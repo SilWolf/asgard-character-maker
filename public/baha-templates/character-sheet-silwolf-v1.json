@@ -626,56 +626,56 @@
       "id": "img_protrait",
       "key": "$img_protrait$",
       "defaultValue": "https://placehold.co/325x695.png",
-      "label": "",
-      "description": ""
+      "label": "角色肖像圖",
+      "description": "用於角色卡最左側"
     },
     {
       "id": "img_badge_left",
       "key": "$img_badge_left$",
       "defaultValue": "https://placehold.co/64x64.png",
-      "label": "",
-      "description": ""
+      "label": "名稱左側圖片A",
+      "description": "可用於放置國家的圖標"
     },
     {
       "id": "img_badge_right",
       "key": "$img_badge_right$",
       "defaultValue": "https://placehold.co/64x64.png",
-      "label": "",
-      "description": ""
+      "label": "名稱左側圖片B",
+      "description": "可用於放置所屬公開的圖標"
     },
     {
       "id": "img_flag",
       "key": "$img_flag$",
       "defaultValue": "https://placehold.co/70x96.png",
-      "label": "",
+      "label": "簡介左側圖片",
       "description": ""
     },
     {
       "id": "img_hr",
       "key": "$img_hr$",
       "defaultValue": "https://placehold.co/500x20.png",
-      "label": "",
+      "label": "分隔線圖片",
       "description": ""
     },
     {
       "id": "img_largeImage_1",
       "key": "$img_largeImage_1$",
       "defaultValue": "https://placehold.co/1920x1080.png",
-      "label": "",
+      "label": "大圖片A",
       "description": ""
     },
     {
       "id": "img_largeImage_2",
       "key": "$img_largeImage_2$",
       "defaultValue": "https://placehold.co/1920x1080.png",
-      "label": "",
+      "label": "大圖片B",
       "description": ""
     },
     {
       "id": "img_largeImage_3",
       "key": "$img_largeImage_3$",
       "defaultValue": "https://placehold.co/1920x1080.png",
-      "label": "",
+      "label": "大圖片C",
       "description": ""
     }
   ],
@@ -684,8 +684,8 @@
       "id": "color_primary",
       "key": "$color_primary$",
       "defaultValue": "#DDDDDD",
-      "label": "",
-      "description": ""
+      "label": "主要顏色",
+      "description": "格式必須是 #abcdef"
     }
   ],
   "bahaCode": "[table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=43% valign=bottom][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div][img=$img_protrait$ width=325 height=695][/div][/td][/tr][/table][/td][/tr][/table][/td][td width=57% valign=bottom][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div align=center][size=1]$topTitle$[/size][/div][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div][img=$img_badge_left$ width=64 height=64][/div][/td][td][div][img=$img_badge_right$ width=64 height=64][/div][/td][td][/td][td][div align=right][size=6]$fullname$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td valign=top][div][img=$img_flag$ width=70 height=96][/div][/td][td valign=top][div align=right][size=3]$briefing$[/size][/div][/td][/tr][/table][/td][/tr][tr][td align=left][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td][div][img=$img_hr$ width=500 height=20][/div][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$race_th$[/size][/div][/td][td valign=center][div align=right][size=3]$race$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$gender_th$[/size][/div][/td][td valign=center][div align=right][size=3]$gender$[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$birthday_th$[/size][/div][/td][td valign=center][div align=right][size=3]$birthday$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$age_th$[/size][/div][/td][td valign=center][div align=right][size=3]$age$[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$size_th$[/size][/div][/td][td valign=center][div align=right][size=3]$size$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$appearance_th$[/size][/div][/td][td valign=center][div align=right][size=3]$appearance$[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$alignment_th$[/size][/div][/td][td valign=center][div align=right][size=3]$alignment$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$personality_th$[/size][/div][/td][td valign=center][div align=right][size=3]$personality$[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$hobby_th$[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]$hobby$[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$likes_th$[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]$likes$[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$hates_th$[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]$hates$[/size][/div][/td][/tr][/table][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td valign=bottom width=33%][div][size=3][img=$img_largeImage_1$][/size][/div][/td][td valign=bottom width=33%][div][size=3][img=$img_largeImage_2$][/size][/div][/td][td valign=bottom width=33%][div][size=3][img=$img_largeImage_3$][/size][/div][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=33% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=40% bgcolor=$color_primary$ align=center][div][size=3]$combatClass_th$[/size][/div][/td][td][/td][td width=60% bgcolor=$color_primary$ align=center][div][size=3]$combatStyle_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$combatClass$[/size][/div][/td][td][/td][td align=center][div][size=3]$combatStyle$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=center][div][size=3]$proficiency_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$proficiency$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_strength_th$[/size][/div][/td][td][/td][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_dexterity_th$[/size][/div][/td][td][/td][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_constitution_th$[/size][/div][/td][td][/td][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_magic_th$[/size][/div][/td][td][/td][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_spirit_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$stat_strength$[/size][/div][/td][td][/td][td align=center][div][size=3]$stat_dexterity$[/size][/div][/td][td][/td][td align=center][div][size=3]$stat_constitution$[/size][/div][/td][td][/td][td align=center][div][size=3]$stat_magic$[/size][/div][/td][td][/td][td align=center][div][size=3]$stat_spirit$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$magic_fire_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$magic_water_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$magic_wind_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$magic_earth_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$magic_froze_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$magic_thunder_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$magic_holy_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$magic_darkness_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3]$magic_earth$[/size][/div][/td][td][/td][td align=center][div][size=3]$magic_froze$[/size][/div][/td][td][/td][td align=center][div][size=3]$magic_holy$[/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3]$magic_darkness$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$environment_land_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$environment_sea_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$environment_sky_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$environment_forest_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$environment_mountain_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$environment_swamp_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$environment_froze_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$environment_hot_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$environment_land$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_sea$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_sky$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_forest$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_mountain$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_swamp$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_froze$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_hot$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=30% bgcolor=$color_primary$ align=center][div][size=3]$nation_th$[/size][/div][/td][td][/td][td width=70% bgcolor=$color_primary$ align=center][div][size=3]$guild_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$nation$[/size][/div][/td][td][/td][td align=center][div][size=3]$guild$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=50% bgcolor=$color_primary$ align=center][div][size=3]$charateristic_th$[/size][/div][/td][td][/td][td width=50% bgcolor=$color_primary$ align=center][div][size=3]$ability_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$characteristic$[/size][/div][/td][td][/td][td align=center][div][size=3]$ability$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=center][div][size=3]$goal_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$goal$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][/table][/td][td width=67% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=left][div][size=3]$introduction_th$[/size][/div][/td][/tr][tr][td align=left][div][size=3]$introduction$[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=left][div][size=3]$history_th$[/size][/div][/td][/tr][tr][td align=left][div][size=3]$history$[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=left][div][size=3]$relationship_th$[/size][/div][/td][/tr][tr][td align=left][div][size=3]$relationship$[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table]"

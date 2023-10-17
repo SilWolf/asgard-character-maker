@@ -39,13 +39,15 @@ const bahaPreset = reactPreset.extend((tags: Record<string, unknown>) => ({
     },
     content: null,
   }),
-  size: (node: BBOBNode) => ({
-    tag: "font",
-    attrs: {
-      size: Object.keys(node.attrs).find((key) => key === node.attrs[key]),
-    },
-    content: node.content,
-  }),
+  size: (node: BBOBNode) => {
+    return {
+      tag: "font",
+      attrs: {
+        size: Object.keys(node.attrs).find((key) => key === node.attrs[key]),
+      },
+      content: node.content,
+    };
+  },
 }));
 
 type Props = {
