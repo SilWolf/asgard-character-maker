@@ -6,6 +6,7 @@ export type BahaTemplate = {
   slug: string;
   author: string;
   textProps: BahaTemplateProp[];
+  systemTextProps: BahaTemplateProp[];
   imageProps: BahaTemplateProp[];
   colorProps: BahaTemplateProp[];
   bahaCode: string;
@@ -15,6 +16,7 @@ export type BahaTemplateProp = {
   id: string;
   key: string;
   defaultValue: string;
+  label: string;
   description: string;
 };
 
@@ -56,6 +58,7 @@ const BahaCode = ({ code, template, values }: Props) => {
   const refinedCode = useMemo(() => {
     const props = [
       ...template.textProps,
+      ...template.systemTextProps,
       ...template.imageProps,
       ...template.colorProps,
     ];
@@ -65,7 +68,7 @@ const BahaCode = ({ code, template, values }: Props) => {
     for (const prop of props) {
       replacedCode = replacedCode.replace(
         new RegExp(`\\$${prop.id}\\$`, "g"),
-        values[prop.id] ?? prop.defaultValue
+        values[prop.id] || prop.defaultValue
       );
     }
 
@@ -74,6 +77,7 @@ const BahaCode = ({ code, template, values }: Props) => {
     code,
     template.colorProps,
     template.imageProps,
+    template.systemTextProps,
     template.textProps,
     values,
   ]);

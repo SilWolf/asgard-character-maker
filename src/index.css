@@ -17,19 +17,19 @@
       min-width: 12px;
       min-height: 1em;
       white-space: break-spaces;
-      cursor: pointer;
+      /* cursor: pointer; */
 
-      &:hover {
+      /* &:hover {
         background: #FFFF00;
-      }
+      } */
     }
 
     img {
-      cursor: pointer;
+      /* cursor: pointer; */
       
-      &:hover {
+      /* &:hover {
         opacity: 0.8;
-      }
+      } */
     }
 
     td {

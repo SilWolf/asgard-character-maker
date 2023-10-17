@@ -8,7 +8,7 @@ let replacedBahaCode = SOURCE_BAHA_CODE;
 // Part 1: Text Props
 const textProps = [];
 const parsedTextProps = [
-  ...replacedBahaCode.matchAll(/\[size=[123456]\]([^\]]+)\[\/size\]/g),
+  ...replacedBahaCode.matchAll(/\[size=[123456]\]([^\]]*)\[\/size\]/g),
 ]
   .map((result, i) => ({
     text: result[1],
@@ -24,6 +24,7 @@ for (const parsedTextProp of parsedTextProps) {
     id,
     key: `$${id}$`,
     defaultValue: parsedTextProp.text,
+    label: "",
     description: "",
   });
 
@@ -54,6 +55,7 @@ for (const parsedImageProp of parsedImageProps) {
     id,
     key: `$${id}$`,
     defaultValue: parsedImageProp.text,
+    label: "",
     description: "",
   });
 
@@ -80,13 +82,14 @@ for (const parsedColorProp of parsedColorProps) {
   const foundSameColor = colorProps.find(
     ({ defaultValue }) => defaultValue === parsedColorProp.text
   );
-  const id = foundSameColor?.id ?? `img_${nanoid(8)}`;
+  const id = foundSameColor?.id ?? `color_${nanoid(8)}`;
 
   if (!foundSameColor) {
     colorProps.unshift({
       id,
       key: `$${id}$`,
       defaultValue: parsedColorProp.text,
+      label: "",
       description: "",
     });
   }
