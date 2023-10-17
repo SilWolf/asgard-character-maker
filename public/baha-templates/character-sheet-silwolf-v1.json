@@ -1,0 +1,575 @@
+{
+  "slug": "character-sheet-silwolf-v1",
+  "author": "silwolf167",
+  "textProps": [
+    {
+      "id": "text__xvTImre",
+      "key": "$text__xvTImre$",
+      "defaultValue": "Wolf Lord of Asgard  |  Karlott, the Howler",
+      "description": ""
+    },
+    {
+      "id": "text_BatEZT1l",
+      "key": "$text_BatEZT1l$",
+      "defaultValue": "卡洛特．海沃爾",
+      "description": ""
+    },
+    {
+      "id": "text_5_JKIi4p",
+      "key": "$text_5_JKIi4p$",
+      "defaultValue": "央城大狼．銀星【沃野卿】\n  萬國商會狼族協調官兼駐央城支部長\n  阿斯嘉特傳奇冒險者、『曙葉小隊』副隊長\n  前央城正規軍千夫長、四災義勇軍榮譽軍人",
+      "description": ""
+    },
+    {
+      "id": "text_ZQFB9O9b",
+      "key": "$text_ZQFB9O9b$",
+      "defaultValue": "種族",
+      "description": ""
+    },
+    {
+      "id": "text_lavXuNZK",
+      "key": "$text_lavXuNZK$",
+      "defaultValue": "狼人",
+      "description": ""
+    },
+    {
+      "id": "text_KFxc6aBm",
+      "key": "$text_KFxc6aBm$",
+      "defaultValue": "性別",
+      "description": ""
+    },
+    {
+      "id": "text_sFjyiCwQ",
+      "key": "$text_sFjyiCwQ$",
+      "defaultValue": "雄性",
+      "description": ""
+    },
+    {
+      "id": "text_d2V95goa",
+      "key": "$text_d2V95goa$",
+      "defaultValue": "生日",
+      "description": ""
+    },
+    {
+      "id": "text_ejq2vNNr",
+      "key": "$text_ejq2vNNr$",
+      "defaultValue": "8月5日",
+      "description": ""
+    },
+    {
+      "id": "text_XEi4t3bO",
+      "key": "$text_XEi4t3bO$",
+      "defaultValue": "年齡",
+      "description": ""
+    },
+    {
+      "id": "text_g4lZMcbc",
+      "key": "$text_g4lZMcbc$",
+      "defaultValue": "外表45 / 實際30",
+      "description": ""
+    },
+    {
+      "id": "text_eGunosDV",
+      "key": "$text_eGunosDV$",
+      "defaultValue": "體型",
+      "description": ""
+    },
+    {
+      "id": "text_7bTirEk6",
+      "key": "$text_7bTirEk6$",
+      "defaultValue": "215公分 / 140公斤",
+      "description": ""
+    },
+    {
+      "id": "text_eYV9uAeZ",
+      "key": "$text_eYV9uAeZ$",
+      "defaultValue": "觀感",
+      "description": ""
+    },
+    {
+      "id": "text_8vrhke6l",
+      "key": "$text_8vrhke6l$",
+      "defaultValue": "魁梧、成熟、霸氣",
+      "description": ""
+    },
+    {
+      "id": "text_ClkDQL7u",
+      "key": "$text_ClkDQL7u$",
+      "defaultValue": "陣營",
+      "description": ""
+    },
+    {
+      "id": "text_6jWQ7mXh",
+      "key": "$text_6jWQ7mXh$",
+      "defaultValue": "守序中立",
+      "description": ""
+    },
+    {
+      "id": "text_HWzdD_To",
+      "key": "$text_HWzdD_To$",
+      "defaultValue": "個性",
+      "description": ""
+    },
+    {
+      "id": "text_YWtFTW8d",
+      "key": "$text_YWtFTW8d$",
+      "defaultValue": "負責、耐苦、隨興",
+      "description": ""
+    },
+    {
+      "id": "text_GItoMrf9",
+      "key": "$text_GItoMrf9$",
+      "defaultValue": "興趣",
+      "description": ""
+    },
+    {
+      "id": "text_l4bKJBJf",
+      "key": "$text_l4bKJBJf$",
+      "defaultValue": "喝酒、木工藝、解體工作、攀登、照顧孩子",
+      "description": ""
+    },
+    {
+      "id": "text_EQhW13Fg",
+      "key": "$text_EQhW13Fg$",
+      "defaultValue": "喜愛",
+      "description": ""
+    },
+    {
+      "id": "text_AEiUXlch",
+      "key": "$text_AEiUXlch$",
+      "defaultValue": "肉、酒、溫泉、家庭話題、冒險話題、鍛練菜鳥",
+      "description": ""
+    },
+    {
+      "id": "text_ukQHwj6b",
+      "key": "$text_ukQHwj6b$",
+      "defaultValue": "厭惡",
+      "description": ""
+    },
+    {
+      "id": "text_e0Rf8YOn",
+      "key": "$text_e0Rf8YOn$",
+      "defaultValue": "菜、甜、逃避責任者、破壞他人平靜生活的行為",
+      "description": ""
+    },
+    {
+      "id": "text_9ma7eVci",
+      "key": "$text_9ma7eVci$",
+      "defaultValue": "戰鬥職業",
+      "description": ""
+    },
+    {
+      "id": "text_FGlyor89",
+      "key": "$text_FGlyor89$",
+      "defaultValue": "風格",
+      "description": ""
+    },
+    {
+      "id": "text_Y42F0Jw3",
+      "key": "$text_Y42F0Jw3$",
+      "defaultValue": "戰士、前衛",
+      "description": ""
+    },
+    {
+      "id": "text_P7lFZHzf",
+      "key": "$text_P7lFZHzf$",
+      "defaultValue": "戰術、硬碰硬",
+      "description": ""
+    },
+    {
+      "id": "text_llqmMTQ4",
+      "key": "$text_llqmMTQ4$",
+      "defaultValue": "慣用武器、魔法、其他",
+      "description": ""
+    },
+    {
+      "id": "text_FtnProHE",
+      "key": "$text_FtnProHE$",
+      "defaultValue": "大劍、斧、爪牙、霰彈槍\n  大地系、闇系、冰系魔法\n  獅鷲、狼群戰術、狼系權能",
+      "description": ""
+    },
+    {
+      "id": "text_wyDLJ71h",
+      "key": "$text_wyDLJ71h$",
+      "defaultValue": "力",
+      "description": ""
+    },
+    {
+      "id": "text_pMgtwsHw",
+      "key": "$text_pMgtwsHw$",
+      "defaultValue": "敏",
+      "description": ""
+    },
+    {
+      "id": "text_DvpnNWc3",
+      "key": "$text_DvpnNWc3$",
+      "defaultValue": "體",
+      "description": ""
+    },
+    {
+      "id": "text_7Js2T8qt",
+      "key": "$text_7Js2T8qt$",
+      "defaultValue": "魔",
+      "description": ""
+    },
+    {
+      "id": "text_h7dnUmeR",
+      "key": "$text_h7dnUmeR$",
+      "defaultValue": "精",
+      "description": ""
+    },
+    {
+      "id": "text_Z5Z1IB-9",
+      "key": "$text_Z5Z1IB-9$",
+      "defaultValue": "A",
+      "description": ""
+    },
+    {
+      "id": "text_oXEImeox",
+      "key": "$text_oXEImeox$",
+      "defaultValue": "C",
+      "description": ""
+    },
+    {
+      "id": "text_YvdI4wNL",
+      "key": "$text_YvdI4wNL$",
+      "defaultValue": "S",
+      "description": ""
+    },
+    {
+      "id": "text_xLOaA1RX",
+      "key": "$text_xLOaA1RX$",
+      "defaultValue": "C",
+      "description": ""
+    },
+    {
+      "id": "text_iw3mPU2P",
+      "key": "$text_iw3mPU2P$",
+      "defaultValue": "D",
+      "description": ""
+    },
+    {
+      "id": "text_YtCL3G8P",
+      "key": "$text_YtCL3G8P$",
+      "defaultValue": "火",
+      "description": ""
+    },
+    {
+      "id": "text_VrBe2Jbw",
+      "key": "$text_VrBe2Jbw$",
+      "defaultValue": "水",
+      "description": ""
+    },
+    {
+      "id": "text_7QKJhBVO",
+      "key": "$text_7QKJhBVO$",
+      "defaultValue": "風",
+      "description": ""
+    },
+    {
+      "id": "text_cn5NG9-2",
+      "key": "$text_cn5NG9-2$",
+      "defaultValue": "土",
+      "description": ""
+    },
+    {
+      "id": "text_Q0d854Q0",
+      "key": "$text_Q0d854Q0$",
+      "defaultValue": "冰",
+      "description": ""
+    },
+    {
+      "id": "text_oBhTNIGL",
+      "key": "$text_oBhTNIGL$",
+      "defaultValue": "雷",
+      "description": ""
+    },
+    {
+      "id": "text_hicTjv5n",
+      "key": "$text_hicTjv5n$",
+      "defaultValue": "聖",
+      "description": ""
+    },
+    {
+      "id": "text_PTDphMpB",
+      "key": "$text_PTDphMpB$",
+      "defaultValue": "闇",
+      "description": ""
+    },
+    {
+      "id": "text_hLdJ-r7C",
+      "key": "$text_hLdJ-r7C$",
+      "defaultValue": "⦾",
+      "description": ""
+    },
+    {
+      "id": "text_-xTjsJEF",
+      "key": "$text_-xTjsJEF$",
+      "defaultValue": "○",
+      "description": ""
+    },
+    {
+      "id": "text_-qei09ha",
+      "key": "$text_-qei09ha$",
+      "defaultValue": "△",
+      "description": ""
+    },
+    {
+      "id": "text_zl_HjX79",
+      "key": "$text_zl_HjX79$",
+      "defaultValue": "⦾",
+      "description": ""
+    },
+    {
+      "id": "text_eDPEVWsI",
+      "key": "$text_eDPEVWsI$",
+      "defaultValue": "陸",
+      "description": ""
+    },
+    {
+      "id": "text_fB3A4d9A",
+      "key": "$text_fB3A4d9A$",
+      "defaultValue": "海",
+      "description": ""
+    },
+    {
+      "id": "text_Qo3ztCB5",
+      "key": "$text_Qo3ztCB5$",
+      "defaultValue": "空",
+      "description": ""
+    },
+    {
+      "id": "text_hMM1Y7Pz",
+      "key": "$text_hMM1Y7Pz$",
+      "defaultValue": "森",
+      "description": ""
+    },
+    {
+      "id": "text_rTawCyUA",
+      "key": "$text_rTawCyUA$",
+      "defaultValue": "脈",
+      "description": ""
+    },
+    {
+      "id": "text_c0h_Wadq",
+      "key": "$text_c0h_Wadq$",
+      "defaultValue": "沼",
+      "description": ""
+    },
+    {
+      "id": "text_aJleKpm8",
+      "key": "$text_aJleKpm8$",
+      "defaultValue": "寒",
+      "description": ""
+    },
+    {
+      "id": "text_by7NA_jD",
+      "key": "$text_by7NA_jD$",
+      "defaultValue": "熱",
+      "description": ""
+    },
+    {
+      "id": "text__WHNr3sv",
+      "key": "$text__WHNr3sv$",
+      "defaultValue": "⦾",
+      "description": ""
+    },
+    {
+      "id": "text_iPHgowWV",
+      "key": "$text_iPHgowWV$",
+      "defaultValue": "×",
+      "description": ""
+    },
+    {
+      "id": "text_6WvB_VYi",
+      "key": "$text_6WvB_VYi$",
+      "defaultValue": "△",
+      "description": ""
+    },
+    {
+      "id": "text_ntou6ws7",
+      "key": "$text_ntou6ws7$",
+      "defaultValue": "⦾",
+      "description": ""
+    },
+    {
+      "id": "text_-waDYgoF",
+      "key": "$text_-waDYgoF$",
+      "defaultValue": "○",
+      "description": ""
+    },
+    {
+      "id": "text_DywZH1Z3",
+      "key": "$text_DywZH1Z3$",
+      "defaultValue": "×",
+      "description": ""
+    },
+    {
+      "id": "text_xjLIzUxa",
+      "key": "$text_xjLIzUxa$",
+      "defaultValue": "○",
+      "description": ""
+    },
+    {
+      "id": "text_f8vu3j6Z",
+      "key": "$text_f8vu3j6Z$",
+      "defaultValue": "×",
+      "description": ""
+    },
+    {
+      "id": "text_Qe0u5LUb",
+      "key": "$text_Qe0u5LUb$",
+      "defaultValue": "國籍",
+      "description": ""
+    },
+    {
+      "id": "text_KrxQowUc",
+      "key": "$text_KrxQowUc$",
+      "defaultValue": "隸屬",
+      "description": ""
+    },
+    {
+      "id": "text_uuDyGpjG",
+      "key": "$text_uuDyGpjG$",
+      "defaultValue": "喀爾登",
+      "description": ""
+    },
+    {
+      "id": "text_-Wz7msfD",
+      "key": "$text_-Wz7msfD$",
+      "defaultValue": "萬國商會、自由聯邦",
+      "description": ""
+    },
+    {
+      "id": "text_RK4tvLon",
+      "key": "$text_RK4tvLon$",
+      "defaultValue": "特徵傾向",
+      "description": ""
+    },
+    {
+      "id": "text_6j_2kNiL",
+      "key": "$text_6j_2kNiL$",
+      "defaultValue": "能力傾向",
+      "description": ""
+    },
+    {
+      "id": "text_K28hl4qb",
+      "key": "$text_K28hl4qb$",
+      "defaultValue": "西北的獸型",
+      "description": ""
+    },
+    {
+      "id": "text_3KQ3mCg7",
+      "key": "$text_3KQ3mCg7$",
+      "defaultValue": "北方的蠻力",
+      "description": ""
+    },
+    {
+      "id": "text_G7Wo1vGA",
+      "key": "$text_G7Wo1vGA$",
+      "defaultValue": "人生目標",
+      "description": ""
+    },
+    {
+      "id": "text_ypZ_ps8y",
+      "key": "$text_ypZ_ps8y$",
+      "defaultValue": "守護家庭、守護阿斯嘉特\n  維持狼族在世界上的地位\n  等待『那女孩』、尋找通往\n  『那女孩』所在的門",
+      "description": ""
+    },
+    {
+      "id": "text_oJRuFwL0",
+      "key": "$text_oJRuFwL0$",
+      "defaultValue": "身分與形象",
+      "description": ""
+    },
+    {
+      "id": "text_5FPd5pCm",
+      "key": "$text_5FPd5pCm$",
+      "defaultValue": "　　滿讀品他建件神確容國方題能結！那內書再資告片；起斯有識不道中處程遠世我把業，因型北滿作難，沒他而時情司兩阿，電為人高，操解健認子日民機血重景房主管完覺笑臉為陽前人……像國爭，團去加他：人紅文的那畫？\n  　　看成總地你技進種他有著性頭水友任個政智了由立害北心、實優超一，查文一，以著答師！一流發還氣五當團。童放是容安用腦的，子加善生為然下元報海單不冷火去易？頭法意止房方收進不造處南期當人，不老一得者時人了木使詩變的於條對給文的覺是口，回腳不多此爾。",
+      "description": ""
+    },
+    {
+      "id": "text_cyokW7zp",
+      "key": "$text_cyokW7zp$",
+      "defaultValue": "事蹟",
+      "description": ""
+    },
+    {
+      "id": "text_-7R8HgzV",
+      "key": "$text_-7R8HgzV$",
+      "defaultValue": "　　全記邊增……始以該賣……歡感但種育世本！的男活異臺不報拿出邊我舞當發外公生取物的學，境一標試來初格金，來文國不報了……\n  　　些式大、車如生民須代出市孩積力細行速放幾，故點香木氣際謝：們山白消能產受不對民文，期會的未代香長，海子美能收生後來雙取壓集國們光打香使部夫遠來性來手物要受上的來試見提次家適市新員價節成管最軍手，在雖基全能推的可用，病識滿時形待相賽門眼區果實食幾業門給結說不獨下定背動年總其存種一關德！",
+      "description": ""
+    },
+    {
+      "id": "text_viIn59wg",
+      "key": "$text_viIn59wg$",
+      "defaultValue": "人脈關係",
+      "description": ""
+    },
+    {
+      "id": "text_Lx0R1DnF",
+      "key": "$text_Lx0R1DnF$",
+      "defaultValue": "　　規相登間又分以見流被印圖的，早邊演個分效意臺過計的年。也明聲還、起體人道電子原員維門舞人足果寶利那？樂清希保月……裡沒這子一健有只及口部真車！兩路中又合雖機跟雖病則才人得國如細走同了時年好綠地總道保市港空的研大動頭溫新觀主點很產馬玩市的利美們。",
+      "description": ""
+    }
+  ],
+  "imageProps": [
+    {
+      "id": "img_OX1K876E",
+      "key": "$img_OX1K876E$",
+      "defaultValue": "https://placehold.co/325x695.png",
+      "description": ""
+    },
+    {
+      "id": "img__26j4Dya",
+      "key": "$img__26j4Dya$",
+      "defaultValue": "https://placehold.co/64x64.png",
+      "description": ""
+    },
+    {
+      "id": "img_GbNoLgbU",
+      "key": "$img_GbNoLgbU$",
+      "defaultValue": "https://placehold.co/64x64.png",
+      "description": ""
+    },
+    {
+      "id": "img_PAfMjdFl",
+      "key": "$img_PAfMjdFl$",
+      "defaultValue": "https://placehold.co/70x96.png",
+      "description": ""
+    },
+    {
+      "id": "img_uM_gY3TD",
+      "key": "$img_uM_gY3TD$",
+      "defaultValue": "https://placehold.co/500x20.png",
+      "description": ""
+    },
+    {
+      "id": "img_EZbCqpO8",
+      "key": "$img_EZbCqpO8$",
+      "defaultValue": "https://placehold.co/1920x1080.png",
+      "description": ""
+    },
+    {
+      "id": "img_bWIjIXqL",
+      "key": "$img_bWIjIXqL$",
+      "defaultValue": "https://placehold.co/1920x1080.png",
+      "description": ""
+    },
+    {
+      "id": "img_hzz-PkPx",
+      "key": "$img_hzz-PkPx$",
+      "defaultValue": "https://placehold.co/1920x1080.png",
+      "description": ""
+    }
+  ],
+  "colorProps": [
+    {
+      "id": "img_4AtzdekT",
+      "key": "$img_4AtzdekT$",
+      "defaultValue": "#DDDDDD",
+      "description": ""
+    }
+  ],
+  "bahaCode": "[table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=43% valign=bottom][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div][img=$img_OX1K876E$ width=325 height=695][/div][/td][/tr][/table][/td][/tr][/table][/td][td width=57% valign=bottom][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div align=center][size=1]$text__xvTImre$[/size][/div][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div][img=$img__26j4Dya$ width=64 height=64][/div][/td][td][div][img=$img_GbNoLgbU$ width=64 height=64][/div][/td][td][/td][td][div align=right][size=6]$text_BatEZT1l$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td valign=top][div][img=$img_PAfMjdFl$ width=70 height=96][/div][/td][td valign=top][div align=right][size=3]$text_5_JKIi4p$[/size][/div][/td][/tr][/table][/td][/tr][tr][td align=left][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td][div][img=$img_uM_gY3TD$ width=500 height=20][/div][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_ZQFB9O9b$[/size][/div][/td][td valign=center][div align=right][size=3]$text_lavXuNZK$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_KFxc6aBm$[/size][/div][/td][td valign=center][div align=right][size=3]$text_sFjyiCwQ$[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_d2V95goa$[/size][/div][/td][td valign=center][div align=right][size=3]$text_ejq2vNNr$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_XEi4t3bO$[/size][/div][/td][td valign=center][div align=right][size=3]$text_g4lZMcbc$[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_eGunosDV$[/size][/div][/td][td valign=center][div align=right][size=3]$text_7bTirEk6$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_eYV9uAeZ$[/size][/div][/td][td valign=center][div align=right][size=3]$text_8vrhke6l$[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_ClkDQL7u$[/size][/div][/td][td valign=center][div align=right][size=3]$text_6jWQ7mXh$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_HWzdD_To$[/size][/div][/td][td valign=center][div align=right][size=3]$text_YWtFTW8d$[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_GItoMrf9$[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]$text_l4bKJBJf$[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_EQhW13Fg$[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]$text_AEiUXlch$[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=$img_4AtzdekT$ width=40][div][size=3]$text_ukQHwj6b$[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]$text_e0Rf8YOn$[/size][/div][/td][/tr][/table][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td valign=bottom width=33%][div][size=3][img=$img_EZbCqpO8$][/size][/div][/td][td valign=bottom width=33%][div][size=3][img=$img_bWIjIXqL$][/size][/div][/td][td valign=bottom width=33%][div][size=3][img=$img_hzz-PkPx$][/size][/div][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=33% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=40% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_9ma7eVci$[/size][/div][/td][td][/td][td width=60% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_FGlyor89$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$text_Y42F0Jw3$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_P7lFZHzf$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_llqmMTQ4$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$text_FtnProHE$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=20% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_wyDLJ71h$[/size][/div][/td][td][/td][td width=20% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_pMgtwsHw$[/size][/div][/td][td][/td][td width=20% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_DvpnNWc3$[/size][/div][/td][td][/td][td width=20% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_7Js2T8qt$[/size][/div][/td][td][/td][td width=20% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_h7dnUmeR$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$text_Z5Z1IB-9$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_oXEImeox$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_YvdI4wNL$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_xLOaA1RX$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_iw3mPU2P$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=13% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_YtCL3G8P$[/size][/div][/td][td][/td][td width=12% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_VrBe2Jbw$[/size][/div][/td][td][/td][td width=12% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_7QKJhBVO$[/size][/div][/td][td][/td][td width=13% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_cn5NG9-2$[/size][/div][/td][td][/td][td width=13% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_Q0d854Q0$[/size][/div][/td][td][/td][td width=12% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_oBhTNIGL$[/size][/div][/td][td][/td][td width=12% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_hicTjv5n$[/size][/div][/td][td][/td][td width=13% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_PTDphMpB$[/size][/div][/td][/tr][tr][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3]$text_hLdJ-r7C$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_-xTjsJEF$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_-qei09ha$[/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3]$text_zl_HjX79$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=13% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_eDPEVWsI$[/size][/div][/td][td][/td][td width=12% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_fB3A4d9A$[/size][/div][/td][td][/td][td width=12% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_Qo3ztCB5$[/size][/div][/td][td][/td][td width=13% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_hMM1Y7Pz$[/size][/div][/td][td][/td][td width=13% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_rTawCyUA$[/size][/div][/td][td][/td][td width=12% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_c0h_Wadq$[/size][/div][/td][td][/td][td width=12% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_aJleKpm8$[/size][/div][/td][td][/td][td width=13% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_by7NA_jD$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$text__WHNr3sv$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_iPHgowWV$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_6WvB_VYi$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_ntou6ws7$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_-waDYgoF$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_DywZH1Z3$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_xjLIzUxa$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_f8vu3j6Z$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=30% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_Qe0u5LUb$[/size][/div][/td][td][/td][td width=70% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_KrxQowUc$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$text_uuDyGpjG$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_-Wz7msfD$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=50% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_RK4tvLon$[/size][/div][/td][td][/td][td width=50% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_6j_2kNiL$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$text_K28hl4qb$[/size][/div][/td][td][/td][td align=center][div][size=3]$text_3KQ3mCg7$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$img_4AtzdekT$ align=center][div][size=3]$text_G7Wo1vGA$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$text_ypZ_ps8y$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][/table][/td][td width=67% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$img_4AtzdekT$ align=left][div][size=3]$text_oJRuFwL0$[/size][/div][/td][/tr][tr][td align=left][div][size=3]$text_5FPd5pCm$[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$img_4AtzdekT$ align=left][div][size=3]$text_cyokW7zp$[/size][/div][/td][/tr][tr][td align=left][div][size=3]$text_-7R8HgzV$[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$img_4AtzdekT$ align=left][div][size=3]$text_viIn59wg$[/size][/div][/td][/tr][tr][td align=left][div][size=3]$text_Lx0R1DnF$[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table]"
+}

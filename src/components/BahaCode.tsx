@@ -1,5 +1,22 @@
 import reactPreset from "@bbob/preset-react";
 import reactRender from "@bbob/react/es/render";
+import { useMemo } from "react";
+
+export type BahaTemplate = {
+  slug: string;
+  author: string;
+  textProps: BahaTemplateProp[];
+  imageProps: BahaTemplateProp[];
+  colorProps: BahaTemplateProp[];
+  bahaCode: string;
+};
+
+export type BahaTemplateProp = {
+  id: string;
+  key: string;
+  defaultValue: string;
+  description: string;
+};
 
 type BBOBNode = {
   tag: string;
@@ -31,10 +48,37 @@ const bahaPreset = reactPreset.extend((tags: Record<string, unknown>) => ({
 
 type Props = {
   code: string;
+  template: BahaTemplate;
+  values: Record<string, string>;
 };
 
-const BahaCode = ({ code }: Props) => {
-  return reactRender(code, bahaPreset());
+const BahaCode = ({ code, template, values }: Props) => {
+  const refinedCode = useMemo(() => {
+    const props = [
+      ...template.textProps,
+      ...template.imageProps,
+      ...template.colorProps,
+    ];
+
+    let replacedCode = code;
+
+    for (const prop of props) {
+      replacedCode = replacedCode.replace(
+        new RegExp(`\\$${prop.id}\\$`, "g"),
+        values[prop.id] ?? prop.defaultValue
+      );
+    }
+
+    return replacedCode;
+  }, [
+    code,
+    template.colorProps,
+    template.imageProps,
+    template.textProps,
+    values,
+  ]);
+
+  return reactRender(refinedCode, bahaPreset());
 };
 
 export default BahaCode;
