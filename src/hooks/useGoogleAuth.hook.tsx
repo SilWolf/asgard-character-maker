@@ -1,7 +1,8 @@
+import { Button } from "@mui/joy";
 import {
-  CredentialResponse,
-  GoogleLogin,
   GoogleOAuthProvider,
+  TokenResponse,
+  useGoogleLogin,
 } from "@react-oauth/google";
 import React, {
   PropsWithChildren,
@@ -57,7 +58,7 @@ const useGoogleAuth = () => {
 export default useGoogleAuth;
 
 type GoogleAuthLoginButtonProps = {
-  onSuccess?: (credentialResponse: CredentialResponse) => unknown;
+  onSuccess?: (tokenResponse: TokenResponse) => unknown;
   onError?: () => unknown;
 };
 
@@ -68,9 +69,10 @@ export const GoogleAuthLoginButton = ({
   const { setToken } = useGoogleAuth();
 
   const handleSuccessGoogleLogin = useCallback(
-    (credentialResponse: CredentialResponse) => {
-      setToken(credentialResponse.credential);
-      onSuccess?.(credentialResponse);
+    (tokenResponse: TokenResponse) => {
+      console.log(tokenResponse);
+      setToken(tokenResponse.access_token);
+      onSuccess?.(tokenResponse);
     },
     [onSuccess, setToken]
   );
@@ -80,11 +82,25 @@ export const GoogleAuthLoginButton = ({
     onError?.();
   }, [onError]);
 
+  const login = useGoogleLogin({
+    onSuccess: handleSuccessGoogleLogin,
+    onError: handleErrorGoogleLogin,
+    scope:
+      "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata",
+  });
+
+  const handleClickLogin = useCallback(() => {
+    login();
+  }, [login]);
+
   return (
-    <GoogleLogin
-      onSuccess={handleSuccessGoogleLogin}
-      onError={handleErrorGoogleLogin}
-      auto_select
-    />
+    // <GoogleLogin
+    //   onSuccess={handleSuccessGoogleLogin}
+    //   onError={handleErrorGoogleLogin}
+    //   auto_select
+    // />
+    <Button onClick={handleClickLogin} variant="outlined">
+      登入 Google 並援權
+    </Button>
   );
 };

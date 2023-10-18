@@ -1,6 +1,18 @@
 import { GoogleAuthLoginButton } from "@/hooks/useGoogleAuth.hook";
+import { updateGoogleDriveRequestProps } from "@/helpers/google-drive.helper";
+import { TokenResponse } from "@react-oauth/google";
+import { useCallback } from "react";
 
 const FirstLandingPage = () => {
+  const handleSuccessGoogleLogin = useCallback(
+    (tokenResponse: TokenResponse) => {
+      updateGoogleDriveRequestProps({
+        token: tokenResponse.access_token,
+      });
+    },
+    []
+  );
+
   return (
     <div className="container mx-auto py-16">
       <div className="space-y-6 text-center">
@@ -17,7 +29,7 @@ const FirstLandingPage = () => {
         </ul>
         <div></div>
         <div className="inline-block">
-          <GoogleAuthLoginButton />
+          <GoogleAuthLoginButton onSuccess={handleSuccessGoogleLogin} />
         </div>
       </div>
     </div>
