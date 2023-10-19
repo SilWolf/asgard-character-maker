@@ -1,5 +1,5 @@
 /* eslint-disable no-irregular-whitespace */
-import SheetDetailPage from "./pages/detail.page";
+import SheetDetailPage from "./pages/sheet-detail/index.page";
 
 import useGoogleAuth from "./hooks/useGoogleAuth.hook";
 import FirstLandingPage from "./pages/first-landing.page";
@@ -7,6 +7,7 @@ import { Route } from "wouter";
 import HomePage from "./pages/home.page";
 import { updateGoogleDriveRequestProps } from "./helpers/google-drive.helper";
 import { useEffectOnce } from "react-use";
+import TemplateDetailPage from "./pages/template-detail.page";
 
 const App = () => {
   const { isLogined, token } = useGoogleAuth();
@@ -36,6 +37,9 @@ const App = () => {
       </Route>
       <Route path="/sheet/:sheetId">
         <SheetDetailPage />
+      </Route>
+      <Route path="/template/:templateId">
+        <TemplateDetailPage />
       </Route>
     </>
   );

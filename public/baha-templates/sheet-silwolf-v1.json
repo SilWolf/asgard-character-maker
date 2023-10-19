@@ -1,0 +1,705 @@
+{
+  "slug": "sheet-silwolf-v1",
+  "name": "卡洛特．海沃爾 v1",
+  "author": "銀狼 (silwolf167)",
+  "sections": [
+    {
+      "id": "a",
+      "name": "區塊1",
+      "template": {
+        "slug": "character-sheet-silwolf-v1",
+        "name": "銀狼的角色卡（新版小屋） - v1",
+        "author": "銀狼 (silwolf167)",
+        "textProps": [
+          {
+            "id": "topTitle",
+            "key": "$topTitle$",
+            "defaultValue": "Wolf Lord of Asgard  |  Karlott, the Howler",
+            "label": "角色標題",
+            "description": "在角色卡最上方，推薦使用英文或其他非中文語言"
+          },
+          {
+            "id": "fullname",
+            "key": "$fullname$",
+            "defaultValue": "卡洛特．海沃爾",
+            "label": "角色名字",
+            "description": "最多8個全型文字"
+          },
+          {
+            "id": "briefing",
+            "key": "$briefing$",
+            "defaultValue": "央城大狼．銀星【沃野卿】\n  萬國商會狼族協調官兼駐央城支部長\n  阿斯嘉特傳奇冒險者、『曙葉小隊』副隊長\n  前央城正規軍千夫長、四災義勇軍榮譽軍人",
+            "label": "角色簡介",
+            "description": "可列出如身分、角色的傳聞等等"
+          },
+          {
+            "id": "race",
+            "key": "$race$",
+            "defaultValue": "狼人",
+            "label": "種族",
+            "description": ""
+          },
+          {
+            "id": "gender",
+            "key": "$gender$",
+            "defaultValue": "雄性",
+            "label": "性別",
+            "description": ""
+          },
+          {
+            "id": "birthday",
+            "key": "$birthday$",
+            "defaultValue": "8月5日",
+            "label": "生日",
+            "description": ""
+          },
+          {
+            "id": "age",
+            "key": "$age$",
+            "defaultValue": "外表45 / 實際30",
+            "label": "年齡",
+            "description": ""
+          },
+          {
+            "id": "size",
+            "key": "$size$",
+            "defaultValue": "215公分 / 140公斤",
+            "label": "體型",
+            "description": ""
+          },
+          {
+            "id": "appearance",
+            "key": "$appearance$",
+            "defaultValue": "魁梧、成熟、霸氣",
+            "label": "外觀",
+            "description": "使用兩至三個簡短的形容詞"
+          },
+          {
+            "id": "alignment",
+            "key": "$alignment$",
+            "defaultValue": "守序中立",
+            "label": "陣營",
+            "description": ""
+          },
+          {
+            "id": "personality",
+            "key": "$personality$",
+            "defaultValue": "負責、耐苦、隨興",
+            "label": "個性",
+            "description": "使用兩至三個簡短的形容詞"
+          },
+          {
+            "id": "hobby",
+            "key": "$hobby$",
+            "defaultValue": "喝酒、木工藝、解體工作、攀登、照顧孩子",
+            "label": "興趣",
+            "description": ""
+          },
+          {
+            "id": "likes",
+            "key": "$likes$",
+            "defaultValue": "肉、酒、溫泉、家庭話題、冒險話題、鍛練菜鳥",
+            "label": "喜愛",
+            "description": ""
+          },
+          {
+            "id": "hates",
+            "key": "$hates$",
+            "defaultValue": "菜、甜、逃避責任者、破壞他人平靜生活的行為",
+            "label": "厭惡",
+            "description": ""
+          },
+          {
+            "id": "combatClass",
+            "key": "$combatClass$",
+            "defaultValue": "戰士、前衛",
+            "label": "戰鬥職業",
+            "description": ""
+          },
+          {
+            "id": "combatStyle",
+            "key": "$combatStyle$",
+            "defaultValue": "戰術、硬碰硬",
+            "label": "戰鬥風格",
+            "description": ""
+          },
+          {
+            "id": "proficiency",
+            "key": "$proficiency$",
+            "defaultValue": "大劍、斧、爪牙、霰彈槍\n  大地系、闇系、冰系魔法\n  獅鷲、狼群戰術、狼系權能",
+            "label": "慣用武器、魔法、其他",
+            "description": ""
+          },
+          {
+            "id": "stat_strength",
+            "key": "$stat_strength$",
+            "defaultValue": "A",
+            "label": "素質－力量",
+            "description": "力量越高，角色的物理干涉力越高"
+          },
+          {
+            "id": "stat_dexterity",
+            "key": "$stat_dexterity$",
+            "defaultValue": "C",
+            "label": "素質－敏捷",
+            "description": "敏捷越高，角色的身體越靈活"
+          },
+          {
+            "id": "stat_constitution",
+            "key": "$stat_constitution$",
+            "defaultValue": "S",
+            "label": "素質－體質",
+            "description": "體質越高，角色承受傷勢及異常的能力越強"
+          },
+          {
+            "id": "stat_magic",
+            "key": "$stat_magic$",
+            "defaultValue": "C",
+            "label": "素質－魔法",
+            "description": "魔法越高，角色使用及對抗魔力的能力越強"
+          },
+          {
+            "id": "stat_spirit",
+            "key": "$stat_spirit$",
+            "defaultValue": "D",
+            "label": "素質－精神",
+            "description": "精神越高，角色的意念干涉力越強"
+          },
+          {
+            "id": "magic_fire",
+            "key": "$magic_fire$",
+            "defaultValue": "",
+            "label": "魔法適性－火",
+            "description": "適應越高，代表角色在使用或對抗對應屬性上更得心應手"
+          },
+          {
+            "id": "magic_water",
+            "key": "$magic_water$",
+            "defaultValue": "",
+            "label": "魔法適性－水",
+            "description": ""
+          },
+          {
+            "id": "magic_wind",
+            "key": "$magic_wind$",
+            "defaultValue": "",
+            "label": "魔法適性－風",
+            "description": ""
+          },
+          {
+            "id": "magic_earth",
+            "key": "$magic_earth$",
+            "defaultValue": "⦾",
+            "label": "魔法適性－土",
+            "description": ""
+          },
+          {
+            "id": "magic_froze",
+            "key": "$magic_froze$",
+            "defaultValue": "○",
+            "label": "魔法適性－冰",
+            "description": ""
+          },
+          {
+            "id": "magic_holy",
+            "key": "$magic_holy$",
+            "defaultValue": "△",
+            "label": "魔法適性－聖",
+            "description": ""
+          },
+          {
+            "id": "magic_darkness",
+            "key": "$magic_darkness$",
+            "defaultValue": "⦾",
+            "label": "魔法適性－闇",
+            "description": ""
+          },
+          {
+            "id": "environment_land",
+            "key": "$environment_land$",
+            "defaultValue": "⦾",
+            "label": "環境適性－陸地",
+            "description": ""
+          },
+          {
+            "id": "environment_sea",
+            "key": "$environment_sea$",
+            "defaultValue": "×",
+            "label": "環境適性－海洋",
+            "description": ""
+          },
+          {
+            "id": "environment_sky",
+            "key": "$environment_sky$",
+            "defaultValue": "△",
+            "label": "環境適性－天空",
+            "description": ""
+          },
+          {
+            "id": "environment_forest",
+            "key": "$environment_forest$",
+            "defaultValue": "⦾",
+            "label": "環境適性－森林",
+            "description": ""
+          },
+          {
+            "id": "environment_mountain",
+            "key": "$environment_mountain$",
+            "defaultValue": "○",
+            "label": "環境適性－山脈",
+            "description": ""
+          },
+          {
+            "id": "environment_swamp",
+            "key": "$environment_swamp$",
+            "defaultValue": "×",
+            "label": "環境適性－沼澤",
+            "description": ""
+          },
+          {
+            "id": "environment_froze",
+            "key": "$environment_froze$",
+            "defaultValue": "○",
+            "label": "環境適性－寒地",
+            "description": ""
+          },
+          {
+            "id": "environment_hot",
+            "key": "$environment_hot$",
+            "defaultValue": "×",
+            "label": "環境適性－熱地",
+            "description": ""
+          },
+          {
+            "id": "nation",
+            "key": "$nation$",
+            "defaultValue": "喀爾登",
+            "label": "國藉",
+            "description": "一般指角色來自哪個國家或城市"
+          },
+          {
+            "id": "guild",
+            "key": "$guild$",
+            "defaultValue": "萬國商會、自由聯邦",
+            "label": "隸屬",
+            "description": "一般指角色聽命於哪個公會或組織"
+          },
+          {
+            "id": "characteristic",
+            "key": "$characteristic$",
+            "defaultValue": "西北的獸型",
+            "label": "特徵傾向",
+            "description": "一般人第一印象會認為角色是什麼來頭"
+          },
+          {
+            "id": "ability",
+            "key": "$ability$",
+            "defaultValue": "北方的蠻力",
+            "label": "能力傾向",
+            "description": "概括角色整體能力的特徵"
+          },
+          {
+            "id": "goal",
+            "key": "$goal$",
+            "defaultValue": "守護家庭、守護阿斯嘉特\n  維持狼族在世界上的地位\n  等待『那女孩』、尋找通往\n  『那女孩』所在的門",
+            "label": "人生目標",
+            "description": "角色為了什麼而活、為了什麼而冒險等等"
+          },
+          {
+            "id": "introduction",
+            "key": "$introduction$",
+            "defaultValue": "　　滿讀品他建件神確容國方題能結！那內書再資告片；起斯有識不道中處程遠世我把業，因型北滿作難，沒他而時情司兩阿，電為人高，操解健認子日民機血重景房主管完覺笑臉為陽前人……像國爭，團去加他：人紅文的那畫？\n  　　看成總地你技進種他有著性頭水友任個政智了由立害北心、實優超一，查文一，以著答師！一流發還氣五當團。童放是容安用腦的，子加善生為然下元報海單不冷火去易？頭法意止房方收進不造處南期當人，不老一得者時人了木使詩變的於條對給文的覺是口，回腳不多此爾。",
+            "label": "身分與形象",
+            "description": "更詳細地描述角色的外觀、日常生活／冒險生活時給予他人的觀感"
+          },
+          {
+            "id": "history",
+            "key": "$history$",
+            "defaultValue": "　　全記邊增……始以該賣……歡感但種育世本！的男活異臺不報拿出邊我舞當發外公生取物的學，境一標試來初格金，來文國不報了……\n  　　些式大、車如生民須代出市孩積力細行速放幾，故點香木氣際謝：們山白消能產受不對民文，期會的未代香長，海子美能收生後來雙取壓集國們光打香使部夫遠來性來手物要受上的來試見提次家適市新員價節成管最軍手，在雖基全能推的可用，病識滿時形待相賽門眼區果實食幾業門給結說不獨下定背動年總其存種一關德！",
+            "label": "事蹟",
+            "description": "角色曾做過什麼大事"
+          },
+          {
+            "id": "relationship",
+            "key": "$relationship$",
+            "defaultValue": "　　規相登間又分以見流被印圖的，早邊演個分效意臺過計的年。也明聲還、起體人道電子原員維門舞人足果寶利那？樂清希保月……裡沒這子一健有只及口部真車！兩路中又合雖機跟雖病則才人得國如細走同了時年好綠地總道保市港空的研大動頭溫新觀主點很產馬玩市的利美們。",
+            "label": "人脈關係",
+            "description": "角色與經常出入的城市的關係、與公會／組織的關係、與特定人物的關係等等"
+          }
+        ],
+        "systemTextProps": [
+          {
+            "id": "race_th",
+            "key": "$race_th$",
+            "defaultValue": "種族",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "gender_th",
+            "key": "$gender_th$",
+            "defaultValue": "性別",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "birthday_th",
+            "key": "$birthday_th$",
+            "defaultValue": "生日",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "age_th",
+            "key": "$age_th$",
+            "defaultValue": "年齡",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "size_th",
+            "key": "$size_th$",
+            "defaultValue": "體型",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "appearance_th",
+            "key": "$appearance_th$",
+            "defaultValue": "觀感",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "alignment_th",
+            "key": "$alignment_th$",
+            "defaultValue": "陣營",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "personality_th",
+            "key": "$personality_th$",
+            "defaultValue": "個性",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "hobby_th",
+            "key": "$hobby_th$",
+            "defaultValue": "興趣",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "likes_th",
+            "key": "$likes_th$",
+            "defaultValue": "喜愛",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "hates_th",
+            "key": "$hates_th$",
+            "defaultValue": "厭惡",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "combatClass_th",
+            "key": "$combatClass_th$",
+            "defaultValue": "戰鬥職業",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "combatStyle_th",
+            "key": "$combatStyle_th$",
+            "defaultValue": "風格",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "proficiency_th",
+            "key": "$proficiency_th$",
+            "defaultValue": "慣用武器、魔法、其他",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "stat_strength_th",
+            "key": "$stat_strength_th$",
+            "defaultValue": "力",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "stat_dexterity_th",
+            "key": "$stat_dexterity_th$",
+            "defaultValue": "敏",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "stat_constitution_th",
+            "key": "$stat_constitution_th$",
+            "defaultValue": "體",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "stat_magic_th",
+            "key": "$stat_magic_th$",
+            "defaultValue": "魔",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "stat_spirit_th",
+            "key": "$stat_spirit_th$",
+            "defaultValue": "精",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "magic_fire_th",
+            "key": "$magic_fire_th$",
+            "defaultValue": "火",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "magic_water_th",
+            "key": "$magic_water_th$",
+            "defaultValue": "水",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "magic_wind_th",
+            "key": "$magic_wind_th$",
+            "defaultValue": "風",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "magic_earth_th",
+            "key": "$magic_earth_th$",
+            "defaultValue": "土",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "magic_froze_th",
+            "key": "$magic_froze_th$",
+            "defaultValue": "冰",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "magic_thunder_th",
+            "key": "$magic_thunder_th$",
+            "defaultValue": "雷",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "magic_holy_th",
+            "key": "$magic_holy_th$",
+            "defaultValue": "聖",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "magic_darkness_th",
+            "key": "$magic_darkness_th$",
+            "defaultValue": "闇",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "environment_land_th",
+            "key": "$environment_land_th$",
+            "defaultValue": "陸",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "environment_sea_th",
+            "key": "$environment_sea_th$",
+            "defaultValue": "海",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "environment_sky_th",
+            "key": "$environment_sky_th$",
+            "defaultValue": "空",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "environment_forest_th",
+            "key": "$environment_forest_th$",
+            "defaultValue": "森",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "environment_mountain_th",
+            "key": "$environment_mountain_th$",
+            "defaultValue": "脈",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "environment_swamp_th",
+            "key": "$environment_swamp_th$",
+            "defaultValue": "沼",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "environment_froze_th",
+            "key": "$environment_froze_th$",
+            "defaultValue": "寒",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "environment_hot_th",
+            "key": "$environment_hot_th$",
+            "defaultValue": "熱",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "nation_th",
+            "key": "$nation_th$",
+            "defaultValue": "國籍",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "guild_th",
+            "key": "$guild_th$",
+            "defaultValue": "隸屬",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "charateristic_th",
+            "key": "$charateristic_th$",
+            "defaultValue": "特徵傾向",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "ability_th",
+            "key": "$ability_th$",
+            "defaultValue": "能力傾向",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "goal_th",
+            "key": "$goal_th$",
+            "defaultValue": "人生目標",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "introduction_th",
+            "key": "$introduction_th$",
+            "defaultValue": "身分與形象",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "history_th",
+            "key": "$history_th$",
+            "defaultValue": "事蹟",
+            "label": "",
+            "description": ""
+          },
+          {
+            "id": "relationship_th",
+            "key": "$relationship_th$",
+            "defaultValue": "人脈關係",
+            "label": "",
+            "description": ""
+          }
+        ],
+        "imageProps": [
+          {
+            "id": "img_protrait",
+            "key": "$img_protrait$",
+            "defaultValue": "https://placehold.co/325x695.png",
+            "label": "角色肖像圖",
+            "description": "用於角色卡最左側"
+          },
+          {
+            "id": "img_badge_left",
+            "key": "$img_badge_left$",
+            "defaultValue": "https://placehold.co/64x64.png",
+            "label": "名稱左側圖片A",
+            "description": "可用於放置國家的圖標"
+          },
+          {
+            "id": "img_badge_right",
+            "key": "$img_badge_right$",
+            "defaultValue": "https://placehold.co/64x64.png",
+            "label": "名稱左側圖片B",
+            "description": "可用於放置所屬公開的圖標"
+          },
+          {
+            "id": "img_flag",
+            "key": "$img_flag$",
+            "defaultValue": "https://placehold.co/70x96.png",
+            "label": "簡介左側圖片",
+            "description": ""
+          },
+          {
+            "id": "img_hr",
+            "key": "$img_hr$",
+            "defaultValue": "https://placehold.co/500x20.png",
+            "label": "分隔線圖片",
+            "description": ""
+          },
+          {
+            "id": "img_largeImage_1",
+            "key": "$img_largeImage_1$",
+            "defaultValue": "https://placehold.co/1920x1080.png",
+            "label": "大圖片A",
+            "description": ""
+          },
+          {
+            "id": "img_largeImage_2",
+            "key": "$img_largeImage_2$",
+            "defaultValue": "https://placehold.co/1920x1080.png",
+            "label": "大圖片B",
+            "description": ""
+          },
+          {
+            "id": "img_largeImage_3",
+            "key": "$img_largeImage_3$",
+            "defaultValue": "https://placehold.co/1920x1080.png",
+            "label": "大圖片C",
+            "description": ""
+          }
+        ],
+        "colorProps": [
+          {
+            "id": "color_primary",
+            "key": "$color_primary$",
+            "defaultValue": "#DDDDDD",
+            "label": "主要顏色",
+            "description": "格式必須是 #abcdef"
+          }
+        ],
+        "bahaCode": "[table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=43% valign=bottom][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div][img=$img_protrait$ width=325 height=695][/div][/td][/tr][/table][/td][/tr][/table][/td][td width=57% valign=bottom][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div align=center][size=1]$topTitle$[/size][/div][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div][img=$img_badge_left$ width=64 height=64][/div][/td][td][div][img=$img_badge_right$ width=64 height=64][/div][/td][td][/td][td][div align=right][size=6]$fullname$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td valign=top][div][img=$img_flag$ width=70 height=96][/div][/td][td valign=top][div align=right][size=3]$briefing$[/size][/div][/td][/tr][/table][/td][/tr][tr][td align=left][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td][div][img=$img_hr$ width=500 height=20][/div][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$race_th$[/size][/div][/td][td valign=center][div align=right][size=3]$race$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$gender_th$[/size][/div][/td][td valign=center][div align=right][size=3]$gender$[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$birthday_th$[/size][/div][/td][td valign=center][div align=right][size=3]$birthday$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$age_th$[/size][/div][/td][td valign=center][div align=right][size=3]$age$[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$size_th$[/size][/div][/td][td valign=center][div align=right][size=3]$size$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$appearance_th$[/size][/div][/td][td valign=center][div align=right][size=3]$appearance$[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$alignment_th$[/size][/div][/td][td valign=center][div align=right][size=3]$alignment$[/size][/div][/td][td][/td][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$personality_th$[/size][/div][/td][td valign=center][div align=right][size=3]$personality$[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$hobby_th$[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]$hobby$[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$likes_th$[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]$likes$[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=$color_primary$ width=40][div][size=3]$hates_th$[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]$hates$[/size][/div][/td][/tr][/table][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td valign=bottom width=33%][div][size=3][img=$img_largeImage_1$][/size][/div][/td][td valign=bottom width=33%][div][size=3][img=$img_largeImage_2$][/size][/div][/td][td valign=bottom width=33%][div][size=3][img=$img_largeImage_3$][/size][/div][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=33% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=40% bgcolor=$color_primary$ align=center][div][size=3]$combatClass_th$[/size][/div][/td][td][/td][td width=60% bgcolor=$color_primary$ align=center][div][size=3]$combatStyle_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$combatClass$[/size][/div][/td][td][/td][td align=center][div][size=3]$combatStyle$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=center][div][size=3]$proficiency_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$proficiency$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_strength_th$[/size][/div][/td][td][/td][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_dexterity_th$[/size][/div][/td][td][/td][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_constitution_th$[/size][/div][/td][td][/td][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_magic_th$[/size][/div][/td][td][/td][td width=20% bgcolor=$color_primary$ align=center][div][size=3]$stat_spirit_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$stat_strength$[/size][/div][/td][td][/td][td align=center][div][size=3]$stat_dexterity$[/size][/div][/td][td][/td][td align=center][div][size=3]$stat_constitution$[/size][/div][/td][td][/td][td align=center][div][size=3]$stat_magic$[/size][/div][/td][td][/td][td align=center][div][size=3]$stat_spirit$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$magic_fire_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$magic_water_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$magic_wind_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$magic_earth_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$magic_froze_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$magic_thunder_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$magic_holy_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$magic_darkness_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3]$magic_earth$[/size][/div][/td][td][/td][td align=center][div][size=3]$magic_froze$[/size][/div][/td][td][/td][td align=center][div][size=3]$magic_holy$[/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3]$magic_darkness$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$environment_land_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$environment_sea_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$environment_sky_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$environment_forest_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$environment_mountain_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$environment_swamp_th$[/size][/div][/td][td][/td][td width=12% bgcolor=$color_primary$ align=center][div][size=3]$environment_froze_th$[/size][/div][/td][td][/td][td width=13% bgcolor=$color_primary$ align=center][div][size=3]$environment_hot_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$environment_land$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_sea$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_sky$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_forest$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_mountain$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_swamp$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_froze$[/size][/div][/td][td][/td][td align=center][div][size=3]$environment_hot$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=30% bgcolor=$color_primary$ align=center][div][size=3]$nation_th$[/size][/div][/td][td][/td][td width=70% bgcolor=$color_primary$ align=center][div][size=3]$guild_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$nation$[/size][/div][/td][td][/td][td align=center][div][size=3]$guild$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=50% bgcolor=$color_primary$ align=center][div][size=3]$charateristic_th$[/size][/div][/td][td][/td][td width=50% bgcolor=$color_primary$ align=center][div][size=3]$ability_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$characteristic$[/size][/div][/td][td][/td][td align=center][div][size=3]$ability$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=center][div][size=3]$goal_th$[/size][/div][/td][/tr][tr][td align=center][div][size=3]$goal$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][/table][/td][td width=67% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=left][div][size=3]$introduction_th$[/size][/div][/td][/tr][tr][td align=left][div][size=3]$introduction$[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=left][div][size=3]$history_th$[/size][/div][/td][/tr][tr][td align=left][div][size=3]$history$[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=$color_primary$ align=left][div][size=3]$relationship_th$[/size][/div][/td][/tr][tr][td align=left][div][size=3]$relationship$[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table]"
+      },
+      "value": {}
+    }
+  ]
+}

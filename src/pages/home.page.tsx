@@ -3,6 +3,7 @@ import {
   postCreateFolder,
   postUploadFile,
 } from "@/helpers/google-drive.helper";
+import useCustomTemplates from "@/hooks/useCustomTemplates.hook";
 import { renderHumanDate } from "@/utils/date.util";
 import { pickFile } from "@/utils/file.util";
 import { Button, Table } from "@mui/joy";
@@ -10,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
 import { useAsyncFn, useEffectOnce, useLocalStorage } from "react-use";
+import { Link } from "wouter";
 
 const HomePage = () => {
   const [googleDriveMasterFolderId, setGoogleDriveMasterFolderId] =
@@ -20,28 +22,47 @@ const HomePage = () => {
     useLocalStorage<string>("acm-google-drive-sheets-folder-id", undefined, {
       raw: true,
     });
-  const [googleDriveTemplatesFolderId, setGoogleDriveTemplatesFolderId] =
-    useLocalStorage<string>("acm-google-drive-templates-folder-id", undefined, {
-      raw: true,
-    });
 
-  const { data: sheets, isLoading: isLoadingSheets } = useQuery({
+  const {
+    data: templates,
+    isLoading: isLoadingTemplates,
+    refetch: refetchTemplates,
+    googleDriveTemplatesFolderId,
+    setGoogleDriveTemplatesFolderId,
+  } = useCustomTemplates();
+
+  const {
+    data: sheets,
+    isLoading: isLoadingSheets,
+    refetch: refetchSheets,
+  } = useQuery({
     queryKey: ["sheets", googleDriveSheetsFolderId],
     queryFn: () =>
       getFilesByFolderId(googleDriveSheetsFolderId as unknown as string),
     enabled: !!googleDriveSheetsFolderId,
   });
 
-  const {
-    data: templates,
-    isLoading: isLoadingTemplates,
-    refetch: refetchTemplates,
-  } = useQuery({
-    queryKey: ["templates", googleDriveTemplatesFolderId],
-    queryFn: () =>
-      getFilesByFolderId(googleDriveTemplatesFolderId as unknown as string),
-    enabled: !!googleDriveTemplatesFolderId,
-  });
+  const [{ loading: isUploadingSheet }, uploadSheetAsyncFn] = useAsyncFn(
+    postUploadFile,
+    []
+  );
+
+  const handleClickUploadSheet = useCallback(async () => {
+    const file = await pickFile();
+    toast
+      .promise(uploadSheetAsyncFn(file, file.name, googleDriveSheetsFolderId), {
+        loading: (
+          <span>
+            正在上傳角色卡 <span className="bold">{file.name}</span>
+          </span>
+        ),
+        success: "上傳完成！",
+        error: "上傳失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+      })
+      .then(() => {
+        refetchSheets();
+      });
+  }, [googleDriveSheetsFolderId, refetchSheets, uploadSheetAsyncFn]);
 
   const [{ loading: isUploadingTemplate }, uploadTemplateAsyncFn] = useAsyncFn(
     postUploadFile,
@@ -97,15 +118,8 @@ const HomePage = () => {
             "初始化失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
         }
       );
-
-      // .then(([newSheetsFolderId, newTemplatesFolderId]) => {
-      //   setGoogleDriveSheetsFolderId(newSheetsFolderId);
-      //   setGoogleDriveTemplatesFolderId(newTemplatesFolderId);
-      // });
     }
   });
-
-  console.log(sheets, templates);
 
   return (
     <div className="container mx-auto py-16">
@@ -113,7 +127,16 @@ const HomePage = () => {
         <section className="space-y-2">
           <div className="flex justify-between">
             <h1 className="text-2xl bold">你的角色卡</h1>
-            <div className="text-right">
+            <div className="text-right space-x-2">
+              <Button
+                size="lg"
+                variant="soft"
+                color="primary"
+                onClick={handleClickUploadSheet}
+                loading={isUploadingSheet}
+              >
+                上傳角色卡(.json)
+              </Button>
               <Button size="lg" variant="solid" color="success">
                 創建新的角色卡
               </Button>
@@ -135,7 +158,9 @@ const HomePage = () => {
                   <td>{renderHumanDate(item.modifiedTime)}</td>
                   <td>
                     <div className="space-x-1">
-                      <Button>打開</Button>
+                      <Link to={`/sheet/${item.id}`}>
+                        <Button data-file-id={item.id}>打開</Button>
+                      </Link>
                       <Button>複製</Button>
                       <Button>匯出紀錄檔</Button>
                       <Button>匯出巴哈原始碼</Button>
@@ -194,7 +219,9 @@ const HomePage = () => {
                   <td>{renderHumanDate(item.modifiedTime)}</td>
                   <td>
                     <div className="space-x-1">
-                      <Button>打開</Button>
+                      <Link to={`/template/${item.id}`}>
+                        <Button data-file-id={item.id}>打開</Button>
+                      </Link>
                       <Button>複製</Button>
                       <Button>匯出紀錄檔</Button>
                       <Button>匯出巴哈原始碼</Button>
