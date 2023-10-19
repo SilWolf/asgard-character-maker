@@ -1,11 +1,15 @@
 import {
   getFilesByFolderId,
   postCreateFolder,
+  postUploadFile,
 } from "@/helpers/google-drive.helper";
+import { renderHumanDate } from "@/utils/date.util";
+import { pickFile } from "@/utils/file.util";
 import { Button, Table } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import toast from "react-hot-toast";
-import { useEffectOnce, useLocalStorage } from "react-use";
+import { useAsyncFn, useEffectOnce, useLocalStorage } from "react-use";
 
 const HomePage = () => {
   const [googleDriveMasterFolderId, setGoogleDriveMasterFolderId] =
@@ -21,23 +25,51 @@ const HomePage = () => {
       raw: true,
     });
 
-  const { data: sheets } = useQuery({
+  const { data: sheets, isLoading: isLoadingSheets } = useQuery({
     queryKey: ["sheets", googleDriveSheetsFolderId],
     queryFn: () =>
       getFilesByFolderId(googleDriveSheetsFolderId as unknown as string),
     enabled: !!googleDriveSheetsFolderId,
   });
 
-  const { data: templates } = useQuery({
+  const {
+    data: templates,
+    isLoading: isLoadingTemplates,
+    refetch: refetchTemplates,
+  } = useQuery({
     queryKey: ["templates", googleDriveTemplatesFolderId],
     queryFn: () =>
       getFilesByFolderId(googleDriveTemplatesFolderId as unknown as string),
     enabled: !!googleDriveTemplatesFolderId,
   });
 
+  const [{ loading: isUploadingTemplate }, uploadTemplateAsyncFn] = useAsyncFn(
+    postUploadFile,
+    []
+  );
+
+  const handleClickUploadTemplate = useCallback(async () => {
+    const file = await pickFile();
+    toast
+      .promise(
+        uploadTemplateAsyncFn(file, file.name, googleDriveTemplatesFolderId),
+        {
+          loading: (
+            <span>
+              正在上傳自定義模版 <span className="bold">{file.name}</span>
+            </span>
+          ),
+          success: "上傳完成！",
+          error: "上傳失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        }
+      )
+      .then(() => {
+        refetchTemplates();
+      });
+  }, [googleDriveTemplatesFolderId, refetchTemplates, uploadTemplateAsyncFn]);
+
   useEffectOnce(() => {
     if (!googleDriveMasterFolderId) {
-      console.log("1");
       toast.promise(
         postCreateFolder("巴哈RPG公會角色卡工具資料庫")
           .then((res) => {
@@ -73,6 +105,8 @@ const HomePage = () => {
     }
   });
 
+  console.log(sheets, templates);
+
   return (
     <div className="container mx-auto py-16">
       <div className="space-y-24">
@@ -95,28 +129,50 @@ const HomePage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>卡洛特．海沃爾</td>
-                <td>2023-02-03</td>
-                <td>
-                  <div className="space-x-1">
-                    <Button>打開</Button>
-                    <Button>匯出紀錄檔</Button>
-                    <Button>匯出巴哈原始碼</Button>
-                    <Button color="danger" variant="plain">
-                      刪除
-                    </Button>
-                  </div>
-                </td>
-              </tr>
+              {sheets?.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.name}</td>
+                  <td>{renderHumanDate(item.modifiedTime)}</td>
+                  <td>
+                    <div className="space-x-1">
+                      <Button>打開</Button>
+                      <Button>複製</Button>
+                      <Button>匯出紀錄檔</Button>
+                      <Button>匯出巴哈原始碼</Button>
+                      <Button color="danger" variant="plain">
+                        刪除
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
+          {!isLoadingSheets && sheets?.length === 0 && (
+            <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+              沒有角色卡
+            </div>
+          )}
+          {isLoadingSheets && (
+            <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+              讀取中...
+            </div>
+          )}
         </section>
 
         <section className="space-y-2">
           <div className="flex justify-between">
             <h1 className="text-2xl bold">你的自定義模版</h1>
-            <div className="text-right">
+            <div className="text-right space-x-2">
+              <Button
+                size="lg"
+                variant="soft"
+                color="primary"
+                onClick={handleClickUploadTemplate}
+                loading={isUploadingTemplate}
+              >
+                上傳新的模版(.json)
+              </Button>
               <Button size="lg" variant="solid" color="success">
                 創建新的模版
               </Button>
@@ -132,22 +188,35 @@ const HomePage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>銀狼整齊版－巴哈新版創作 v1</td>
-                <td>2023-02-03</td>
-                <td>
-                  <div className="space-x-1">
-                    <Button>打開</Button>
-                    <Button>匯出紀錄檔</Button>
-                    <Button>匯出巴哈原始碼</Button>
-                    <Button color="danger" variant="plain">
-                      刪除
-                    </Button>
-                  </div>
-                </td>
-              </tr>
+              {templates?.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.name}</td>
+                  <td>{renderHumanDate(item.modifiedTime)}</td>
+                  <td>
+                    <div className="space-x-1">
+                      <Button>打開</Button>
+                      <Button>複製</Button>
+                      <Button>匯出紀錄檔</Button>
+                      <Button>匯出巴哈原始碼</Button>
+                      <Button color="danger" variant="plain">
+                        刪除
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
+          {!isLoadingTemplates && templates?.length === 0 && (
+            <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+              沒有自定義的模版
+            </div>
+          )}
+          {isLoadingTemplates && (
+            <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+              讀取中...
+            </div>
+          )}
         </section>
       </div>
     </div>

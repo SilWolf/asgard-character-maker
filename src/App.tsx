@@ -1,5 +1,5 @@
 /* eslint-disable no-irregular-whitespace */
-import DetailPage from "./pages/detail.page";
+import SheetDetailPage from "./pages/detail.page";
 
 import useGoogleAuth from "./hooks/useGoogleAuth.hook";
 import FirstLandingPage from "./pages/first-landing.page";
@@ -9,7 +9,7 @@ import { updateGoogleDriveRequestProps } from "./helpers/google-drive.helper";
 import { useEffectOnce } from "react-use";
 
 const App = () => {
-  const { isLogined } = useGoogleAuth();
+  const { isLogined, token } = useGoogleAuth();
   // return <DetailPage />;
 
   // const hasAccess = hasGrantedAllScopesGoogle(
@@ -21,6 +21,7 @@ const App = () => {
   useEffectOnce(() => {
     updateGoogleDriveRequestProps({
       apiKey: import.meta.env.VITE_GOOGLE_DRIVE_API_KEY,
+      token,
     });
   });
 
@@ -33,8 +34,8 @@ const App = () => {
       <Route path="/">
         <HomePage />
       </Route>
-      <Route path="/creation/:creationId">
-        <DetailPage />
+      <Route path="/sheet/:sheetId">
+        <SheetDetailPage />
       </Route>
     </>
   );

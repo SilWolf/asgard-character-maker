@@ -9,12 +9,12 @@ import React, {
   useCallback,
   useContext,
   useMemo,
-  useState,
 } from "react";
+import { useCookie } from "react-use";
 
 type GoogleAuthContextValue = {
-  token: string | undefined;
-  setToken: (newValue: string | undefined) => unknown;
+  token: string | undefined | null;
+  setToken: (newValue: string) => unknown;
 };
 
 const GoogleAuthContext = React.createContext<GoogleAuthContextValue>({
@@ -30,9 +30,15 @@ export const GoogleAuthProvider = ({
   children,
   clientId,
 }: GoogleAuthProviderProps) => {
-  const [token, setToken] = useState<string>();
+  const [token, updateToken] = useCookie("acm-google-auth-token");
+  const setToken = useCallback(
+    (newToken: string) => {
+      updateToken(newToken, { expires: 1 / 24 });
+    },
+    [updateToken]
+  );
 
-  const value = useMemo(() => ({ token, setToken }), [token]);
+  const value = useMemo(() => ({ token, setToken }), [setToken, token]);
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
@@ -70,7 +76,6 @@ export const GoogleAuthLoginButton = ({
 
   const handleSuccessGoogleLogin = useCallback(
     (tokenResponse: TokenResponse) => {
-      console.log(tokenResponse);
       setToken(tokenResponse.access_token);
       onSuccess?.(tokenResponse);
     },
