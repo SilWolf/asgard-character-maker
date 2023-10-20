@@ -1,5 +1,5 @@
 /* eslint-disable no-irregular-whitespace */
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import BahaCode from "@/components/BahaCode";
 import { Breadcrumbs, Button, Tab, TabList, Tabs } from "@mui/joy";
 import toast from "react-hot-toast";
@@ -8,26 +8,30 @@ import {
   getFileByIdAsJSON,
   patchFileWithJsonObject,
 } from "@/helpers/google-drive.helper";
-import {
-  useAsyncFn,
-  useBeforeUnload,
-  useEffectOnce,
-  useToggle,
-} from "react-use";
-import { Link, useParams } from "wouter";
+import { useAsyncFn, useEffectOnce, useToggle } from "react-use";
+import { Link, useParams, unstable_usePrompt } from "react-router-dom";
 import SheetDetailNewSingleSubPage, {
   SheetNewSingle,
 } from "./new-single.subpage";
 import { Sheet } from "@/types/Sheet.type";
 import { BahaTemplate } from "@/types/Baha.type";
 import SheetDetailConfigAndExportSubPage from "./config-and-export.subpage";
+import PublicLayout from "@/layouts/public.layout";
 
 const SheetDetailPage = () => {
   const { sheetId } = useParams<{ sheetId: string }>();
   const [sheet, setSheet] = useState<Sheet | undefined>(undefined);
 
   const [dirty, toggleDirty] = useToggle(false);
-  useBeforeUnload(dirty, "你可能有未儲存的修改，確定要離開嗎？");
+  const usePromptOptions = useMemo(
+    () => ({
+      when: dirty,
+      message: "你可能有未儲存的修改，確定要離開嗎？",
+    }),
+    [dirty]
+  );
+  // useBeforeUnload(dirty, "你可能有未儲存的修改，確定要離開嗎？");
+  unstable_usePrompt(usePromptOptions);
 
   useEffectOnce(() => {
     if (!sheetId) {
@@ -45,7 +49,7 @@ const SheetDetailPage = () => {
       return;
     }
     toast
-      .promise(saveAsyncFn(sheetId, sheet), {
+      .promise(saveAsyncFn(sheetId as string, sheet), {
         loading: "儲存中...",
         success: "儲存完成",
         error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
@@ -131,12 +135,12 @@ const SheetDetailPage = () => {
   );
 
   if (!sheet) {
-    return <></>;
+    return <PublicLayout />;
   }
 
   return (
-    <>
-      <header id="header" className="pt-4 space-y-4">
+    <PublicLayout>
+      <header id="header" className="space-y-4">
         <div className="container mx-auto">
           <Breadcrumbs aria-label="breadcrumbs">
             <Link to="/">主頁</Link>
@@ -219,7 +223,7 @@ const SheetDetailPage = () => {
             className="hidden data-[active='1']:block"
             data-active={activeTab === section.id ? "1" : "0"}
           >
-            <div className="mx-auto container flex flex-row gap-x-4 h-[calc(100vh-80px)] py-4">
+            <div className="h-[calc(100vh-320px)]">
               <SheetDetailSingle
                 sectionId={section.id}
                 template={section.template}
@@ -248,7 +252,7 @@ const SheetDetailPage = () => {
           <SheetDetailConfigAndExportSubPage sheet={sheet} />
         </section>
       </div>
-    </>
+    </PublicLayout>
   );
 };
 

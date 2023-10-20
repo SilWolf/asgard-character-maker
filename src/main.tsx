@@ -16,6 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         clientId={import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID}
       >
         <Toaster position="top-right" />
+
         <App />
       </GoogleAuthProvider>
     </QueryClientProvider>

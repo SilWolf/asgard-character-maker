@@ -4,6 +4,7 @@ import {
   postUploadFile,
 } from "@/helpers/google-drive.helper";
 import useCustomTemplates from "@/hooks/useCustomTemplates.hook";
+import PublicLayout from "@/layouts/public.layout";
 import { renderHumanDate } from "@/utils/date.util";
 import { pickFile } from "@/utils/file.util";
 import { Button, Table } from "@mui/joy";
@@ -11,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
 import { useAsyncFn, useEffectOnce, useLocalStorage } from "react-use";
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const [googleDriveMasterFolderId, setGoogleDriveMasterFolderId] =
@@ -122,131 +123,125 @@ const HomePage = () => {
   });
 
   return (
-    <div className="container mx-auto py-16">
-      <div className="space-y-24">
-        <section className="space-y-2">
-          <div className="flex justify-between">
-            <h1 className="text-2xl bold">你的角色卡</h1>
-            <div className="text-right space-x-2">
-              <Button
-                size="lg"
-                variant="soft"
-                color="primary"
-                onClick={handleClickUploadSheet}
-                loading={isUploadingSheet}
-              >
-                上傳角色卡(.json)
-              </Button>
-              <Button size="lg" variant="solid" color="success">
-                創建新的角色卡
-              </Button>
+    <PublicLayout>
+      <div className="container mx-auto">
+        <div className="space-y-24">
+          <section className="space-y-2">
+            <div className="flex justify-between">
+              <h1 className="text-2xl bold">你的角色卡</h1>
+              <div className="text-right space-x-2">
+                <Button
+                  size="lg"
+                  variant="soft"
+                  color="primary"
+                  onClick={handleClickUploadSheet}
+                  loading={isUploadingSheet}
+                >
+                  上傳角色卡(.json)
+                </Button>
+                <Button size="lg" variant="solid" color="success">
+                  創建新的角色卡
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <Table>
-            <thead>
-              <tr>
-                <th style={{ width: "40%" }}>名稱</th>
-                <th>最後更新日期</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sheets?.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.name}</td>
-                  <td>{renderHumanDate(item.modifiedTime)}</td>
-                  <td>
-                    <div className="space-x-1">
-                      <Link to={`/sheet/${item.id}`}>
-                        <Button data-file-id={item.id}>打開</Button>
-                      </Link>
-                      <Button>複製</Button>
-                      <Button>匯出紀錄檔</Button>
-                      <Button>匯出巴哈原始碼</Button>
-                      <Button color="danger" variant="plain">
-                        刪除
-                      </Button>
-                    </div>
-                  </td>
+            <Table>
+              <thead>
+                <tr>
+                  <th>名稱</th>
+                  <th>最後更新日期</th>
+                  <th>
+                    <p className="text-right">操作</p>
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          {!isLoadingSheets && sheets?.length === 0 && (
-            <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
-              沒有角色卡
-            </div>
-          )}
-          {isLoadingSheets && (
-            <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
-              讀取中...
-            </div>
-          )}
-        </section>
+              </thead>
+              <tbody>
+                {sheets?.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{renderHumanDate(item.modifiedTime)}</td>
+                    <td className="text-right">
+                      <div className="space-x-1">
+                        <Link to={`/sheet/${item.id}`}>
+                          <Button data-file-id={item.id}>打開</Button>
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            {!isLoadingSheets && sheets?.length === 0 && (
+              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+                沒有角色卡
+              </div>
+            )}
+            {isLoadingSheets && (
+              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+                讀取中...
+              </div>
+            )}
+          </section>
 
-        <section className="space-y-2">
-          <div className="flex justify-between">
-            <h1 className="text-2xl bold">你的自定義模版</h1>
-            <div className="text-right space-x-2">
-              <Button
-                size="lg"
-                variant="soft"
-                color="primary"
-                onClick={handleClickUploadTemplate}
-                loading={isUploadingTemplate}
-              >
-                上傳新的模版(.json)
-              </Button>
-              <Button size="lg" variant="solid" color="success">
-                創建新的模版
-              </Button>
+          <section className="space-y-2">
+            <div className="flex justify-between">
+              <h1 className="text-2xl bold">你的自定義模版</h1>
+              <div className="text-right space-x-2">
+                <Button
+                  size="lg"
+                  variant="soft"
+                  color="primary"
+                  onClick={handleClickUploadTemplate}
+                  loading={isUploadingTemplate}
+                >
+                  上傳新的模版(.json)
+                </Button>
+                <Button size="lg" variant="solid" color="success">
+                  創建新的模版
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <Table>
-            <thead>
-              <tr>
-                <th style={{ width: "40%" }}>名稱</th>
-                <th>最後更新日期</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {templates?.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.name}</td>
-                  <td>{renderHumanDate(item.modifiedTime)}</td>
-                  <td>
-                    <div className="space-x-1">
-                      <Link to={`/template/${item.id}`}>
-                        <Button data-file-id={item.id}>打開</Button>
-                      </Link>
-                      <Button>複製</Button>
-                      <Button>匯出紀錄檔</Button>
-                      <Button>匯出巴哈原始碼</Button>
-                      <Button color="danger" variant="plain">
-                        刪除
-                      </Button>
-                    </div>
-                  </td>
+            <Table>
+              <thead>
+                <tr>
+                  <th>名稱</th>
+                  <th>最後更新日期</th>
+                  <th>
+                    <p className="text-right">操作</p>
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          {!isLoadingTemplates && templates?.length === 0 && (
-            <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
-              沒有自定義的模版
-            </div>
-          )}
-          {isLoadingTemplates && (
-            <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
-              讀取中...
-            </div>
-          )}
-        </section>
+              </thead>
+              <tbody>
+                {templates?.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{renderHumanDate(item.modifiedTime)}</td>
+                    <td className="text-right">
+                      <div className="space-x-1">
+                        <Link to={`/template/${item.id}`}>
+                          <Button data-file-id={item.id}>打開</Button>
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            {!isLoadingTemplates && templates?.length === 0 && (
+              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+                沒有自定義的模版
+              </div>
+            )}
+            {isLoadingTemplates && (
+              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+                讀取中...
+              </div>
+            )}
+          </section>
+        </div>
       </div>
-    </div>
+    </PublicLayout>
   );
 };
 

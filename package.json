@@ -26,8 +26,8 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
     "react-hot-toast": "^2.4.1",
-    "react-use": "^17.4.0",
-    "wouter": "^2.12.1"
+    "react-router-dom": "^6.17.0",
+    "react-use": "^17.4.0"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.0.0",
