@@ -1,6 +1,6 @@
 /* eslint-disable no-irregular-whitespace */
 import { useCallback, useState } from "react";
-import BahaCode, { BahaTemplate } from "@/components/BahaCode";
+import BahaCode from "@/components/BahaCode";
 import { Breadcrumbs, Button, Tab, TabList, Tabs } from "@mui/joy";
 import toast from "react-hot-toast";
 import SheetDetailSingle from "./single.subpage";
@@ -8,29 +8,26 @@ import {
   getFileByIdAsJSON,
   patchFileWithJsonObject,
 } from "@/helpers/google-drive.helper";
-import { useAsyncFn, useEffectOnce } from "react-use";
+import {
+  useAsyncFn,
+  useBeforeUnload,
+  useEffectOnce,
+  useToggle,
+} from "react-use";
 import { Link, useParams } from "wouter";
 import SheetDetailNewSingleSubPage, {
   SheetNewSingle,
 } from "./new-single.subpage";
-
-type Sheet = {
-  slug: string;
-  name: string;
-  author: string;
-  sections: SheetSection[];
-};
-
-type SheetSection = {
-  id: string;
-  name: string;
-  template: BahaTemplate;
-  value: Record<string, string>;
-};
+import { Sheet } from "@/types/Sheet.type";
+import { BahaTemplate } from "@/types/Baha.type";
+import SheetDetailConfigAndExportSubPage from "./config-and-export.subpage";
 
 const SheetDetailPage = () => {
   const { sheetId } = useParams<{ sheetId: string }>();
   const [sheet, setSheet] = useState<Sheet | undefined>(undefined);
+
+  const [dirty, toggleDirty] = useToggle(false);
+  useBeforeUnload(dirty, "你可能有未儲存的修改，確定要離開嗎？");
 
   useEffectOnce(() => {
     if (!sheetId) {
@@ -40,44 +37,6 @@ const SheetDetailPage = () => {
     getFileByIdAsJSON<Sheet>(sheetId).then(setSheet);
   });
 
-  const handleClickExport = useCallback(() => {
-    if (!sheet) {
-      return;
-    }
-
-    const finalBahaCode = sheet.sections
-      .map(({ template, value }) => {
-        const props = [
-          ...template.textProps,
-          ...template.systemTextProps,
-          ...template.imageProps,
-          ...template.colorProps,
-        ];
-
-        let replacedCode = template.bahaCode;
-
-        for (const prop of props) {
-          replacedCode = replacedCode.replace(
-            new RegExp(`\\$${prop.id}\\$`, "g"),
-            value[prop.id] || prop.defaultValue
-          );
-        }
-
-        return replacedCode;
-      })
-      .join("\n");
-
-    const filename = `asgard character - ${new Date().toISOString()}.txt`;
-
-    const element = document.createElement("a");
-    element.setAttribute(
-      "href",
-      "data:text/plain;charset=utf-8," + encodeURIComponent(finalBahaCode)
-    );
-    element.setAttribute("download", filename);
-    element.click();
-  }, [sheet]);
-
   const [{ loading: isSaving }, saveAsyncFn] = useAsyncFn(
     patchFileWithJsonObject
   );
@@ -85,12 +44,16 @@ const SheetDetailPage = () => {
     if (!sheet) {
       return;
     }
-    toast.promise(saveAsyncFn(sheetId, sheet), {
-      loading: "儲存中...",
-      success: "儲存完成",
-      error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
-    });
-  }, [saveAsyncFn, sheet, sheetId]);
+    toast
+      .promise(saveAsyncFn(sheetId, sheet), {
+        loading: "儲存中...",
+        success: "儲存完成",
+        error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+      })
+      .then(() => {
+        toggleDirty(false);
+      });
+  }, [saveAsyncFn, sheet, sheetId, toggleDirty]);
 
   const [activeTab, setActiveTab] = useState<string>("0");
   const handleChangeTab = useCallback(
@@ -122,8 +85,9 @@ const SheetDetailPage = () => {
           }),
         };
       });
+      toggleDirty(true);
     },
-    []
+    [toggleDirty]
   );
 
   const handleSubmitNewSingle = useCallback(
@@ -158,11 +122,12 @@ const SheetDetailPage = () => {
               ],
             };
           });
-
           setActiveTab(newSingle.id);
+
+          toggleDirty(true);
         });
     },
-    []
+    [toggleDirty]
   );
 
   if (!sheet) {
@@ -209,14 +174,16 @@ const SheetDetailPage = () => {
               </Tabs>
             </div>
           </div>
+          <div className="shrink-0">
+            <Tabs value={activeTab} onChange={handleChangeTab}>
+              <TabList>
+                <Tab value="configAndExport" variant="plain" color="neutral">
+                  設定/匯出
+                </Tab>
+              </TabList>
+            </Tabs>
+          </div>
           <div className="shrink-0 space-x-2">
-            <Button
-              color="neutral"
-              variant="outlined"
-              onClick={handleClickExport}
-            >
-              匯出巴哈創作原始碼
-            </Button>
             <Button
               color="success"
               onClick={handleClickSave}
@@ -272,6 +239,13 @@ const SheetDetailPage = () => {
             sectionsCount={sheet.sections.length}
             onSubmit={handleSubmitNewSingle}
           />
+        </section>
+
+        <section
+          className="hidden data-[active='1']:block"
+          data-active={activeTab === "configAndExport" ? "1" : "0"}
+        >
+          <SheetDetailConfigAndExportSubPage sheet={sheet} />
         </section>
       </div>
     </>

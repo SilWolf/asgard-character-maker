@@ -1,24 +1,7 @@
+import { BahaTemplate } from "@/types/Baha.type";
 import reactPreset from "@bbob/preset-react";
 import reactRender from "@bbob/react/es/render";
 import { useMemo } from "react";
-
-export type BahaTemplate = {
-  slug: string;
-  author: string;
-  textProps: BahaTemplateProp[];
-  systemTextProps: BahaTemplateProp[];
-  imageProps: BahaTemplateProp[];
-  colorProps: BahaTemplateProp[];
-  bahaCode: string;
-};
-
-export type BahaTemplateProp = {
-  id: string;
-  key: string;
-  defaultValue: string;
-  label: string;
-  description: string;
-};
 
 type BBOBNode = {
   tag: string;
