@@ -95,3 +95,22 @@ export const postUploadFile = (
     }
   );
 };
+
+export const patchFileWithJsonObject = (
+  fileId: string,
+  jsonObj: Record<string, unknown>
+) => {
+  const blob = new Blob([JSON.stringify(jsonObj, null, 2)], {
+    type: "application/json",
+  });
+
+  return googleDriveAxiosInstance.patch(
+    `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media&fields=id`,
+    blob,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+};

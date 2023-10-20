@@ -1,12 +1,15 @@
 /* eslint-disable no-irregular-whitespace */
 import { useCallback, useState } from "react";
 import BahaCode, { BahaTemplate } from "@/components/BahaCode";
-import { Button, Tab, TabList, Tabs } from "@mui/joy";
+import { Breadcrumbs, Button, Tab, TabList, Tabs } from "@mui/joy";
 import toast from "react-hot-toast";
 import SheetDetailSingle from "./single.subpage";
-import { getFileByIdAsJSON } from "@/helpers/google-drive.helper";
-import { useEffectOnce } from "react-use";
-import { useParams } from "wouter";
+import {
+  getFileByIdAsJSON,
+  patchFileWithJsonObject,
+} from "@/helpers/google-drive.helper";
+import { useAsyncFn, useEffectOnce } from "react-use";
+import { Link, useParams } from "wouter";
 import SheetDetailNewSingleSubPage, {
   SheetNewSingle,
 } from "./new-single.subpage";
@@ -75,16 +78,50 @@ const SheetDetailPage = () => {
     element.click();
   }, [sheet]);
 
+  const [{ loading: isSaving }, saveAsyncFn] = useAsyncFn(
+    patchFileWithJsonObject
+  );
   const handleClickSave = useCallback(() => {
-    localStorage.setItem("save", JSON.stringify(sheet));
-
-    toast.success("已儲存");
-  }, [sheet]);
+    if (!sheet) {
+      return;
+    }
+    toast.promise(saveAsyncFn(sheetId, sheet), {
+      loading: "儲存中...",
+      success: "儲存完成",
+      error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+    });
+  }, [saveAsyncFn, sheet, sheetId]);
 
   const [activeTab, setActiveTab] = useState<string>("0");
   const handleChangeTab = useCallback(
     (_: unknown, newValue: string | number | null) => {
       setActiveTab(newValue as string);
+    },
+    []
+  );
+
+  const handleSubmitSingle = useCallback(
+    (sectionId: string, newValue: Record<string, string>) => {
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        const index = prev.sections.findIndex(({ id }) => sectionId === id);
+        if (index === -1) {
+          return prev;
+        }
+
+        const section = prev.sections[index];
+
+        return {
+          ...prev,
+          sections: prev.sections.splice(index, 1, {
+            ...section,
+            value: newValue,
+          }),
+        };
+      });
     },
     []
   );
@@ -134,51 +171,60 @@ const SheetDetailPage = () => {
 
   return (
     <>
-      <header
-        id="header"
-        className="pt-4 container mx-auto flex flex-row gap-x-4"
-      >
-        <div className="shrink-0">
-          <Tabs value={activeTab} onChange={handleChangeTab}>
-            <TabList>
-              <Tab value="0" variant="plain" color="neutral">
-                總覽
-              </Tab>
-            </TabList>
-          </Tabs>
+      <header id="header" className="pt-4 space-y-4">
+        <div className="container mx-auto">
+          <Breadcrumbs aria-label="breadcrumbs">
+            <Link to="/">主頁</Link>
+            <span>{sheet.name}</span>
+          </Breadcrumbs>
         </div>
-        <div className="flex-1">
-          <div>
+        <div className="container mx-auto flex flex-row gap-x-4">
+          <div className="shrink-0">
             <Tabs value={activeTab} onChange={handleChangeTab}>
               <TabList>
-                {sheet.sections.map((section) => (
-                  <Tab
-                    key={section.id}
-                    value={section.id}
-                    variant="plain"
-                    color="neutral"
-                  >
-                    {section.name}
-                  </Tab>
-                ))}
-                <Tab value="+" variant="plain" color="neutral">
-                  +
+                <Tab value="0" variant="plain" color="neutral">
+                  總覽
                 </Tab>
               </TabList>
             </Tabs>
           </div>
-        </div>
-        <div className="shrink-0 space-x-2">
-          <Button
-            color="neutral"
-            variant="outlined"
-            onClick={handleClickExport}
-          >
-            匯出巴哈創作原始碼
-          </Button>
-          <Button color="success" onClick={handleClickSave}>
-            儲存
-          </Button>
+          <div className="flex-1">
+            <div>
+              <Tabs value={activeTab} onChange={handleChangeTab}>
+                <TabList>
+                  {sheet.sections.map((section) => (
+                    <Tab
+                      key={section.id}
+                      value={section.id}
+                      variant="plain"
+                      color="neutral"
+                    >
+                      {section.name}
+                    </Tab>
+                  ))}
+                  <Tab value="+" variant="plain" color="neutral">
+                    +
+                  </Tab>
+                </TabList>
+              </Tabs>
+            </div>
+          </div>
+          <div className="shrink-0 space-x-2">
+            <Button
+              color="neutral"
+              variant="outlined"
+              onClick={handleClickExport}
+            >
+              匯出巴哈創作原始碼
+            </Button>
+            <Button
+              color="success"
+              onClick={handleClickSave}
+              loading={isSaving}
+            >
+              儲存
+            </Button>
+          </div>
         </div>
       </header>
       <div className="mt-4">
@@ -208,8 +254,11 @@ const SheetDetailPage = () => {
           >
             <div className="mx-auto container flex flex-row gap-x-4 h-[calc(100vh-80px)] py-4">
               <SheetDetailSingle
+                sectionId={section.id}
                 template={section.template}
                 value={section.value}
+                submitFlag={activeTab !== section.id}
+                onSubmit={handleSubmitSingle}
               />
             </div>
           </section>

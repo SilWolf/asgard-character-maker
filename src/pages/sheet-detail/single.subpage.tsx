@@ -1,15 +1,32 @@
 import BahaCode, { BahaTemplate } from "@/components/BahaCode";
 import { FormControl, FormHelperText, FormLabel, Textarea } from "@mui/joy";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
+  sectionId: string;
   template: BahaTemplate;
   value: Record<string, string>;
+  submitFlag: boolean;
+  onSubmit: (sectionId: string, newValue: Record<string, string>) => void;
 };
 
-const SheetDetailSingle = ({ template, value }: Props) => {
-  const { register, watch } = useForm({ defaultValues: value });
+const SheetDetailSingle = ({
+  sectionId,
+  template,
+  value,
+  submitFlag,
+  onSubmit,
+}: Props) => {
+  const { register, watch, getValues } = useForm({ defaultValues: value });
   const values = watch();
+
+  useEffect(() => {
+    if (submitFlag) {
+      onSubmit(sectionId, getValues());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submitFlag]);
 
   return (
     <>
