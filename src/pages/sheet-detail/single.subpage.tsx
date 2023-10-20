@@ -1,7 +1,7 @@
 import BahaCode from "@/components/BahaCode";
 import { BahaTemplate } from "@/types/Baha.type";
 import { FormControl, FormHelperText, FormLabel, Textarea } from "@mui/joy";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
@@ -19,8 +19,12 @@ const SheetDetailSingle = ({
   submitFlag,
   onSubmit,
 }: Props) => {
-  const { register, watch, getValues } = useForm({ defaultValues: value });
-  const values = watch();
+  const { register, getValues } = useForm({ defaultValues: value });
+  const [thisValue, setThisValue] = useState(value);
+
+  const handleBlurForm = useCallback(() => {
+    setThisValue(getValues());
+  }, [getValues]);
 
   useEffect(() => {
     if (submitFlag) {
@@ -36,12 +40,12 @@ const SheetDetailSingle = ({
           <BahaCode
             code={template.bahaCode}
             template={template}
-            values={values}
+            values={thisValue}
           />
         </div>
       </section>
       <section className="flex-1 overflow-y-scroll">
-        <form>
+        <form onBlur={handleBlurForm}>
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl bold">顏色</h2>
