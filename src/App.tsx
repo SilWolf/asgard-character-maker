@@ -1,12 +1,12 @@
 /* eslint-disable no-irregular-whitespace */
 import SheetDetailPage from "./pages/sheet-detail/index.page";
+import TemplateDetailPage from "./pages/template-detail/index.page";
 
 import useGoogleAuth from "./hooks/useGoogleAuth.hook";
 import FirstLandingPage from "./pages/first-landing.page";
 import HomePage from "./pages/home.page";
 import { updateGoogleDriveRequestProps } from "./helpers/google-drive.helper";
 import { useEffectOnce } from "react-use";
-import TemplateDetailPage from "./pages/template-detail.page";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([

@@ -1,7 +1,7 @@
 import BahaCode from "@/components/BahaCode";
 import { BahaTemplate } from "@/types/Baha.type";
 import { FormControl, FormHelperText, FormLabel, Textarea } from "@mui/joy";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
@@ -21,6 +21,27 @@ const SheetDetailSingle = ({
 }: Props) => {
   const { register, getValues } = useForm({ defaultValues: value });
   const [thisValue, setThisValue] = useState(value);
+
+  const [colorProps, textProps, imageProps, systemProps] = useMemo(() => {
+    const thisColorProps = [];
+    const thisTextProps = [];
+    const thisImageProps = [];
+    const thisSystemProps = [];
+
+    for (const prop of template.props) {
+      if (prop.category === "text") {
+        thisTextProps.push(prop);
+      } else if (prop.category === "color") {
+        thisColorProps.push(prop);
+      } else if (prop.category === "image") {
+        thisImageProps.push(prop);
+      } else if (prop.category === "system") {
+        thisSystemProps.push(prop);
+      }
+    }
+
+    return [thisColorProps, thisTextProps, thisImageProps, thisSystemProps];
+  }, [template.props]);
 
   const handleBlurForm = useCallback(() => {
     setThisValue(getValues());
@@ -49,7 +70,7 @@ const SheetDetailSingle = ({
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl bold">顏色</h2>
-              {template.colorProps.map((prop) => (
+              {colorProps.map((prop) => (
                 <div
                   key={prop.id}
                   className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
@@ -68,7 +89,7 @@ const SheetDetailSingle = ({
 
             <div>
               <h2 className="text-2xl bold">角色資料</h2>
-              {template.textProps.map((prop) => (
+              {textProps.map((prop) => (
                 <div
                   key={prop.id}
                   className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
@@ -87,7 +108,7 @@ const SheetDetailSingle = ({
 
             <div>
               <h2 className="text-2xl bold">圖片</h2>
-              {template.imageProps.map((prop) => (
+              {imageProps.map((prop) => (
                 <div
                   key={prop.id}
                   className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
@@ -106,7 +127,7 @@ const SheetDetailSingle = ({
 
             <div>
               <h2 className="text-2xl bold">系統用字</h2>
-              {template.systemTextProps.map((prop) => (
+              {systemProps.map((prop) => (
                 <div
                   key={prop.id}
                   className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"

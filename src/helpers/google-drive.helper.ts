@@ -65,7 +65,7 @@ export const postCreateFolder = (name: string, parentFolderId?: string) => {
 };
 
 export const postUploadFile = (
-  file: File,
+  file: File | Blob,
   filename: string,
   parentFolderId: string = "root"
 ) => {
@@ -85,7 +85,7 @@ export const postUploadFile = (
   );
   formData.append("file", file);
 
-  return googleDriveAxiosInstance.post(
+  return googleDriveAxiosInstance.post<{ id: string }>(
     "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id",
     formData,
     {
@@ -94,6 +94,18 @@ export const postUploadFile = (
       },
     }
   );
+};
+
+export const postUploadJsonObjectAsFile = (
+  jsonObj: Record<string, unknown>,
+  filename: string,
+  parentFolderId: string = "root"
+) => {
+  const blob = new Blob([JSON.stringify(jsonObj, null, 2)], {
+    type: "application/json",
+  });
+
+  return postUploadFile(blob, filename, parentFolderId);
 };
 
 export const patchFileWithJsonObject = (

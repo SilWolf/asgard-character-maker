@@ -37,35 +37,24 @@ type Props = {
   code: string;
   template: BahaTemplate;
   values: Record<string, string>;
+  alwaysFallbackKeys?: boolean;
 };
 
-const BahaCode = ({ code, template, values }: Props) => {
+const BahaCode = ({ code, template, values, alwaysFallbackKeys }: Props) => {
   const refinedCode = useMemo(() => {
-    const props = [
-      ...template.textProps,
-      ...template.systemTextProps,
-      ...template.imageProps,
-      ...template.colorProps,
-    ];
-
     let replacedCode = code;
 
-    for (const prop of props) {
+    for (const prop of template.props) {
       replacedCode = replacedCode.replace(
         new RegExp(`\\$${prop.id}\\$`, "g"),
-        values[prop.id] || prop.defaultValue
+        values[prop.id] ||
+          prop.defaultValue ||
+          (alwaysFallbackKeys ? prop.key : "")
       );
     }
 
     return replacedCode;
-  }, [
-    code,
-    template.colorProps,
-    template.imageProps,
-    template.systemTextProps,
-    template.textProps,
-    values,
-  ]);
+  }, [alwaysFallbackKeys, code, template.props, values]);
 
   return reactRender(refinedCode, bahaPreset());
 };

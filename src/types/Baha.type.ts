@@ -1,10 +1,8 @@
 export type BahaTemplate = {
+  name: string;
   slug: string;
   author: string;
-  textProps: BahaTemplateProp[];
-  systemTextProps: BahaTemplateProp[];
-  imageProps: BahaTemplateProp[];
-  colorProps: BahaTemplateProp[];
+  props: BahaTemplateProp[];
   bahaCode: string;
 };
 
@@ -14,4 +12,5 @@ export type BahaTemplateProp = {
   defaultValue: string;
   label: string;
   description: string;
+  category: "text" | "color" | "image" | "system";
 };

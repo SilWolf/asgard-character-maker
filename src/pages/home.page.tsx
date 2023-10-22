@@ -2,19 +2,24 @@ import {
   getFilesByFolderId,
   postCreateFolder,
   postUploadFile,
+  postUploadJsonObjectAsFile,
 } from "@/helpers/google-drive.helper";
 import useCustomTemplates from "@/hooks/useCustomTemplates.hook";
 import PublicLayout from "@/layouts/public.layout";
-import { renderHumanDate } from "@/utils/date.util";
+import { getNowString, renderHumanDate } from "@/utils/date.util";
 import { pickFile } from "@/utils/file.util";
 import { Button, Table } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
 import { useAsyncFn, useEffectOnce, useLocalStorage } from "react-use";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BahaTemplate } from "@/types/Baha.type";
+import { utilGetUniqueId } from "@/utils/string.util";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
   const [googleDriveMasterFolderId, setGoogleDriveMasterFolderId] =
     useLocalStorage<string>("acm-google-drive-master-folder-id", undefined, {
       raw: true,
@@ -89,6 +94,37 @@ const HomePage = () => {
         refetchTemplates();
       });
   }, [googleDriveTemplatesFolderId, refetchTemplates, uploadTemplateAsyncFn]);
+
+  const [{ loading: isCreatingTemplate }, createTemplateAsyncFn] = useAsyncFn(
+    postUploadJsonObjectAsFile
+  );
+  const handleClickCreateTemplate = useCallback(() => {
+    const name = `未命名模版_${getNowString()}`;
+    const slug = `${getNowString()}_${utilGetUniqueId()}`;
+    const defaultTemplate: BahaTemplate = {
+      name: name,
+      slug,
+      author: "",
+      props: [],
+      bahaCode: "[div]這是一個新的模版。[/div]",
+    };
+    toast
+      .promise(
+        createTemplateAsyncFn(
+          defaultTemplate,
+          `${name}.json`,
+          googleDriveTemplatesFolderId
+        ),
+        {
+          loading: "正在創建一個空白的模版",
+          success: "創建完成！",
+          error: "創建失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        }
+      )
+      .then((res) => {
+        navigate(`/template/${res.data.id}`);
+      });
+  }, [createTemplateAsyncFn, googleDriveTemplatesFolderId, navigate]);
 
   useEffectOnce(() => {
     if (!googleDriveMasterFolderId) {
@@ -196,7 +232,13 @@ const HomePage = () => {
                 >
                   上傳新的模版(.json)
                 </Button>
-                <Button size="lg" variant="solid" color="success">
+                <Button
+                  size="lg"
+                  variant="solid"
+                  color="success"
+                  onClick={handleClickCreateTemplate}
+                  loading={isCreatingTemplate}
+                >
                   創建新的模版
                 </Button>
               </div>

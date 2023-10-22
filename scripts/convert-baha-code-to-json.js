@@ -106,9 +106,7 @@ fs.writeFileSync(
   "./dist.json",
   JSON.stringify(
     {
-      textProps,
-      imageProps,
-      colorProps,
+      props: [...textProps, ...imageProps, ...colorProps],
       bahaCode: replacedBahaCode,
     },
     null,

@@ -18,16 +18,9 @@ const SheetDetailConfigAndExportSubPage = ({ sheet }: Props) => {
     () =>
       sheet?.sections
         .map(({ template, value }) => {
-          const props = [
-            ...template.textProps,
-            ...template.systemTextProps,
-            ...template.imageProps,
-            ...template.colorProps,
-          ];
-
           let replacedCode = template.bahaCode;
 
-          for (const prop of props) {
+          for (const prop of template.props) {
             replacedCode = replacedCode.replace(
               new RegExp(`\\$${prop.id}\\$`, "g"),
               value[prop.id] || prop.defaultValue
