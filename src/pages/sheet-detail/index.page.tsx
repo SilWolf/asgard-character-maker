@@ -134,6 +134,23 @@ const SheetDetailPage = () => {
     [toggleDirty]
   );
 
+  const handleSubmitConfig = useCallback(
+    (newValue: Pick<Sheet, "name" | "author">) => {
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          ...prev,
+          ...newValue,
+        };
+      });
+
+      toggleDirty(true);
+    },
+    [toggleDirty]
+  );
+
   if (!sheet) {
     return <PublicLayout />;
   }
@@ -250,7 +267,10 @@ const SheetDetailPage = () => {
           className="hidden data-[active='1']:block"
           data-active={activeTab === "configAndExport" ? "1" : "0"}
         >
-          <SheetDetailConfigAndExportSubPage sheet={sheet} />
+          <SheetDetailConfigAndExportSubPage
+            sheet={sheet}
+            onSubmit={handleSubmitConfig}
+          />
         </section>
       </div>
     </PublicLayout>

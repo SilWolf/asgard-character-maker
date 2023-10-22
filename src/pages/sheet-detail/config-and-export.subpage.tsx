@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 
 type Props = {
   sheet: Sheet;
-  onSubmit: (newValues: Pick<BahaTemplate, "name" | "author">) => void;
+  onSubmit: (newValues: Pick<Sheet, "name" | "author">) => void;
 };
 
 const SheetDetailConfigAndExportSubPage = ({ sheet, onSubmit }: Props) => {
