@@ -4,16 +4,30 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  Input,
   Textarea,
 } from "@mui/joy";
 import { useCallback, useMemo } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 type Props = {
   sheet: Sheet;
+  onSubmit: (newValues: Pick<BahaTemplate, "name" | "author">) => void;
 };
 
-const SheetDetailConfigAndExportSubPage = ({ sheet }: Props) => {
+const SheetDetailConfigAndExportSubPage = ({ sheet, onSubmit }: Props) => {
+  const { register, getValues } = useForm({
+    defaultValues: {
+      name: sheet.name,
+      author: sheet.author,
+    },
+  });
+
+  const handleBlurForm = useCallback(() => {
+    onSubmit(getValues());
+  }, [getValues, onSubmit]);
+
   const finalBahaCode = useMemo(
     () =>
       sheet?.sections
@@ -56,29 +70,43 @@ const SheetDetailConfigAndExportSubPage = ({ sheet }: Props) => {
 
   return (
     <div className="container mx-auto max-w-screen-md">
-      <div className="space-y-6">
-        <h2 className="text-2xl bold">匯出</h2>
-        <div className="space-y-2">
+      <div className="space-y-16">
+        <form className="space-y-4" onBlur={handleBlurForm}>
+          <h2 className="text-2xl">基本設置</h2>
           <FormControl>
-            <FormLabel>巴哈小屋創作原始碼</FormLabel>
-            <Textarea value={finalBahaCode} maxRows={5} />
-            <FormHelperText>
-              將以上原始碼複製貼上到到小屋創作中，就能得到「總覽」中的效果。
-            </FormHelperText>
+            <FormLabel>模版名稱</FormLabel>
+            <Input {...register("name")} />
           </FormControl>
-          <div className="space-x-2">
-            <Button color="primary" onClick={handleClickCopyBahaCode}>
-              複製
-            </Button>
-            <Button
-              color="neutral"
-              variant="outlined"
-              onClick={handleClickExport}
-            >
-              下載巴哈創作原始碼(.txt)
-            </Button>
+          <FormControl>
+            <FormLabel>作者</FormLabel>
+            <Input {...register("author")} />
+          </FormControl>
+        </form>
+
+        <form className="space-y-4">
+          <h2 className="text-2xl">匯出</h2>
+          <div className="space-y-4">
+            <FormControl>
+              <FormLabel>巴哈小屋創作原始碼</FormLabel>
+              <Textarea value={finalBahaCode} maxRows={5} />
+              <FormHelperText>
+                將以上原始碼複製貼上到到小屋創作中，就能得到「總覽」中的效果。
+              </FormHelperText>
+            </FormControl>
+            <div className="space-x-2">
+              <Button color="primary" onClick={handleClickCopyBahaCode}>
+                複製
+              </Button>
+              <Button
+                color="neutral"
+                variant="outlined"
+                onClick={handleClickExport}
+              >
+                下載巴哈創作原始碼(.txt)
+              </Button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

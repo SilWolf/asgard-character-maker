@@ -16,6 +16,7 @@ import { useAsyncFn, useEffectOnce, useLocalStorage } from "react-use";
 import { Link, useNavigate } from "react-router-dom";
 import { BahaTemplate } from "@/types/Baha.type";
 import { utilGetUniqueId } from "@/utils/string.util";
+import { Sheet } from "@/types/Sheet.type";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -74,6 +75,36 @@ const HomePage = () => {
     postUploadFile,
     []
   );
+
+  const [{ loading: isCreatingSheet }, createSheetAsyncFn] = useAsyncFn(
+    postUploadJsonObjectAsFile
+  );
+  const handleClickCreateSheet = useCallback(() => {
+    const name = `未命名角色卡_${getNowString()}`;
+    const slug = `${getNowString()}_${utilGetUniqueId()}`;
+    const defaultSheet: Sheet = {
+      name: name,
+      slug,
+      author: "",
+      sections: [],
+    };
+    toast
+      .promise(
+        createSheetAsyncFn(
+          defaultSheet,
+          `${name}.json`,
+          googleDriveSheetsFolderId
+        ),
+        {
+          loading: "正在創建一個空白的角色卡",
+          success: "創建完成！",
+          error: "創建失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        }
+      )
+      .then((res) => {
+        navigate(`/sheet/${res.data.id}`);
+      });
+  }, [createSheetAsyncFn, googleDriveSheetsFolderId, navigate]);
 
   const handleClickUploadTemplate = useCallback(async () => {
     const file = await pickFile();
@@ -173,9 +204,15 @@ const HomePage = () => {
                   onClick={handleClickUploadSheet}
                   loading={isUploadingSheet}
                 >
-                  上傳角色卡(.json)
+                  上傳角色卡 (.json)
                 </Button>
-                <Button size="lg" variant="solid" color="success">
+                <Button
+                  size="lg"
+                  variant="solid"
+                  color="success"
+                  onClick={handleClickCreateSheet}
+                  loading={isCreatingSheet}
+                >
                   創建新的角色卡
                 </Button>
               </div>

@@ -144,6 +144,7 @@ const SheetDetailPage = () => {
         <div className="container mx-auto">
           <Breadcrumbs aria-label="breadcrumbs">
             <Link to="/">主頁</Link>
+            <span>角色卡</span>
             <span>{sheet.name}</span>
           </Breadcrumbs>
         </div>
@@ -182,7 +183,7 @@ const SheetDetailPage = () => {
             <Tabs value={activeTab} onChange={handleChangeTab}>
               <TabList>
                 <Tab value="configAndExport" variant="plain" color="neutral">
-                  設定/匯出
+                  設定＆匯出
                 </Tab>
               </TabList>
             </Tabs>

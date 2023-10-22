@@ -11,6 +11,7 @@ import { useAsyncFn, useEffectOnce, useToggle } from "react-use";
 import TemplateDetailPropsSubPage from "./props.subpage";
 import TemplateDetailBahaCodeSubPage from "./bahaCode.subpage";
 import toast from "react-hot-toast";
+import TemplateDetailConfigAndExportSubPage from "./config-and-export.subpage";
 
 const TemplateCreatePage = () => {
   const { templateId } = useParams<{ templateId: string }>();
@@ -52,6 +53,23 @@ const TemplateCreatePage = () => {
         return {
           ...prev,
           props: newProps,
+        };
+      });
+
+      toggleDirty(true);
+    },
+    [toggleDirty]
+  );
+
+  const handleSubmitConfig = useCallback(
+    (newValue: Pick<BahaTemplate, "name" | "author">) => {
+      setTemplate((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          ...prev,
+          ...newValue,
         };
       });
 
@@ -156,6 +174,16 @@ const TemplateCreatePage = () => {
               onSubmit={handleSubmitProps}
             />
           </div>
+        </section>
+
+        <section
+          className="hidden data-[active='1']:block"
+          data-active={activeTab === "2" ? "1" : "0"}
+        >
+          <TemplateDetailConfigAndExportSubPage
+            template={template}
+            onSubmit={handleSubmitConfig}
+          />
         </section>
       </div>
     </PublicLayout>
