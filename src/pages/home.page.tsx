@@ -1,4 +1,5 @@
 import {
+  copyFile,
   getFilesByFolderId,
   postCreateFolder,
   postUploadFile,
@@ -157,6 +158,24 @@ const HomePage = () => {
       });
   }, [createTemplateAsyncFn, googleDriveTemplatesFolderId, navigate]);
 
+  const [{ loading: isCopyingFile }, copyFileAsyncFn] = useAsyncFn(copyFile);
+  const handleClickCopy = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const fileId = e.currentTarget.getAttribute("data-file-id") as string;
+      toast
+        .promise(copyFileAsyncFn(fileId), {
+          loading: "正在複製新的檔案",
+          success: "複製成功",
+          error: "複製失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        })
+        .then(() => {
+          refetchSheets();
+          refetchTemplates();
+        });
+    },
+    [copyFileAsyncFn, refetchSheets, refetchTemplates]
+  );
+
   useEffectOnce(() => {
     if (!googleDriveMasterFolderId) {
       toast.promise(
@@ -238,6 +257,14 @@ const HomePage = () => {
                         <Link to={`/sheet/${item.id}`}>
                           <Button data-file-id={item.id}>打開</Button>
                         </Link>
+                        <Button
+                          variant="plain"
+                          data-file-id={item.id}
+                          onClick={handleClickCopy}
+                          loading={isCopyingFile}
+                        >
+                          複製
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -301,6 +328,14 @@ const HomePage = () => {
                         <Link to={`/template/${item.id}`}>
                           <Button data-file-id={item.id}>打開</Button>
                         </Link>
+                        <Button
+                          variant="plain"
+                          data-file-id={item.id}
+                          onClick={handleClickCopy}
+                          loading={isCopyingFile}
+                        >
+                          複製
+                        </Button>
                       </div>
                     </td>
                   </tr>

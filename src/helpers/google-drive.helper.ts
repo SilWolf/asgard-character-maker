@@ -159,3 +159,9 @@ export const deleteFile = (fileId: string) => {
     `https://www.googleapis.com/drive/v3/files/${fileId}`
   );
 };
+
+export const copyFile = (fileId: string) => {
+  return googleDriveAxiosInstance.post(
+    `https://www.googleapis.com/drive/v3/files/${fileId}/copy`
+  );
+};

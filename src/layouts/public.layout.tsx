@@ -27,7 +27,7 @@ const PublicLayout = ({ children }: Props) => {
 
       <footer className="text-center">
         <div className="container mx-auto pt-8 pb-8 space-y-6">
-          <div className="h-px bg-gray-400"></div>
+          <div className="h-px bg-gray-300"></div>
           <p className="text-sm text-gray-400">
             &copy; 2023 SilWolf's Workshop
           </p>
