@@ -267,7 +267,7 @@ const HomePage = () => {
                   onClick={handleClickUploadTemplate}
                   loading={isUploadingTemplate}
                 >
-                  上傳新的模版(.json)
+                  上傳模版 (.json)
                 </Button>
                 <Button
                   size="lg"

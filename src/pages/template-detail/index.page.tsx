@@ -94,11 +94,14 @@ const TemplateCreatePage = () => {
       return;
     }
     toast
-      .promise(saveAsyncFn(templateId as string, template), {
-        loading: "儲存中...",
-        success: "儲存完成",
-        error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
-      })
+      .promise(
+        saveAsyncFn(templateId as string, template, `${template.name}.json`),
+        {
+          loading: "儲存中...",
+          success: "儲存完成",
+          error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        }
+      )
       .then(() => {
         toggleDirty(false);
       });
@@ -112,7 +115,7 @@ const TemplateCreatePage = () => {
     getFileByIdAsJSON<BahaTemplate>(templateId).then(setTemplate);
   });
 
-  if (!template) {
+  if (!template || !templateId) {
     return <PublicLayout></PublicLayout>;
   }
 
@@ -183,6 +186,7 @@ const TemplateCreatePage = () => {
           <TemplateDetailConfigAndExportSubPage
             template={template}
             onSubmit={handleSubmitConfig}
+            templateId={templateId}
           />
         </section>
       </div>

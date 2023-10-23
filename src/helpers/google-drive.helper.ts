@@ -108,21 +108,54 @@ export const postUploadJsonObjectAsFile = (
   return postUploadFile(blob, filename, parentFolderId);
 };
 
-export const patchFileWithJsonObject = (
+export const patchFile = (
   fileId: string,
-  jsonObj: Record<string, unknown>
+  file: File | Blob,
+  filename?: string
 ) => {
-  const blob = new Blob([JSON.stringify(jsonObj, null, 2)], {
-    type: "application/json",
-  });
+  const formData = new FormData();
+
+  if (filename) {
+    formData.append(
+      "metadata",
+      new Blob(
+        [
+          JSON.stringify({
+            name: filename,
+          }),
+        ],
+        { type: "application/json" }
+      )
+    );
+  }
+
+  formData.append("file", file);
 
   return googleDriveAxiosInstance.patch(
-    `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media&fields=id`,
-    blob,
+    `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=multipart&fields=id`,
+    formData,
     {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     }
+  );
+};
+
+export const patchFileWithJsonObject = (
+  fileId: string,
+  jsonObj: Record<string, unknown>,
+  filename?: string
+) => {
+  const blob = new Blob([JSON.stringify(jsonObj, null, 2)], {
+    type: "application/json",
+  });
+
+  return patchFile(fileId, blob, filename);
+};
+
+export const deleteFile = (fileId: string) => {
+  return googleDriveAxiosInstance.delete(
+    `https://www.googleapis.com/drive/v3/files/${fileId}`
   );
 };

@@ -1,3 +1,5 @@
+import { deleteFile } from "@/helpers/google-drive.helper";
+import useDialog from "@/hooks/useDialog.hook";
 import { Sheet } from "@/types/Sheet.type";
 import {
   Button,
@@ -10,13 +12,22 @@ import {
 import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   sheet: Sheet;
+  sheetId: string;
   onSubmit: (newValues: Pick<Sheet, "name" | "author">) => void;
 };
 
-const SheetDetailConfigAndExportSubPage = ({ sheet, onSubmit }: Props) => {
+const SheetDetailConfigAndExportSubPage = ({
+  sheet,
+  sheetId,
+  onSubmit,
+}: Props) => {
+  const { openDialog } = useDialog();
+  const navigate = useNavigate();
+
   const { register, getValues } = useForm({
     defaultValues: {
       name: sheet.name,
@@ -68,6 +79,19 @@ const SheetDetailConfigAndExportSubPage = ({ sheet, onSubmit }: Props) => {
     element.click();
   }, [sheet, finalBahaCode]);
 
+  const handleClickDelete = useCallback(() => {
+    openDialog({
+      title: "刪除角色卡",
+      content: "此動作無法回溯，請先下載紀錄檔進行備放。確定刪除角色卡嗎？",
+      onYes: async () => {
+        return deleteFile(sheetId).then(() => {
+          toast.success("已刪除角色卡");
+          navigate("/");
+        });
+      },
+    });
+  }, [navigate, openDialog, sheetId]);
+
   return (
     <div className="container mx-auto max-w-screen-md">
       <div className="space-y-16">
@@ -85,6 +109,7 @@ const SheetDetailConfigAndExportSubPage = ({ sheet, onSubmit }: Props) => {
 
         <form className="space-y-4">
           <h2 className="text-2xl">匯出</h2>
+
           <div className="space-y-4">
             <FormControl>
               <FormLabel>巴哈小屋創作原始碼</FormLabel>
@@ -102,11 +127,18 @@ const SheetDetailConfigAndExportSubPage = ({ sheet, onSubmit }: Props) => {
                 variant="outlined"
                 onClick={handleClickExport}
               >
-                下載巴哈創作原始碼(.txt)
+                下載 .txt 檔
               </Button>
             </div>
           </div>
         </form>
+
+        <div className="space-y-4">
+          <h2 className="text-2xl">其他操作</h2>
+          <Button color="danger" variant="outlined" onClick={handleClickDelete}>
+            刪除此角色卡
+          </Button>
+        </div>
       </div>
     </div>
   );

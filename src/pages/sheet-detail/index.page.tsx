@@ -49,7 +49,7 @@ const SheetDetailPage = () => {
       return;
     }
     toast
-      .promise(saveAsyncFn(sheetId as string, sheet), {
+      .promise(saveAsyncFn(sheetId as string, sheet, `${sheet.name}.json`), {
         loading: "儲存中...",
         success: "儲存完成",
         error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
@@ -151,7 +151,7 @@ const SheetDetailPage = () => {
     [toggleDirty]
   );
 
-  if (!sheet) {
+  if (!sheet || !sheetId) {
     return <PublicLayout />;
   }
 
@@ -270,6 +270,7 @@ const SheetDetailPage = () => {
           <SheetDetailConfigAndExportSubPage
             sheet={sheet}
             onSubmit={handleSubmitConfig}
+            sheetId={sheetId}
           />
         </section>
       </div>
