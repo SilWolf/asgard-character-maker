@@ -1,18 +1,80 @@
-import { GoogleAuthLoginButton } from "@/hooks/useGoogleAuth.hook";
-import { updateGoogleDriveRequestProps } from "@/helpers/google-drive.helper";
+import useGoogleAuth, {
+  GoogleAuthLoginButton,
+  GoogleDriveAppSetting,
+} from "@/hooks/useGoogleAuth.hook";
+import {
+  getFileByNameAsJSON,
+  postCreateFolder,
+  postUploadJsonObjectAsFile,
+  updateGoogleDriveRequestProps,
+} from "@/helpers/google-drive.helper";
 import { TokenResponse } from "@react-oauth/google";
-import { useCallback } from "react";
 import PublicLayout from "@/layouts/public.layout";
+import { useAsyncFn } from "react-use";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
-  const handleSuccessGoogleLogin = useCallback(
-    (tokenResponse: TokenResponse) => {
-      updateGoogleDriveRequestProps({
-        token: tokenResponse.access_token,
-      });
+  const { setToken, setSetting } = useGoogleAuth();
+  const navigate = useNavigate();
+
+  const [{ loading: isLogining }, handleSuccessGoogleLogin] = useAsyncFn(
+    async (tokenResponse: TokenResponse) => {
+      return getFileByNameAsJSON<GoogleDriveAppSetting>("setting.json")
+        .then((setting) => {
+          if (!setting) {
+            return toast.promise(
+              Promise.all([
+                postCreateFolder("角色卡"),
+                postCreateFolder("模版"),
+              ]).then(async (results) => {
+                const [newSheetsFolderId, newTemplatesFolderId] = results.map(
+                  (res) => res.data.id
+                );
+
+                const newSetting = {
+                  sheetsFolderId: newSheetsFolderId,
+                  templatesFolderId: newTemplatesFolderId,
+                };
+
+                await postUploadJsonObjectAsFile(newSetting, "setting.json");
+
+                return {
+                  sheetsFolderId: newSheetsFolderId,
+                  templatesFolderId: newTemplatesFolderId,
+                };
+              }),
+              {
+                loading:
+                  "偵測到第一次使用此工具，正在在 Google Drive 上初始化所需要的資料夾……",
+                success: "初始化成功，作為第一步，點擊「創建新的角色卡」吧。",
+                error:
+                  "初始化失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+              }
+            );
+          }
+
+          return setting;
+        })
+        .then((setting) => {
+          setToken(tokenResponse.access_token);
+          setSetting(setting);
+          updateGoogleDriveRequestProps({
+            token: tokenResponse.access_token,
+          });
+          navigate("/");
+        });
     },
     []
   );
+
+  if (isLogining) {
+    return (
+      <PublicLayout hideNav>
+        <div className="container mx-auto text-center">讀取中…</div>
+      </PublicLayout>
+    );
+  }
 
   return (
     <PublicLayout hideNav>

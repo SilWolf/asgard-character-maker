@@ -9,10 +9,11 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomePage from "./pages/home.page";
 import LoginPage from "./pages/login.page";
 import MarketplacePage from "./pages/marketplace/index.page";
+import DeveloperPage from "./pages/developer/index.page";
 
 const publicRouter = createBrowserRouter([
   {
-    path: "/",
+    path: "*",
     element: <LoginPage />,
   },
 ]);
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/marketplace",
     element: <MarketplacePage />,
+  },
+  {
+    path: "/developer",
+    element: <DeveloperPage />,
   },
 ]);
 

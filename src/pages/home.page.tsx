@@ -1,7 +1,6 @@
 import {
   copyFile,
   getFilesByFolderId,
-  postCreateFolder,
   postUploadFile,
   postUploadJsonObjectAsFile,
 } from "@/helpers/google-drive.helper";
@@ -13,30 +12,24 @@ import { Button, Table } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
-import { useAsyncFn, useEffectOnce, useLocalStorage } from "react-use";
+import { useAsyncFn } from "react-use";
 import { Link, useNavigate } from "react-router-dom";
 import { BahaTemplate } from "@/types/Baha.type";
 import { utilGetUniqueId } from "@/utils/string.util";
 import { Sheet } from "@/types/Sheet.type";
+import useGoogleAuth from "@/hooks/useGoogleAuth.hook";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const [googleDriveMasterFolderId, setGoogleDriveMasterFolderId] =
-    useLocalStorage<string>("acm-google-drive-master-folder-id", undefined, {
-      raw: true,
-    });
-  const [googleDriveSheetsFolderId, setGoogleDriveSheetsFolderId] =
-    useLocalStorage<string>("acm-google-drive-sheets-folder-id", undefined, {
-      raw: true,
-    });
+  const { setting } = useGoogleAuth();
+  const googleDriveSheetsFolderId = setting.sheetsFolderId;
 
   const {
     data: templates,
     isLoading: isLoadingTemplates,
     refetch: refetchTemplates,
     googleDriveTemplatesFolderId,
-    setGoogleDriveTemplatesFolderId,
   } = useCustomTemplates();
 
   const {
@@ -175,38 +168,6 @@ const HomePage = () => {
     },
     [copyFileAsyncFn, refetchSheets, refetchTemplates]
   );
-
-  useEffectOnce(() => {
-    if (!googleDriveMasterFolderId) {
-      toast.promise(
-        postCreateFolder("巴哈RPG公會角色卡工具資料庫")
-          .then((res) => {
-            const parentFolderId = res.data.id;
-            setGoogleDriveMasterFolderId(parentFolderId);
-
-            return Promise.all([
-              postCreateFolder("角色卡", parentFolderId),
-              postCreateFolder("自定義模版", parentFolderId),
-            ]);
-          })
-          .then((results) => {
-            const [newSheetsFolderId, newTemplatesFolderId] = results.map(
-              (res) => res.data.id
-            );
-
-            setGoogleDriveSheetsFolderId(newSheetsFolderId);
-            setGoogleDriveTemplatesFolderId(newTemplatesFolderId);
-          }),
-        {
-          loading:
-            "偵測到第一次使用此工具，正在在 Google Drive 上初始化所需要的資料夾……",
-          success: "初始化成功，作為第一步，點擊「創建新的角色卡」吧。",
-          error:
-            "初始化失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
-        }
-      );
-    }
-  });
 
   return (
     <PublicLayout>

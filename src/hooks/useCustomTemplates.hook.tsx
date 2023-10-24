@@ -1,12 +1,10 @@
 import { getFilesByFolderId } from "@/helpers/google-drive.helper";
 import { useQuery } from "@tanstack/react-query";
-import { useLocalStorage } from "react-use";
+import useGoogleAuth from "./useGoogleAuth.hook";
 
 const useCustomTemplates = () => {
-  const [googleDriveTemplatesFolderId, setGoogleDriveTemplatesFolderId] =
-    useLocalStorage<string>("acm-google-drive-templates-folder-id", undefined, {
-      raw: true,
-    });
+  const { setting } = useGoogleAuth();
+  const googleDriveTemplatesFolderId = setting.templatesFolderId;
 
   const queryResult = useQuery({
     queryKey: ["templates", googleDriveTemplatesFolderId],
@@ -18,7 +16,6 @@ const useCustomTemplates = () => {
   return {
     ...queryResult,
     googleDriveTemplatesFolderId,
-    setGoogleDriveTemplatesFolderId,
   };
 };
 

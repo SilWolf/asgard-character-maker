@@ -33,12 +33,22 @@ export const getFiles = () => {
 
 export const getFilesByFolderId = (
   folderId: string,
-  options?: { isPublic?: boolean }
+  options?: { isPublic?: boolean; targetFileName?: string }
 ) => {
   const params: Record<string, string> = {
-    q: `'${folderId}' in parents and trashed=false`,
     fields: "files(id,name,createdTime,modifiedTime,size)",
   };
+
+  if (folderId === "appDataFolder") {
+    params.q = `trashed=false`;
+    params.spaces = "appDataFolder";
+  } else {
+    params.q = `'${folderId}' in parents and trashed=false`;
+  }
+
+  if (options?.targetFileName) {
+    params.q += ` and name = '${options.targetFileName}'`;
+  }
 
   if (options?.isPublic) {
     params.public = "1";
@@ -53,6 +63,29 @@ export const getFilesByFolderId = (
 
 export const getPublicFilesByFolderId = (folderId: string) =>
   getFilesByFolderId(folderId, { isPublic: true });
+
+export const getFileByNameAsJSON = async <T extends Record<string, unknown>>(
+  fileName: string,
+  folderId: string = "appDataFolder"
+) => {
+  const files = await getFilesByFolderId(folderId, {
+    targetFileName: fileName,
+  });
+
+  if (!files || files.length === 0) {
+    return undefined;
+  }
+
+  const file = files[0];
+
+  return googleDriveAxiosInstance
+    .get<T>(`/files/${file.id}`, {
+      params: {
+        alt: "media",
+      },
+    })
+    .then((res) => res.data);
+};
 
 export const getFileByIdAsJSON = <T extends Record<string, unknown>>(
   fileId: string
@@ -79,7 +112,7 @@ export const postCreateFolder = (name: string, parentFolderId?: string) => {
 export const postUploadFile = (
   file: File | Blob,
   filename: string,
-  parentFolderId: string = "root"
+  parentFolderId: string = "appDataFolder"
 ) => {
   const formData = new FormData();
   formData.append(
@@ -111,7 +144,7 @@ export const postUploadFile = (
 export const postUploadJsonObjectAsFile = (
   jsonObj: Record<string, unknown>,
   filename: string,
-  parentFolderId: string = "root"
+  parentFolderId?: string
 ) => {
   const blob = new Blob([JSON.stringify(jsonObj, null, 2)], {
     type: "application/json",

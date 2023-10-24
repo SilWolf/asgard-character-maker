@@ -44,13 +44,15 @@ const BahaCode = ({ code, template, values, alwaysFallbackKeys }: Props) => {
   const refinedCode = useMemo(() => {
     let replacedCode = code;
 
-    for (const prop of template.props) {
-      replacedCode = replacedCode.replace(
-        new RegExp(`\\$${prop.id}\\$`, "g"),
-        values[prop.id] ||
-          prop.defaultValue ||
-          (alwaysFallbackKeys ? prop.key : "")
-      );
+    if (template.props) {
+      for (const prop of template.props) {
+        replacedCode = replacedCode.replace(
+          new RegExp(`\\$${prop.id}\\$`, "g"),
+          values[prop.id] ||
+            prop.defaultValue ||
+            (alwaysFallbackKeys ? prop.key : "")
+        );
+      }
     }
 
     return replacedCode;

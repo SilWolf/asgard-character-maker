@@ -12,7 +12,7 @@ type Props = {
 const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
   const defaultValueForProps = useMemo(
     () =>
-      Object.values(template.props).reduce(
+      Object.values(template.props ?? {}).reduce(
         (prev, curr) => ({
           ...prev,
           [curr.id]: {

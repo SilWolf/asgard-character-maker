@@ -48,12 +48,17 @@ const PublicLayout = ({ hideNav, children }: Props) => {
 
       <div className="min-h-[calc(100vh-210px)]">{children}</div>
 
-      <footer className="text-center">
+      <footer>
         <div className="container mx-auto pt-8 pb-8 space-y-6">
           <div className="h-px bg-gray-300"></div>
-          <p className="text-sm text-gray-400">
-            &copy; 2023 SilWolf's Workshop
-          </p>
+          <div className="flex justify-between">
+            <p className="text-sm text-gray-400">
+              &copy; 2023 SilWolf's Workshop
+            </p>
+            <nav className="text-sm text-gray-400 space-x-4">
+              <Link to="/developer">開發者頁面</Link>
+            </nav>
+          </div>
         </div>
       </footer>
     </div>

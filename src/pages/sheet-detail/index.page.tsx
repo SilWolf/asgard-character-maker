@@ -1,7 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 import { useCallback, useMemo, useState } from "react";
 import BahaCode from "@/components/BahaCode";
-import { Breadcrumbs, Button, Tab, TabList, Tabs } from "@mui/joy";
+import { Alert, Breadcrumbs, Button, Tab, TabList, Tabs } from "@mui/joy";
 import toast from "react-hot-toast";
 import SheetDetailSingle from "./single.subpage";
 import {
@@ -17,6 +17,7 @@ import { Sheet } from "@/types/Sheet.type";
 import { BahaTemplate } from "@/types/Baha.type";
 import SheetDetailConfigAndExportSubPage from "./config-and-export.subpage";
 import PublicLayout from "@/layouts/public.layout";
+import { ErrorBoundary } from "react-error-boundary";
 
 const SheetDetailPage = () => {
   const { sheetId } = useParams<{ sheetId: string }>();
@@ -242,13 +243,21 @@ const SheetDetailPage = () => {
             data-active={activeTab === section.id ? "1" : "0"}
           >
             <div className="h-[calc(100vh-320px)]">
-              <SheetDetailSingle
-                sectionId={section.id}
-                template={section.template}
-                value={section.value}
-                submitFlag={activeTab !== section.id}
-                onSubmit={handleSubmitSingle}
-              />
+              <ErrorBoundary
+                fallbackRender={() => (
+                  <Alert color="danger">
+                    在輸出畫面時出現錯誤，有可能檔案格式不對而導致。請在“設定＆匯出“頁面中下載備份、嘗試修復後再上傳，或是直接刪除此檔案。
+                  </Alert>
+                )}
+              >
+                <SheetDetailSingle
+                  sectionId={section.id}
+                  template={section.template}
+                  value={section.value}
+                  submitFlag={activeTab !== section.id}
+                  onSubmit={handleSubmitSingle}
+                />
+              </ErrorBoundary>
             </div>
           </section>
         ))}

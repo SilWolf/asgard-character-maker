@@ -28,15 +28,17 @@ const SheetDetailSingle = ({
     const thisImageProps = [];
     const thisSystemProps = [];
 
-    for (const prop of template.props) {
-      if (prop.category === "text") {
-        thisTextProps.push(prop);
-      } else if (prop.category === "color") {
-        thisColorProps.push(prop);
-      } else if (prop.category === "image") {
-        thisImageProps.push(prop);
-      } else if (prop.category === "system") {
-        thisSystemProps.push(prop);
+    if (template.props) {
+      for (const prop of template.props) {
+        if (prop.category === "text") {
+          thisTextProps.push(prop);
+        } else if (prop.category === "color") {
+          thisColorProps.push(prop);
+        } else if (prop.category === "image") {
+          thisImageProps.push(prop);
+        } else if (prop.category === "system") {
+          thisSystemProps.push(prop);
+        }
       }
     }
 

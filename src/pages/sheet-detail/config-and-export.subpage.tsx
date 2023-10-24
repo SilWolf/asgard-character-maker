@@ -45,11 +45,13 @@ const SheetDetailConfigAndExportSubPage = ({
         .map(({ template, value }) => {
           let replacedCode = template.bahaCode;
 
-          for (const prop of template.props) {
-            replacedCode = replacedCode.replace(
-              new RegExp(`\\$${prop.id}\\$`, "g"),
-              value[prop.id] || prop.defaultValue
-            );
+          if (template.props) {
+            for (const prop of template.props) {
+              replacedCode = replacedCode.replace(
+                new RegExp(`\\$${prop.id}\\$`, "g"),
+                value[prop.id] || prop.defaultValue
+              );
+            }
           }
 
           return replacedCode;
