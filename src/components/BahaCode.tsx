@@ -35,7 +35,7 @@ const bahaPreset = reactPreset.extend((tags: Record<string, unknown>) => ({
 
 type Props = {
   code: string;
-  template: BahaTemplate;
+  template: Pick<BahaTemplate, "bahaCode" | "props">;
   values: Record<string, string>;
   alwaysFallbackKeys?: boolean;
 };

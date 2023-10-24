@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 type Props = {
   sheet: Sheet;
   sheetId: string;
-  onSubmit: (newValues: Pick<Sheet, "name" | "author">) => void;
+  onSubmit: (newValues: Sheet["properties"]) => void;
 };
 
 const SheetDetailConfigAndExportSubPage = ({
@@ -28,10 +28,10 @@ const SheetDetailConfigAndExportSubPage = ({
   const { openDialog } = useDialog();
   const navigate = useNavigate();
 
-  const { register, getValues } = useForm({
+  const { register, getValues } = useForm<Sheet["properties"]>({
     defaultValues: {
-      name: sheet.name,
-      author: sheet.author,
+      name: sheet.properties.name,
+      author: sheet.properties.author,
     },
   });
 
@@ -39,26 +39,47 @@ const SheetDetailConfigAndExportSubPage = ({
     onSubmit(getValues());
   }, [getValues, onSubmit]);
 
-  const finalBahaCode = useMemo(
-    () =>
-      sheet?.sections
-        .map(({ template, value }) => {
-          let replacedCode = template.bahaCode;
+  const finalBahaCode = useMemo(() => {
+    if (!sheet) {
+      return "";
+    }
 
-          if (template.props) {
-            for (const prop of template.props) {
-              replacedCode = replacedCode.replace(
-                new RegExp(`\\$${prop.id}\\$`, "g"),
-                value[prop.id] || prop.defaultValue
-              );
-            }
-          }
+    return sheet.layout
+      .map((row) =>
+        row
+          .map((col) =>
+            col.sectionIds
+              .map((sectionId) => {
+                const section = sheet.sectionsMap[sectionId];
+                if (!section) {
+                  return "";
+                }
 
-          return replacedCode;
-        })
-        .join("\n") ?? "",
-    [sheet?.sections]
-  );
+                const template = sheet.templatesMap[section.templateId];
+                if (!template) {
+                  return "";
+                }
+
+                let replacedCode = template.bahaCode;
+                const value = section.value[0];
+
+                if (template.props && value) {
+                  for (const prop of template.props) {
+                    replacedCode = replacedCode.replace(
+                      new RegExp(`\\$${prop.id}\\$`, "g"),
+                      value[prop.id] || prop.defaultValue
+                    );
+                  }
+                }
+
+                return replacedCode;
+              })
+              .join("")
+          )
+          .join("")
+      )
+      .join("\n");
+  }, [sheet]);
 
   const handleClickCopyBahaCode = useCallback(() => {
     navigator.clipboard.writeText(finalBahaCode);
@@ -115,7 +136,12 @@ const SheetDetailConfigAndExportSubPage = ({
           <div className="space-y-4">
             <FormControl>
               <FormLabel>巴哈小屋創作原始碼</FormLabel>
-              <Textarea value={finalBahaCode} maxRows={5} />
+              <Textarea
+                value={finalBahaCode}
+                minRows={5}
+                maxRows={15}
+                readOnly
+              />
               <FormHelperText>
                 將以上原始碼複製貼上到到小屋創作中，就能得到「總覽」中的效果。
               </FormHelperText>

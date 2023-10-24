@@ -50,11 +50,14 @@ const SheetDetailPage = () => {
       return;
     }
     toast
-      .promise(saveAsyncFn(sheetId as string, sheet, `${sheet.name}.json`), {
-        loading: "儲存中...",
-        success: "儲存完成",
-        error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
-      })
+      .promise(
+        saveAsyncFn(sheetId as string, sheet, `${sheet.properties.name}.json`),
+        {
+          loading: "儲存中...",
+          success: "儲存完成",
+          error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        }
+      )
       .then(() => {
         toggleDirty(false);
       });
@@ -71,23 +74,19 @@ const SheetDetailPage = () => {
   const handleSubmitSingle = useCallback(
     (sectionId: string, newValue: Record<string, string>) => {
       setSheet((prev) => {
-        if (!prev) {
+        if (!prev || !prev.sectionsMap[sectionId]) {
           return prev;
         }
-
-        const index = prev.sections.findIndex(({ id }) => sectionId === id);
-        if (index === -1) {
-          return prev;
-        }
-
-        const section = prev.sections[index];
 
         return {
           ...prev,
-          sections: prev.sections.splice(index, 1, {
-            ...section,
-            value: newValue,
-          }),
+          sectionsMap: {
+            ...prev.sectionsMap,
+            [sectionId]: {
+              ...prev.sectionsMap[sectionId],
+              value: [newValue],
+            },
+          },
         };
       });
       toggleDirty(true);
@@ -97,8 +96,46 @@ const SheetDetailPage = () => {
 
   const handleSubmitNewSingle = useCallback(
     async (newSingle: SheetNewSingle) => {
-      return toast
-        .promise(getFileByIdAsJSON<BahaTemplate>(newSingle.templateId), {
+      return toast.promise(
+        getFileByIdAsJSON<BahaTemplate>(newSingle.templateId).then(
+          (template) => {
+            setSheet((prev) => {
+              if (!prev) {
+                return prev;
+              }
+
+              return {
+                ...prev,
+                templatesMap: {
+                  ...prev.templatesMap,
+                  [newSingle.templateId]: template,
+                },
+                sectionsMap: {
+                  ...prev.sectionsMap,
+                  [newSingle.id]: {
+                    id: newSingle.id,
+                    name: newSingle.name,
+                    templateId: newSingle.templateId,
+                    value: [{}],
+                  },
+                },
+                layout: [
+                  ...prev.layout,
+                  [
+                    {
+                      width: "100%",
+                      sectionIds: [newSingle.id],
+                    },
+                  ],
+                ],
+              };
+            });
+            setActiveTab(newSingle.id);
+
+            toggleDirty(true);
+          }
+        ),
+        {
           loading: (
             <span>
               正在創建區塊 <span className="bold">{newSingle.name}</span>
@@ -106,37 +143,14 @@ const SheetDetailPage = () => {
           ),
           success: "已成功創建",
           error: "創建失敗，下載模版失敗",
-        })
-        .then((template) => {
-          setSheet((prev) => {
-            if (!prev) {
-              return prev;
-            }
-
-            return {
-              ...prev,
-              sections: [
-                ...prev.sections,
-                {
-                  id: newSingle.id,
-                  slug: newSingle.id,
-                  name: newSingle.name,
-                  template,
-                  value: {},
-                },
-              ],
-            };
-          });
-          setActiveTab(newSingle.id);
-
-          toggleDirty(true);
-        });
+        }
+      );
     },
     [toggleDirty]
   );
 
   const handleSubmitConfig = useCallback(
-    (newValue: Pick<Sheet, "name" | "author">) => {
+    (newValue: Sheet["properties"]) => {
       setSheet((prev) => {
         if (!prev) {
           return prev;
@@ -152,6 +166,21 @@ const SheetDetailPage = () => {
     [toggleDirty]
   );
 
+  const sheetSections = useMemo(() => {
+    if (!sheet) {
+      return [];
+    }
+
+    const sectionIds = [];
+    for (const row of sheet.layout) {
+      for (const col of row) {
+        sectionIds.push(...col.sectionIds);
+      }
+    }
+
+    return sectionIds.map((sectionId) => sheet.sectionsMap[sectionId]);
+  }, [sheet]);
+
   if (!sheet || !sheetId) {
     return <PublicLayout />;
   }
@@ -163,7 +192,7 @@ const SheetDetailPage = () => {
           <Breadcrumbs aria-label="breadcrumbs">
             <Link to="/">主頁</Link>
             <span>角色卡</span>
-            <span>{sheet.name}</span>
+            <span>{sheet.properties.name}</span>
           </Breadcrumbs>
         </div>
         <div className="container mx-auto flex flex-row gap-x-4">
@@ -173,6 +202,9 @@ const SheetDetailPage = () => {
                 <Tab value="0" variant="plain" color="neutral">
                   總覽
                 </Tab>
+                <Tab value="layout" variant="plain" color="neutral">
+                  佈區＆區塊
+                </Tab>
               </TabList>
             </Tabs>
           </div>
@@ -180,7 +212,7 @@ const SheetDetailPage = () => {
             <div>
               <Tabs value={activeTab} onChange={handleChangeTab}>
                 <TabList>
-                  {sheet.sections.map((section) => (
+                  {sheetSections.map((section) => (
                     <Tab
                       key={section.id}
                       value={section.id}
@@ -224,19 +256,19 @@ const SheetDetailPage = () => {
         >
           <div className="mx-auto container py-4">
             <div className="baha-preview">
-              {sheet.sections.map((section) => (
+              {sheetSections.map((section) => (
                 <BahaCode
                   key={section.id}
-                  code={section.template.bahaCode}
-                  template={section.template}
-                  values={section.value}
+                  code={sheet.templatesMap[section.templateId].bahaCode}
+                  template={sheet.templatesMap[section.templateId]}
+                  values={section.value[0]}
                 />
               ))}
             </div>
           </div>
         </section>
 
-        {sheet.sections.map((section) => (
+        {sheetSections.map((section) => (
           <section
             key={section.id}
             className="hidden data-[active='1']:block"
@@ -252,8 +284,8 @@ const SheetDetailPage = () => {
               >
                 <SheetDetailSingle
                   sectionId={section.id}
-                  template={section.template}
-                  value={section.value}
+                  template={sheet.templatesMap[section.templateId]}
+                  value={section.value[0]}
                   submitFlag={activeTab !== section.id}
                   onSubmit={handleSubmitSingle}
                 />
@@ -267,7 +299,7 @@ const SheetDetailPage = () => {
           data-active={activeTab === "+" ? "1" : "0"}
         >
           <SheetDetailNewSingleSubPage
-            sectionsCount={sheet.sections.length}
+            sectionsCount={sheetSections.length}
             onSubmit={handleSubmitNewSingle}
           />
         </section>

@@ -20,6 +20,10 @@ const LoginPage = () => {
 
   const [{ loading: isLogining }, handleSuccessGoogleLogin] = useAsyncFn(
     async (tokenResponse: TokenResponse) => {
+      updateGoogleDriveRequestProps({
+        token: tokenResponse.access_token,
+      });
+
       return getFileByNameAsJSON<GoogleDriveAppSetting>("setting.json")
         .then((setting) => {
           if (!setting) {
@@ -59,9 +63,6 @@ const LoginPage = () => {
         .then((setting) => {
           setToken(tokenResponse.access_token);
           setSetting(setting);
-          updateGoogleDriveRequestProps({
-            token: tokenResponse.access_token,
-          });
           navigate("/");
         });
     },

@@ -15,7 +15,6 @@ import toast from "react-hot-toast";
 import { useAsyncFn } from "react-use";
 import { Link, useNavigate } from "react-router-dom";
 import { BahaTemplate } from "@/types/Baha.type";
-import { utilGetUniqueId } from "@/utils/string.util";
 import { Sheet } from "@/types/Sheet.type";
 import useGoogleAuth from "@/hooks/useGoogleAuth.hook";
 
@@ -75,12 +74,41 @@ const HomePage = () => {
   );
   const handleClickCreateSheet = useCallback(() => {
     const name = `未命名角色卡_${getNowString()}`;
-    const slug = `${getNowString()}_${utilGetUniqueId()}`;
     const defaultSheet: Sheet = {
-      name: name,
-      slug,
-      author: "",
-      sections: [],
+      templatesMap: {
+        starter: {
+          bahaCode: "[div]輸入你想要的值：$placeholder$[/div]",
+          props: [
+            {
+              id: "placeholder",
+              key: "$placeholder$",
+              defaultValue: "預設值",
+              label: "文字",
+              description: "修改這個值就能填入左側的預覽中",
+              category: "text",
+            },
+          ],
+        },
+      },
+      sectionsMap: {
+        section1: {
+          id: "section1",
+          name: "第一個區塊",
+          templateId: "starter",
+          value: [{}],
+        },
+      },
+      layout: [[{ width: "100%", sectionIds: ["section1"] }]],
+      properties: {
+        name,
+        author: "",
+        briefing: "",
+        description: "",
+        demoUrl: "",
+        previewImageUrl: "",
+        imageUrls: [],
+        tags: "",
+      },
     };
     toast
       .promise(

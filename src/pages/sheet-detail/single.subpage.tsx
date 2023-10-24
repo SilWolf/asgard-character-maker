@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 
 type Props = {
   sectionId: string;
-  template: BahaTemplate;
+  template: Pick<BahaTemplate, "bahaCode" | "props">;
   value: Record<string, string>;
   submitFlag: boolean;
   onSubmit: (sectionId: string, newValue: Record<string, string>) => void;
@@ -22,10 +22,10 @@ const SheetDetailSingle = ({
   const { register, getValues } = useForm({ defaultValues: value });
   const [thisValue, setThisValue] = useState(value);
 
-  const [colorProps, textProps, imageProps, systemProps] = useMemo(() => {
+  const [colorProps, textProps, urlProps, systemProps] = useMemo(() => {
     const thisColorProps = [];
     const thisTextProps = [];
-    const thisImageProps = [];
+    const thisUrlProps = [];
     const thisSystemProps = [];
 
     if (template.props) {
@@ -34,15 +34,15 @@ const SheetDetailSingle = ({
           thisTextProps.push(prop);
         } else if (prop.category === "color") {
           thisColorProps.push(prop);
-        } else if (prop.category === "image") {
-          thisImageProps.push(prop);
+        } else if (prop.category === "url") {
+          thisUrlProps.push(prop);
         } else if (prop.category === "system") {
           thisSystemProps.push(prop);
         }
       }
     }
 
-    return [thisColorProps, thisTextProps, thisImageProps, thisSystemProps];
+    return [thisColorProps, thisTextProps, thisUrlProps, thisSystemProps];
   }, [template.props]);
 
   const handleBlurForm = useCallback(() => {
@@ -70,81 +70,89 @@ const SheetDetailSingle = ({
       <section className="flex-1 overflow-y-scroll">
         <form onBlur={handleBlurForm}>
           <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl bold">顏色</h2>
-              {colorProps.map((prop) => (
-                <div
-                  key={prop.id}
-                  className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
-                >
-                  <FormControl>
-                    <FormLabel>{prop.label}</FormLabel>
-                    <Textarea
-                      placeholder={prop.defaultValue}
-                      {...register(prop.id)}
-                    />
-                    <FormHelperText>{prop.description}</FormHelperText>
-                  </FormControl>
-                </div>
-              ))}
-            </div>
+            {colorProps.length > 0 && (
+              <div>
+                <h2 className="text-2xl bold">顏色</h2>
+                {colorProps.map((prop) => (
+                  <div
+                    key={prop.id}
+                    className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
+                  >
+                    <FormControl>
+                      <FormLabel>{prop.label}</FormLabel>
+                      <Textarea
+                        placeholder={prop.defaultValue}
+                        {...register(prop.id)}
+                      />
+                      <FormHelperText>{prop.description}</FormHelperText>
+                    </FormControl>
+                  </div>
+                ))}
+              </div>
+            )}
 
-            <div>
-              <h2 className="text-2xl bold">角色資料</h2>
-              {textProps.map((prop) => (
-                <div
-                  key={prop.id}
-                  className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
-                >
-                  <FormControl>
-                    <FormLabel>{prop.label}</FormLabel>
-                    <Textarea
-                      placeholder={prop.defaultValue}
-                      {...register(prop.id)}
-                    />
-                    <FormHelperText>{prop.description}</FormHelperText>
-                  </FormControl>
-                </div>
-              ))}
-            </div>
+            {textProps.length > 0 && (
+              <div>
+                <h2 className="text-2xl bold">角色資料</h2>
+                {textProps.map((prop) => (
+                  <div
+                    key={prop.id}
+                    className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
+                  >
+                    <FormControl>
+                      <FormLabel>{prop.label}</FormLabel>
+                      <Textarea
+                        placeholder={prop.defaultValue}
+                        {...register(prop.id)}
+                      />
+                      <FormHelperText>{prop.description}</FormHelperText>
+                    </FormControl>
+                  </div>
+                ))}
+              </div>
+            )}
 
-            <div>
-              <h2 className="text-2xl bold">圖片</h2>
-              {imageProps.map((prop) => (
-                <div
-                  key={prop.id}
-                  className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
-                >
-                  <FormControl>
-                    <FormLabel>{prop.label}</FormLabel>
-                    <Textarea
-                      placeholder={prop.defaultValue}
-                      {...register(prop.id)}
-                    />
-                    <FormHelperText>{prop.description}</FormHelperText>
-                  </FormControl>
-                </div>
-              ))}
-            </div>
+            {urlProps.length > 0 && (
+              <div>
+                <h2 className="text-2xl bold">連結</h2>
+                {urlProps.map((prop) => (
+                  <div
+                    key={prop.id}
+                    className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
+                  >
+                    <FormControl>
+                      <FormLabel>{prop.label}</FormLabel>
+                      <Textarea
+                        placeholder={prop.defaultValue}
+                        {...register(prop.id)}
+                      />
+                      <FormHelperText>{prop.description}</FormHelperText>
+                    </FormControl>
+                  </div>
+                ))}
+              </div>
+            )}
 
-            <div>
-              <h2 className="text-2xl bold">系統用字</h2>
-              {systemProps.map((prop) => (
-                <div
-                  key={prop.id}
-                  className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
-                >
-                  <FormControl>
-                    <FormLabel>{prop.label}</FormLabel>
-                    <Textarea
-                      placeholder={prop.defaultValue}
-                      {...register(prop.id)}
-                    />
-                    <FormHelperText>{prop.description}</FormHelperText>
-                  </FormControl>
-                </div>
-              ))}
-            </div>
+            {systemProps.length > 0 && (
+              <div>
+                <h2 className="text-2xl bold">系統用字</h2>
+                {systemProps.map((prop) => (
+                  <div
+                    key={prop.id}
+                    className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
+                  >
+                    <FormControl>
+                      <FormLabel>{prop.label}</FormLabel>
+                      <Textarea
+                        placeholder={prop.defaultValue}
+                        {...register(prop.id)}
+                      />
+                      <FormHelperText>{prop.description}</FormHelperText>
+                    </FormControl>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </form>
       </section>

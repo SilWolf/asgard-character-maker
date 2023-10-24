@@ -33,7 +33,7 @@ const SheetDetailNewSingleSubPage = ({
     [sectionsCount]
   );
 
-  const [{ loading: isSubmitting }, onSubmitAsyncFn] = useAsyncFn(onSubmit, []);
+  const [{ loading: isSubmitting }, onSubmitAsyncFn] = useAsyncFn(onSubmit);
 
   const handleSubmit = useCallback(
     (e: FormEvent) => {
