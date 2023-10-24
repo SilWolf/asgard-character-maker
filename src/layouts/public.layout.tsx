@@ -56,7 +56,7 @@ const PublicLayout = ({ hideNav, children }: Props) => {
               &copy; 2023 SilWolf's Workshop
             </p>
             <nav className="text-sm text-gray-400 space-x-4">
-              <Link to="/developer">開發者頁面</Link>
+              <Link to="/developer">偵錯頁面</Link>
             </nav>
           </div>
         </div>

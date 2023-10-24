@@ -3,12 +3,13 @@ import googleDriveAxiosInstance, {
 } from "@/services/google-drive.service";
 import { getFileMime } from "@/utils/file.util";
 
-type GoogleDriveFile = {
+export type GoogleDriveFile = {
   id: string;
   name: string;
   createdTime: string;
   modifiedTime: string;
   size: string;
+  properties: Record<string, string>;
 };
 
 export const updateGoogleDriveRequestProps = ({
@@ -36,7 +37,7 @@ export const getFilesByFolderId = (
   options?: { isPublic?: boolean; targetFileName?: string }
 ) => {
   const params: Record<string, string> = {
-    fields: "files(id,name,createdTime,modifiedTime,size)",
+    fields: "files(id,name,createdTime,modifiedTime,size,properties)",
   };
 
   if (folderId === "appDataFolder") {
@@ -208,5 +209,17 @@ export const deleteFile = (fileId: string) => {
 export const copyFile = (fileId: string) => {
   return googleDriveAxiosInstance.post(
     `https://www.googleapis.com/drive/v3/files/${fileId}/copy`
+  );
+};
+
+export const patchFileProperties = (
+  fileId: string,
+  properties: Record<string, string>
+) => {
+  return googleDriveAxiosInstance.patch(
+    `https://www.googleapis.com/drive/v3/files/${fileId}`,
+    {
+      properties,
+    }
   );
 };

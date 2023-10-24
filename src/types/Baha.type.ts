@@ -1,9 +1,7 @@
 export type BahaTemplate = {
-  name: string;
-  slug: string;
-  author: string;
   props: BahaTemplateProp[];
   bahaCode: string;
+  properties: BahaTemplateProperties;
 };
 
 export type BahaTemplateProp = {
@@ -12,5 +10,21 @@ export type BahaTemplateProp = {
   defaultValue: string;
   label: string;
   description: string;
-  category: "text" | "color" | "image" | "system";
+  category: "text" | "color" | "url" | "system";
+};
+
+export type BahaTemplateProperties = {
+  name: string;
+  author: string;
+  briefing: string;
+  description: string;
+  demoUrl: string;
+  previewImageUrl: string;
+  imageUrls: string[];
+  tags: string;
+};
+
+export type BahaTemplatePropertiesTemplate = {
+  id: string;
+  name: string;
 };

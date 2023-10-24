@@ -124,20 +124,26 @@ const HomePage = () => {
     postUploadJsonObjectAsFile
   );
   const handleClickCreateTemplate = useCallback(() => {
-    const name = `未命名模版_${getNowString()}`;
-    const slug = `${getNowString()}_${utilGetUniqueId()}`;
+    const newTitle = `未命名模版_${getNowString()}`;
     const defaultTemplate: BahaTemplate = {
-      name: name,
-      slug,
-      author: "",
       props: [],
       bahaCode: "[div]這是一個新的模版。[/div]",
+      properties: {
+        name: newTitle,
+        author: "",
+        briefing: "",
+        description: "",
+        demoUrl: "",
+        previewImageUrl: "",
+        imageUrls: [],
+        tags: "",
+      },
     };
     toast
       .promise(
         createTemplateAsyncFn(
           defaultTemplate,
-          `${name}.json`,
+          `${newTitle}.json`,
           googleDriveTemplatesFolderId
         ),
         {

@@ -91,6 +91,20 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
                             <Input {...register(`${id}.label`)} />
                           </FormControl>
                         </div>
+                        <div>
+                          <FormControl>
+                            <FormLabel>分類</FormLabel>
+                            <select
+                              {...register(`${id}.category`)}
+                              className="px-3 py-[6px] rounded-md border border-gray-300 text-[16px]"
+                            >
+                              <option value="text">文字</option>
+                              <option value="color">顏色</option>
+                              <option value="url">連結</option>
+                              <option value="system">系統用字</option>
+                            </select>
+                          </FormControl>
+                        </div>
                         <div className="col-span-2">
                           <FormControl>
                             <FormLabel>說明</FormLabel>

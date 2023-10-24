@@ -10,6 +10,8 @@ import HomePage from "./pages/home.page";
 import LoginPage from "./pages/login.page";
 import MarketplacePage from "./pages/marketplace/index.page";
 import DeveloperPage from "./pages/developer/index.page";
+import MarketplaceCreatePage from "./pages/marketplace-create/index.page";
+import TemplateDetailPublishPage from "./pages/template-detail/publish.page";
 
 const publicRouter = createBrowserRouter([
   {
@@ -32,12 +34,21 @@ const router = createBrowserRouter([
     element: <TemplateDetailPage />,
   },
   {
+    path: "/template/:templateId/admin-publish",
+    element: <TemplateDetailPublishPage />,
+  },
+  {
     path: "/marketplace",
     element: <MarketplacePage />,
   },
   {
     path: "/developer",
     element: <DeveloperPage />,
+  },
+
+  {
+    path: "/marketplace/admin-create",
+    element: <MarketplaceCreatePage />,
   },
 ]);
 

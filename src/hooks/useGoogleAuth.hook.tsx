@@ -9,7 +9,6 @@ import React, {
   useCallback,
   useContext,
   useMemo,
-  useState,
 } from "react";
 import { useCookie } from "react-use";
 

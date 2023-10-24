@@ -62,14 +62,16 @@ const TemplateCreatePage = () => {
   );
 
   const handleSubmitConfig = useCallback(
-    (newValue: Pick<BahaTemplate, "name" | "author">) => {
+    (newValue: BahaTemplate["properties"]) => {
       setTemplate((prev) => {
         if (!prev) {
           return prev;
         }
         return {
           ...prev,
-          ...newValue,
+          properties: {
+            ...newValue,
+          },
         };
       });
 
@@ -95,7 +97,11 @@ const TemplateCreatePage = () => {
     }
     toast
       .promise(
-        saveAsyncFn(templateId as string, template, `${template.name}.json`),
+        saveAsyncFn(
+          templateId as string,
+          template,
+          `${template.properties.name}.json`
+        ),
         {
           loading: "儲存中...",
           success: "儲存完成",
@@ -126,7 +132,7 @@ const TemplateCreatePage = () => {
           <Breadcrumbs aria-label="breadcrumbs">
             <Link to="/">主頁</Link>
             <span>模版</span>
-            <span>{template.name}</span>
+            <span>{template.properties.name}</span>
           </Breadcrumbs>
         </div>
         <div className="container mx-auto flex gap-x-4">

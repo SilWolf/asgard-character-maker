@@ -713,7 +713,7 @@
       "defaultValue": "https://placehold.co/325x695.png",
       "label": "角色肖像圖",
       "description": "用於角色卡最左側",
-      "category": "image"
+      "category": "url"
     },
     {
       "id": "img_badge_left",
@@ -721,7 +721,7 @@
       "defaultValue": "https://placehold.co/64x64.png",
       "label": "名稱左側圖片A",
       "description": "可用於放置國家的圖標",
-      "category": "image"
+      "category": "url"
     },
     {
       "id": "img_badge_right",
@@ -729,7 +729,7 @@
       "defaultValue": "https://placehold.co/64x64.png",
       "label": "名稱左側圖片B",
       "description": "可用於放置所屬公開的圖標",
-      "category": "image"
+      "category": "url"
     },
     {
       "id": "img_flag",
@@ -737,7 +737,7 @@
       "defaultValue": "https://placehold.co/70x96.png",
       "label": "簡介左側圖片",
       "description": "",
-      "category": "image"
+      "category": "url"
     },
     {
       "id": "img_hr",
@@ -745,7 +745,7 @@
       "defaultValue": "https://placehold.co/500x20.png",
       "label": "分隔線圖片",
       "description": "",
-      "category": "image"
+      "category": "url"
     },
     {
       "id": "img_largeImage_1",
@@ -753,7 +753,7 @@
       "defaultValue": "https://placehold.co/1920x1080.png",
       "label": "大圖片A",
       "description": "",
-      "category": "image"
+      "category": "url"
     },
     {
       "id": "img_largeImage_2",
@@ -761,7 +761,7 @@
       "defaultValue": "https://placehold.co/1920x1080.png",
       "label": "大圖片B",
       "description": "",
-      "category": "image"
+      "category": "url"
     },
     {
       "id": "img_largeImage_3",
@@ -769,7 +769,7 @@
       "defaultValue": "https://placehold.co/1920x1080.png",
       "label": "大圖片C",
       "description": "",
-      "category": "image"
+      "category": "url"
     },
     {
       "id": "color_primary",
