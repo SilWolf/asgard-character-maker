@@ -7,14 +7,20 @@ export type Sheet = {
   properties: SheetProperties;
 };
 
-export type SheetLayoutRow = SheetLayoutCol[];
+export type SheetLayoutRow = {
+  id: string;
+  cols: SheetLayoutCol[];
+};
 
 export type SheetLayoutCol = {
+  id: string;
   width: string;
   sectionIds: string[];
 };
 
-export type SheetTemplate = Pick<BahaTemplate, "bahaCode" | "props">;
+export type SheetTemplate = Pick<BahaTemplate, "bahaCode" | "props"> & {
+  name: string;
+};
 
 export type SheetSection = {
   id: string;

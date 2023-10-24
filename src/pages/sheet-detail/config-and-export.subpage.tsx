@@ -46,7 +46,7 @@ const SheetDetailConfigAndExportSubPage = ({
 
     return sheet.layout
       .map((row) =>
-        row
+        row.cols
           .map((col) =>
             col.sectionIds
               .map((sectionId) => {

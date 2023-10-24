@@ -10,14 +10,14 @@ import {
 } from "@/helpers/google-drive.helper";
 import { useAsyncFn, useEffectOnce, useToggle } from "react-use";
 import { Link, useParams, unstable_usePrompt } from "react-router-dom";
-import SheetDetailNewSingleSubPage, {
-  SheetNewSingle,
-} from "./new-single.subpage";
+import { SheetNewSingle } from "./new-single.subpage";
 import { Sheet } from "@/types/Sheet.type";
 import { BahaTemplate } from "@/types/Baha.type";
 import SheetDetailConfigAndExportSubPage from "./config-and-export.subpage";
 import PublicLayout from "@/layouts/public.layout";
 import { ErrorBoundary } from "react-error-boundary";
+import SheetDetailLayoutAndSectionsSubPage from "./layout-and-sections.subpage";
+import { utilGetUniqueId } from "@/utils/string.util";
 
 const SheetDetailPage = () => {
   const { sheetId } = useParams<{ sheetId: string }>();
@@ -71,6 +71,19 @@ const SheetDetailPage = () => {
     []
   );
 
+  const handleSubmitNewLayout = useCallback((newLayout: Sheet["layout"]) => {
+    setSheet((prev) => {
+      if (!prev) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        layout: newLayout,
+      };
+    });
+  }, []);
+
   const handleSubmitSingle = useCallback(
     (sectionId: string, newValue: Record<string, string>) => {
       setSheet((prev) => {
@@ -94,7 +107,7 @@ const SheetDetailPage = () => {
     [toggleDirty]
   );
 
-  const handleSubmitNewSingle = useCallback(
+  const handleSubmitNewSection = useCallback(
     async (newSingle: SheetNewSingle) => {
       return toast.promise(
         getFileByIdAsJSON<BahaTemplate>(newSingle.templateId).then(
@@ -108,7 +121,11 @@ const SheetDetailPage = () => {
                 ...prev,
                 templatesMap: {
                   ...prev.templatesMap,
-                  [newSingle.templateId]: template,
+                  [newSingle.templateId]: {
+                    bahaCode: template.bahaCode,
+                    props: template.props,
+                    name: template.properties.name,
+                  },
                 },
                 sectionsMap: {
                   ...prev.sectionsMap,
@@ -121,12 +138,16 @@ const SheetDetailPage = () => {
                 },
                 layout: [
                   ...prev.layout,
-                  [
-                    {
-                      width: "100%",
-                      sectionIds: [newSingle.id],
-                    },
-                  ],
+                  {
+                    id: `row_${utilGetUniqueId()}`,
+                    cols: [
+                      {
+                        id: `col_${utilGetUniqueId()}`,
+                        width: "100%",
+                        sectionIds: [newSingle.id],
+                      },
+                    ],
+                  },
                 ],
               };
             });
@@ -173,7 +194,7 @@ const SheetDetailPage = () => {
 
     const sectionIds = [];
     for (const row of sheet.layout) {
-      for (const col of row) {
+      for (const col of row.cols) {
         sectionIds.push(...col.sectionIds);
       }
     }
@@ -202,8 +223,12 @@ const SheetDetailPage = () => {
                 <Tab value="0" variant="plain" color="neutral">
                   總覽
                 </Tab>
-                <Tab value="layout" variant="plain" color="neutral">
-                  佈區＆區塊
+                <Tab
+                  value="layout-and-sections"
+                  variant="plain"
+                  color="neutral"
+                >
+                  區塊＆佈局
                 </Tab>
               </TabList>
             </Tabs>
@@ -268,6 +293,17 @@ const SheetDetailPage = () => {
           </div>
         </section>
 
+        <section
+          className="hidden data-[active='1']:block"
+          data-active={activeTab === "layout-and-sections" ? "1" : "0"}
+        >
+          <SheetDetailLayoutAndSectionsSubPage
+            sheet={sheet}
+            onSubmitSection={handleSubmitNewSection}
+            onSubmitLayout={handleSubmitNewLayout}
+          />
+        </section>
+
         {sheetSections.map((section) => (
           <section
             key={section.id}
@@ -293,16 +329,6 @@ const SheetDetailPage = () => {
             </div>
           </section>
         ))}
-
-        <section
-          className="hidden data-[active='1']:block"
-          data-active={activeTab === "+" ? "1" : "0"}
-        >
-          <SheetDetailNewSingleSubPage
-            sectionsCount={sheetSections.length}
-            onSubmit={handleSubmitNewSingle}
-          />
-        </section>
 
         <section
           className="hidden data-[active='1']:block"

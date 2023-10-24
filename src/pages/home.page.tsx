@@ -77,6 +77,7 @@ const HomePage = () => {
     const defaultSheet: Sheet = {
       templatesMap: {
         starter: {
+          name: "預設模版",
           bahaCode: "[div]輸入你想要的值：$placeholder$[/div]",
           props: [
             {
@@ -98,7 +99,12 @@ const HomePage = () => {
           value: [{}],
         },
       },
-      layout: [[{ width: "100%", sectionIds: ["section1"] }]],
+      layout: [
+        {
+          id: "row1",
+          cols: [{ id: "col1", width: "100%", sectionIds: ["section1"] }],
+        },
+      ],
       properties: {
         name,
         author: "",
