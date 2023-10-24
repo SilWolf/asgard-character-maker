@@ -18,11 +18,61 @@ import {
 import { useAsyncFn } from "react-use";
 import useCustomTemplates from "@/hooks/useCustomTemplates.hook";
 import { utilGetUniqueId } from "@/utils/string.util";
+import useDialog from "@/hooks/useDialog.hook";
+
+type LayoutRowDivProps = {
+  sheet: Sheet;
+  row: SheetLayoutRow;
+  onClickDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
+};
+const LayoutRowDiv = ({ sheet, row, onClickDelete }: LayoutRowDivProps) => {
+  const { name, templateName } = useMemo(() => {
+    const section = sheet.sectionsMap[row.cols[0]?.sectionIds[0]];
+    if (!section) {
+      return {
+        name: "（找不到區塊）",
+        templateName: "（找不到模版）",
+      };
+    }
+
+    const template = sheet.templatesMap[section.templateId];
+    if (!template) {
+      return {
+        name: section.name,
+        templateName: "（找不到模版）",
+      };
+    }
+
+    return {
+      name: section.name,
+      templateName: template.name,
+    };
+  }, [row.cols, sheet.sectionsMap, sheet.templatesMap]);
+
+  return (
+    <div className="flex justify-between items-center">
+      <div>
+        {name} - {templateName}
+      </div>
+      <div className="space-x-1">
+        <Button
+          size="sm"
+          color="danger"
+          variant="plain"
+          data-id={row.id}
+          onClick={onClickDelete}
+        >
+          刪除
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 type Props = {
   sheet: Sheet;
   onSubmitSection: (newSection: SheetSection) => Promise<unknown>;
-  onSubmitLayout: (newLayout: Sheet["layout"]) => void;
+  onSubmitLayout: (newLayout: Sheet["layout"], fullRefresh?: boolean) => void;
 };
 
 const SheetDetailLayoutAndSectionsSubPage = ({
@@ -31,34 +81,9 @@ const SheetDetailLayoutAndSectionsSubPage = ({
   onSubmitLayout,
 }: Props) => {
   const { data: templates } = useCustomTemplates();
+  const { openDialog } = useDialog();
 
   const [rows, setRows] = useState<Sheet["layout"]>([]);
-
-  const getRowInfo = useCallback(
-    (row: SheetLayoutRow) => {
-      const section = sheet.sectionsMap[row.cols[0]?.sectionIds[0]];
-      if (!section) {
-        return {
-          name: "（找不到區塊）",
-          templateName: "（找不到模版）",
-        };
-      }
-
-      const template = sheet.templatesMap[section.templateId];
-      if (!template) {
-        return {
-          name: section.name,
-          templateName: "（找不到模版）",
-        };
-      }
-
-      return {
-        name: section.name,
-        templateName: template.name,
-      };
-    },
-    [sheet.sectionsMap, sheet.templatesMap]
-  );
 
   const handleDragEnd = useCallback((result: DropResult) => {
     setRows((prev) => {
@@ -101,6 +126,22 @@ const SheetDetailLayoutAndSectionsSubPage = ({
       });
     },
     [namePlaceholder, onSubmitSectionAsyncFn]
+  );
+
+  const handleDeleteRow = useCallback(
+    (e: React.MouseEvent) => {
+      const targetRowId = e.currentTarget.getAttribute("data-id") as string;
+
+      openDialog({
+        title: "刪除區塊",
+        content: "確定要刪除區塊嗎？",
+        onYes: async () => {
+          const newRows = rows.filter(({ id }) => id !== targetRowId);
+          return onSubmitLayout(newRows, true);
+        },
+      });
+    },
+    [onSubmitLayout, openDialog, rows]
   );
 
   const handleClickSaveLayout = useCallback(() => {
@@ -159,12 +200,16 @@ const SheetDetailLayoutAndSectionsSubPage = ({
                     <Draggable key={row.id} draggableId={row.id} index={index}>
                       {(provided) => (
                         <div
-                          className="bg-gray-100 border border-gray-300 rounded px-8 py-4 mb-2"
+                          className="bg-gray-100 border border-gray-300 rounded px-4 py-3 mb-2"
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          {getRowInfo(row).name}
+                          <LayoutRowDiv
+                            sheet={sheet}
+                            row={row}
+                            onClickDelete={handleDeleteRow}
+                          />
                         </div>
                       )}
                     </Draggable>

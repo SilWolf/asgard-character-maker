@@ -11,7 +11,7 @@ import {
 import { useAsyncFn, useEffectOnce, useToggle } from "react-use";
 import { Link, useParams, unstable_usePrompt } from "react-router-dom";
 import { SheetNewSingle } from "./new-single.subpage";
-import { Sheet } from "@/types/Sheet.type";
+import { Sheet, SheetSection, SheetTemplate } from "@/types/Sheet.type";
 import { BahaTemplate } from "@/types/Baha.type";
 import SheetDetailConfigAndExportSubPage from "./config-and-export.subpage";
 import PublicLayout from "@/layouts/public.layout";
@@ -71,18 +71,54 @@ const SheetDetailPage = () => {
     []
   );
 
-  const handleSubmitNewLayout = useCallback((newLayout: Sheet["layout"]) => {
-    setSheet((prev) => {
-      if (!prev) {
-        return prev;
-      }
+  const handleSubmitNewLayout = useCallback(
+    (newLayout: Sheet["layout"], fullRefresh?: boolean) => {
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
 
-      return {
-        ...prev,
-        layout: newLayout,
-      };
-    });
-  }, []);
+        const newPrev = {
+          ...prev,
+          layout: newLayout,
+        };
+
+        if (fullRefresh) {
+          const sectionIds = [];
+          const templateIds = [];
+
+          for (const row of newPrev.layout) {
+            for (const col of row.cols) {
+              for (const sectionId of col.sectionIds) {
+                const section = newPrev.sectionsMap[sectionId];
+                if (section) {
+                  sectionIds.push(section.id);
+                  templateIds.push(section.templateId);
+                }
+              }
+            }
+          }
+
+          newPrev.sectionsMap = sectionIds.reduce<Record<string, SheetSection>>(
+            (obj, curr) => {
+              obj[curr] = prev.sectionsMap[curr];
+              return obj;
+            },
+            {}
+          );
+          newPrev.templatesMap = templateIds.reduce<
+            Record<string, SheetTemplate>
+          >((obj, curr) => {
+            obj[curr] = prev.templatesMap[curr];
+            return obj;
+          }, {});
+        }
+
+        return newPrev;
+      });
+    },
+    []
+  );
 
   const handleSubmitSingle = useCallback(
     (sectionId: string, newValue: Record<string, string>) => {
@@ -178,7 +214,10 @@ const SheetDetailPage = () => {
         }
         return {
           ...prev,
-          ...newValue,
+          properties: {
+            ...prev.properties,
+            ...newValue,
+          },
         };
       });
 
