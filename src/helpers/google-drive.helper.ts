@@ -31,16 +31,28 @@ export const getFiles = () => {
   return googleDriveAxiosInstance.get("/files");
 };
 
-export const getFilesByFolderId = (folderId: string) => {
+export const getFilesByFolderId = (
+  folderId: string,
+  options?: { isPublic?: boolean }
+) => {
+  const params: Record<string, string> = {
+    q: `'${folderId}' in parents and trashed=false`,
+    fields: "files(id,name,createdTime,modifiedTime,size)",
+  };
+
+  if (options?.isPublic) {
+    params.public = "1";
+  }
+
   return googleDriveAxiosInstance
     .get<{ files: GoogleDriveFile[] }>("/files", {
-      params: {
-        q: `'${folderId}' in parents and trashed=false`,
-        fields: "files(id,name,createdTime,modifiedTime,size)",
-      },
+      params,
     })
     .then((res) => res.data.files);
 };
+
+export const getPublicFilesByFolderId = (folderId: string) =>
+  getFilesByFolderId(folderId, { isPublic: true });
 
 export const getFileByIdAsJSON = <T extends Record<string, unknown>>(
   fileId: string

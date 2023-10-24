@@ -3,11 +3,19 @@ import SheetDetailPage from "./pages/sheet-detail/index.page";
 import TemplateDetailPage from "./pages/template-detail/index.page";
 
 import useGoogleAuth from "./hooks/useGoogleAuth.hook";
-import FirstLandingPage from "./pages/first-landing.page";
-import HomePage from "./pages/home.page";
 import { updateGoogleDriveRequestProps } from "./helpers/google-drive.helper";
 import { useEffectOnce } from "react-use";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import HomePage from "./pages/home.page";
+import LoginPage from "./pages/login.page";
+import MarketplacePage from "./pages/marketplace/index.page";
+
+const publicRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <LoginPage />,
+  },
+]);
 
 const router = createBrowserRouter([
   {
@@ -22,17 +30,14 @@ const router = createBrowserRouter([
     path: "/template/:templateId",
     element: <TemplateDetailPage />,
   },
+  {
+    path: "/marketplace",
+    element: <MarketplacePage />,
+  },
 ]);
 
 const App = () => {
-  const { isLogined, token } = useGoogleAuth();
-  // return <DetailPage />;
-
-  // const hasAccess = hasGrantedAllScopesGoogle(
-  //   tokenResponse,
-  //   "google-scope-1",
-  //   "google-scope-2"
-  // );
+  const { token, isLogined } = useGoogleAuth();
 
   useEffectOnce(() => {
     updateGoogleDriveRequestProps({
@@ -41,11 +46,7 @@ const App = () => {
     });
   });
 
-  if (!isLogined) {
-    return <FirstLandingPage />;
-  }
-
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={isLogined ? router : publicRouter} />;
 };
 
 export default App;

@@ -1,8 +1,11 @@
 import { PropsWithChildren } from "react";
+import { Link } from "react-router-dom";
 
-type Props = PropsWithChildren;
+type Props = PropsWithChildren<{
+  hideNav?: boolean;
+}>;
 
-const PublicLayout = ({ children }: Props) => {
+const PublicLayout = ({ hideNav, children }: Props) => {
   return (
     <div>
       <header className="p-3 bg-gray-500 border-b border-gray-600 mb-8 sticky top-0 z-10">
@@ -13,11 +16,13 @@ const PublicLayout = ({ children }: Props) => {
             </h3>
           </div>
           <div className="flex-1">
-            <nav className="space-x-6 text-sm text-white">
-              <a href="#">首頁</a>
-              <a href="#">範例角色卡＆模組</a>
-              <a href="#">如何使用？</a>
-            </nav>
+            {!hideNav && (
+              <nav className="space-x-6 text-sm text-white">
+                <Link to="/">首頁</Link>
+                <Link to="/marketplace">範例角色卡＆模版</Link>
+                <a href="#">如何使用？</a>
+              </nav>
+            )}
           </div>
           <div className="shrink-0">
             <nav className="space-x-6 text-sm text-white">

@@ -4,7 +4,7 @@ import { TokenResponse } from "@react-oauth/google";
 import { useCallback } from "react";
 import PublicLayout from "@/layouts/public.layout";
 
-const FirstLandingPage = () => {
+const LoginPage = () => {
   const handleSuccessGoogleLogin = useCallback(
     (tokenResponse: TokenResponse) => {
       updateGoogleDriveRequestProps({
@@ -15,10 +15,10 @@ const FirstLandingPage = () => {
   );
 
   return (
-    <PublicLayout>
+    <PublicLayout hideNav>
       <div className="container mx-auto">
         <div className="space-y-6 text-center">
-          <h1 className="text-2xl bold">RPG公會角色卡製作器</h1>
+          <h1 className="text-2xl bold">RPG公會創作模版工具</h1>
           <p>
             這是一套方便RPG玩家製作角色卡的工具，提供了不同角色卡模版，讓玩家輸入資料後，快速生成巴哈創作的代碼。
           </p>
@@ -39,4 +39,4 @@ const FirstLandingPage = () => {
   );
 };
 
-export default FirstLandingPage;
+export default LoginPage;
