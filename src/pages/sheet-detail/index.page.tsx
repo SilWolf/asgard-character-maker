@@ -261,6 +261,24 @@ const SheetDetailPage = () => {
     return sectionIds.map((sectionId) => sheet.sectionsMap[sectionId]);
   }, [sheet]);
 
+  const [bahaCodePreviewClassName, setBahaCodePreviewClassName] =
+    useState<string>("baha-preview");
+
+  const handleChangePreview = useCallback(
+    (_: unknown, newTab: string | number | null) =>
+      setBahaCodePreviewClassName(newTab as string),
+    []
+  );
+
+  const [bahaCodeLightOrDarkClassName, setBahaCodeLightOrDarkClassName] =
+    useState<string>("baha-preview-light");
+
+  const handleChangeLightOrDark = useCallback(
+    (_: unknown, newTab: string | number | null) =>
+      setBahaCodeLightOrDarkClassName(newTab as string),
+    []
+  );
+
   if (!sheet || !sheetId) {
     return <PublicLayout />;
   }
@@ -338,8 +356,79 @@ const SheetDetailPage = () => {
           className="hidden data-[active='1']:block"
           data-active={activeTab === "0" ? "1" : "0"}
         >
-          <div className="mx-auto container py-4">
-            <div className="baha-preview">
+          <div className="container mx-auto mb-2 space-x-2">
+            <div className="inline-block">
+              <Tabs
+                size="sm"
+                value={bahaCodePreviewClassName}
+                onChange={handleChangePreview}
+              >
+                <TabList disableUnderline>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="baha-preview"
+                  >
+                    新版小屋
+                  </Tab>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="baha-preview-old-home"
+                  >
+                    舊版小屋
+                  </Tab>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="baha-preview-wiki"
+                  >
+                    Wiki
+                  </Tab>
+                </TabList>
+              </Tabs>
+            </div>
+
+            <div className="inline-block">
+              <Tabs
+                size="sm"
+                value={bahaCodeLightOrDarkClassName}
+                onChange={handleChangeLightOrDark}
+              >
+                <TabList disableUnderline>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="baha-preview-light"
+                  >
+                    <i className="uil uil-sun"></i>
+                  </Tab>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="baha-preview-dark"
+                  >
+                    <i className="uil uil-moon"></i>
+                  </Tab>
+                </TabList>
+              </Tabs>
+            </div>
+          </div>
+
+          <div
+            className={`mx-auto container py-4 ${bahaCodeLightOrDarkClassName}`}
+          >
+            <div className={bahaCodePreviewClassName}>
               {sheetSections.map((section) => (
                 <BahaCode
                   key={section.id}

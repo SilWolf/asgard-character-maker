@@ -11,22 +11,42 @@ type BBOBNode = {
 
 const bahaPreset = reactPreset.extend((tags: Record<string, unknown>) => ({
   ...tags,
-  img: (node: BBOBNode) => ({
-    tag: "img",
-    attrs: {
-      src: Object.keys(node.attrs).find((key) => key === node.attrs[key]),
-      style: {
-        width: node.attrs.width ? `${node.attrs.width}px` : "100%",
-        height: node.attrs.height ? `${node.attrs.height}px` : "none",
+  img: (node: BBOBNode) => {
+    return {
+      tag: "img",
+      attrs: {
+        src: Object.keys(node.attrs).find((key) => key === node.attrs[key]),
+        style: {
+          width: node.attrs.width ? `${node.attrs.width}px` : "auto",
+          height: node.attrs.height ? `${node.attrs.height}px` : "none",
+        },
       },
-    },
-    content: null,
-  }),
+      content: null,
+    };
+  },
   size: (node: BBOBNode) => {
     return {
       tag: "font",
       attrs: {
         size: Object.keys(node.attrs).find((key) => key === node.attrs[key]),
+      },
+      content: node.content,
+    };
+  },
+  b: (node: BBOBNode) => {
+    return {
+      tag: "strong",
+      content: node.content,
+    };
+  },
+  color: (node: BBOBNode) => {
+    console.log(node.attrs);
+    return {
+      tag: "span",
+      attrs: {
+        style: {
+          color: Object.keys(node.attrs).find((key) => key === node.attrs[key]),
+        },
       },
       content: node.content,
     };

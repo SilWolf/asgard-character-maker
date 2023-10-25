@@ -4,6 +4,7 @@ import { BahaTemplate } from "@/types/Baha.type";
 import {
   Alert,
   Button,
+  Checkbox,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -81,6 +82,29 @@ const TemplateDetailConfigAndExportSubPage = ({
               className="max-w-[400px]"
             />
           </FormControl>
+
+          {/* <FormControl>
+            <FormLabel>適用的頁面</FormLabel>
+            <FormHelperText>
+              <p>
+                <span className="line-through">因為巴哈太垃圾</span>
+                巴哈有數種不同的創作頁面，各有不同的排版差異。很少情況下一套模版能用在不同頁面上。
+                <br />
+                請勾選你認為這模版適合的頁面。
+              </p>
+            </FormHelperText>
+            <div className="grid grid-cols-3 gap-x-4 mt-4">
+              <div>
+                <Checkbox label="適合新版小屋" />
+              </div>
+              <div>
+                <Checkbox label="適合舊版小屋" />
+              </div>
+              <div>
+                <Checkbox label="適合WIKI" />
+              </div>
+            </div>
+          </FormControl> */}
         </form>
 
         <form className="space-y-6" onBlur={handleBlurForm}>

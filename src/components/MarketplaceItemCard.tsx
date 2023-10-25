@@ -10,10 +10,7 @@ const MarketplaceItemCard = ({ properties }: Props) => {
 
   return (
     <div className="space-y-4">
-      <img
-        className="aspect-square bg-gray-200"
-        src={properties.previewImageUrl}
-      />
+      <img className="bg-gray-200" src={properties.previewImageUrl} />
       <div>
         <h5 className="text-lg">{properties.name}</h5>
         <p className="text-sm text-gray-600">作者: {properties.author}</p>

@@ -37,4 +37,104 @@
       box-sizing: content-box;
     }
   }
+
+  .baha-preview-old-home {
+    font-family: "Helvetica Neue", Helvetica, "Roboto", Arial, "Lucida Grande", "PingFang TC", "蘋果儷中黑", "Apple LiGothic Medium", sans-serif;
+    margin: 0 auto;
+    width: 628px;
+
+    div {
+      font-size: 15px;
+      line-height: 25px;
+      min-height: 25px;
+    }
+
+    font {
+      min-width: 2px;
+      white-space: break-spaces;
+      line-height: 25px;
+      /* cursor: pointer; */
+
+      /* &:hover {
+        background: #FFFF00;
+      } */
+    }
+
+    td {
+      padding: 3px;
+      box-sizing: content-box;
+    }
+
+    hr {
+      margin: 7.5px 0;
+    }
+
+    ul {
+      margin: 10px;
+      padding-left: 30px;
+      list-style-type: disc;
+      list-style-position: outside;
+    }
+
+    li {
+      display: list-item;
+    }
+  }
+
+  .baha-preview-wiki {
+    font-family: "Helvetica Neue", Helvetica, "Roboto", Arial, "Lucida Grande", "PingFang TC", "蘋果儷中黑", "Apple LiGothic Medium", sans-serif;
+    margin: 0 auto;
+    width: 658px;
+
+    div {
+      font-size: 15px;
+      line-height: 150%;
+      min-height: 22.5px;
+    }
+
+    font {
+      min-width: 12px;
+      white-space: break-spaces;
+      line-height: 22.5px;
+      /* cursor: pointer; */
+
+      /* &:hover {
+        background: #FFFF00;
+      } */
+    }
+
+    img {
+      margin: 10px 0;
+      /* cursor: pointer; */
+      
+      /* &:hover {
+        opacity: 0.8;
+      } */
+    }
+
+    td {
+      padding: 3px;
+      box-sizing: content-box;
+    }
+
+    hr {
+      margin: 7.5px 0;
+    }
+
+    ul {
+      margin: 10px;
+      padding-left: 30px;
+      list-style-type: disc;
+      list-style-position: outside;
+    }
+
+    li {
+      display: list-item;
+    }
+  }
+
+  .baha-preview-dark {
+    background: #272728;
+    color: #F7F7F7;
+  }
 }

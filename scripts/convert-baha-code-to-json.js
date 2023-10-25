@@ -1,7 +1,51 @@
 import { nanoid } from "nanoid";
 import fs from "fs";
 
-const SOURCE_BAHA_CODE = `[table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=43% valign=bottom][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div][img=https://placehold.co/325x695.png width=325 height=695][/div][/td][/tr][/table][/td][/tr][/table][/td][td width=57% valign=bottom][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div align=center][size=1]$topTitle$[/size][/div][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td][div][img=https://placehold.co/64x64.png width=64 height=64][/div][/td][td][div][img=https://placehold.co/64x64.png width=64 height=64][/div][/td][td][/td][td][div align=right][size=6]$characterName$[/size][/div][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=right][tr][td valign=top][div][img=https://placehold.co/70x96.png width=70 height=96][/div][/td][td valign=top][div align=right][size=3]央城大狼．銀星【沃野卿】\n  萬國商會狼族協調官兼駐央城支部長\n  阿斯嘉特傳奇冒險者、『曙葉小隊』副隊長\n  前央城正規軍千夫長、四災義勇軍榮譽軍人[/size][/div][/td][/tr][/table][/td][/tr][tr][td align=left][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td][div][img=https://placehold.co/500x20.png width=500 height=20][/div][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]種族[/size][/div][/td][td valign=center][div align=right][size=3]狼人[/size][/div][/td][td][/td][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]性別[/size][/div][/td][td valign=center][div align=right][size=3]雄性[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]生日[/size][/div][/td][td valign=center][div align=right][size=3]8月5日[/size][/div][/td][td][/td][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]年齡[/size][/div][/td][td valign=center][div align=right][size=3]外表45 / 實際30[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]體型[/size][/div][/td][td valign=center][div align=right][size=3]215公分 / 140公斤[/size][/div][/td][td][/td][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]觀感[/size][/div][/td][td valign=center][div align=right][size=3]魁梧、成熟、霸氣[/size][/div][/td][/tr][tr][td colspan=4][/td][/tr][tr][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]陣營[/size][/div][/td][td valign=center][div align=right][size=3]守序中立[/size][/div][/td][td][/td][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]個性[/size][/div][/td][td valign=center][div align=right][size=3]負責、耐苦、隨興[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]興趣[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]喝酒、木工藝、解體工作、攀登、照顧孩子[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]喜愛[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]肉、酒、溫泉、家庭話題、冒險話題、鍛練菜鳥[/size][/div][/td][/tr][tr][td colspan=5][/td][/tr][tr][td valign=center align=center bgcolor=#DDDDDD width=40][div][size=3]厭惡[/size][/div][/td][td valign=center colspan=4][div align=right][size=3]菜、甜、逃避責任者、破壞他人平靜生活的行為[/size][/div][/td][/tr][/table][/td][/tr][/table][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=left][tr][td valign=bottom width=33%][div][size=3][img=https://placehold.co/1920x1080.png][/size][/div][/td][td valign=bottom width=33%][div][size=3][img=https://placehold.co/1920x1080.png][/size][/div][/td][td valign=bottom width=33%][div][size=3][img=https://placehold.co/1920x1080.png][/size][/div][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=33% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=40% bgcolor=#DDDDDD align=center][div][size=3]戰鬥職業[/size][/div][/td][td][/td][td width=60% bgcolor=#DDDDDD align=center][div][size=3]風格[/size][/div][/td][/tr][tr][td align=center][div][size=3]戰士、前衛[/size][/div][/td][td][/td][td align=center][div][size=3]戰術、硬碰硬[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=#DDDDDD align=center][div][size=3]慣用武器、魔法、其他[/size][/div][/td][/tr][tr][td align=center][div][size=3]大劍、斧、爪牙、霰彈槍\n  大地系、闇系、冰系魔法\n  獅鷲、狼群戰術、狼系權能[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=20% bgcolor=#DDDDDD align=center][div][size=3]力[/size][/div][/td][td][/td][td width=20% bgcolor=#DDDDDD align=center][div][size=3]敏[/size][/div][/td][td][/td][td width=20% bgcolor=#DDDDDD align=center][div][size=3]體[/size][/div][/td][td][/td][td width=20% bgcolor=#DDDDDD align=center][div][size=3]魔[/size][/div][/td][td][/td][td width=20% bgcolor=#DDDDDD align=center][div][size=3]精[/size][/div][/td][/tr][tr][td align=center][div][size=3]A[/size][/div][/td][td][/td][td align=center][div][size=3]C[/size][/div][/td][td][/td][td align=center][div][size=3]S[/size][/div][/td][td][/td][td align=center][div][size=3]C[/size][/div][/td][td][/td][td align=center][div][size=3]D[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=13% bgcolor=#DDDDDD align=center][div][size=3]火[/size][/div][/td][td][/td][td width=12% bgcolor=#DDDDDD align=center][div][size=3]水[/size][/div][/td][td][/td][td width=12% bgcolor=#DDDDDD align=center][div][size=3]風[/size][/div][/td][td][/td][td width=13% bgcolor=#DDDDDD align=center][div][size=3]土[/size][/div][/td][td][/td][td width=13% bgcolor=#DDDDDD align=center][div][size=3]冰[/size][/div][/td][td][/td][td width=12% bgcolor=#DDDDDD align=center][div][size=3]雷[/size][/div][/td][td][/td][td width=12% bgcolor=#DDDDDD align=center][div][size=3]聖[/size][/div][/td][td][/td][td width=13% bgcolor=#DDDDDD align=center][div][size=3]闇[/size][/div][/td][/tr][tr][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3]⦾[/size][/div][/td][td][/td][td align=center][div][size=3]○[/size][/div][/td][td][/td][td align=center][div][size=3]△[/size][/div][/td][td][/td][td align=center][div][size=3][/size][/div][/td][td][/td][td align=center][div][size=3]⦾[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=13% bgcolor=#DDDDDD align=center][div][size=3]陸[/size][/div][/td][td][/td][td width=12% bgcolor=#DDDDDD align=center][div][size=3]海[/size][/div][/td][td][/td][td width=12% bgcolor=#DDDDDD align=center][div][size=3]空[/size][/div][/td][td][/td][td width=13% bgcolor=#DDDDDD align=center][div][size=3]森[/size][/div][/td][td][/td][td width=13% bgcolor=#DDDDDD align=center][div][size=3]脈[/size][/div][/td][td][/td][td width=12% bgcolor=#DDDDDD align=center][div][size=3]沼[/size][/div][/td][td][/td][td width=12% bgcolor=#DDDDDD align=center][div][size=3]寒[/size][/div][/td][td][/td][td width=13% bgcolor=#DDDDDD align=center][div][size=3]熱[/size][/div][/td][/tr][tr][td align=center][div][size=3]⦾[/size][/div][/td][td][/td][td align=center][div][size=3]×[/size][/div][/td][td][/td][td align=center][div][size=3]△[/size][/div][/td][td][/td][td align=center][div][size=3]⦾[/size][/div][/td][td][/td][td align=center][div][size=3]○[/size][/div][/td][td][/td][td align=center][div][size=3]×[/size][/div][/td][td][/td][td align=center][div][size=3]○[/size][/div][/td][td][/td][td align=center][div][size=3]×[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=30% bgcolor=#DDDDDD align=center][div][size=3]國籍[/size][/div][/td][td][/td][td width=70% bgcolor=#DDDDDD align=center][div][size=3]隸屬[/size][/div][/td][/tr][tr][td align=center][div][size=3]喀爾登[/size][/div][/td][td][/td][td align=center][div][size=3]萬國商會、自由聯邦[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=50% bgcolor=#DDDDDD align=center][div][size=3]特徵傾向[/size][/div][/td][td][/td][td width=50% bgcolor=#DDDDDD align=center][div][size=3]能力傾向[/size][/div][/td][/tr][tr][td align=center][div][size=3]西北的獸型[/size][/div][/td][td][/td][td align=center][div][size=3]北方的蠻力[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=#DDDDDD align=center][div][size=3]人生目標[/size][/div][/td][/tr][tr][td align=center][div][size=3]守護家庭、守護阿斯嘉特\n  維持狼族在世界上的地位\n  等待『那女孩』、尋找通往\n  『那女孩』所在的門[/size][/div][/td][/tr][/table][/td][/tr][tr][td][/td][/tr][/table][/td][td width=67% valign=top][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=#DDDDDD align=left][div][size=3]身分與形象[/size][/div][/td][/tr][tr][td align=left][div][size=3]　　滿讀品他建件神確容國方題能結！那內書再資告片；起斯有識不道中處程遠世我把業，因型北滿作難，沒他而時情司兩阿，電為人高，操解健認子日民機血重景房主管完覺笑臉為陽前人……像國爭，團去加他：人紅文的那畫？\n  　　看成總地你技進種他有著性頭水友任個政智了由立害北心、實優超一，查文一，以著答師！一流發還氣五當團。童放是容安用腦的，子加善生為然下元報海單不冷火去易？頭法意止房方收進不造處南期當人，不老一得者時人了木使詩變的於條對給文的覺是口，回腳不多此爾。[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=#DDDDDD align=left][div][size=3]事蹟[/size][/div][/td][/tr][tr][td align=left][div][size=3]　　全記邊增……始以該賣……歡感但種育世本！的男活異臺不報拿出邊我舞當發外公生取物的學，境一標試來初格金，來文國不報了……\n  　　些式大、車如生民須代出市孩積力細行速放幾，故點香木氣際謝：們山白消能產受不對民文，期會的未代香長，海子美能收生後來雙取壓集國們光打香使部夫遠來性來手物要受上的來試見提次家適市新員價節成管最軍手，在雖基全能推的可用，病識滿時形待相賽門眼區果實食幾業門給結說不獨下定背動年總其存種一關德！[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][tr][td][table width=100% cellspacing=0 cellpadding=0 border=0 align=center][tr][td width=100% bgcolor=#DDDDDD align=left][div][size=3]人脈關係[/size][/div][/td][/tr][tr][td align=left][div][size=3]　　規相登間又分以見流被印圖的，早邊演個分效意臺過計的年。也明聲還、起體人道電子原員維門舞人足果寶利那？樂清希保月……裡沒這子一健有只及口部真車！兩路中又合雖機跟雖病則才人得國如細走同了時年好綠地總道保市港空的研大動頭溫新觀主點很產馬玩市的利美們。[/size][/div][/td][/tr][/table][/td][/tr][tr][td height=24][/td][/tr][/table][/td][/tr][/table][/td][/tr][/table]`;
+const SOURCE_BAHA_CODE = `[div][table width=98% cellspacing=1 cellpadding=1 align=center]
+[tr]
+[td height=50 width=50 bgcolor=transparent rowspan=4][img=https://truth.bahamut.com.tw/s01/202001/1d372c07129b2b8b7277f7de580e6b5d.JPG height=120 width=120][/td]
+[td colspan=3 rowspan=2 bgcolor=#3366FF align=center][color=#ffffff][size=4][b]『星導爵』[/b][/size][/color][/td]
+[/tr]
+[tr]
+[td colspan=2 align=center][size=4][color=#FF6600][b]LV.88[/b][/color][/size][/td]
+[/tr]
+[tr]
+[td width=60 bgcolor=transparent colspan=3 align=center][b][color=#ccffff][size=4]愛麗絲．白銀[/size][/color][/b][/td]
+[td width=70 colspan=2 bgcolor=transparent align=center][div][color=#C0C0C0][url=http://guild.gamer.com.tw/guildMemberL.php?gsn=3014&su=apaqi1991#apaqi1991][b][color=#99CCFF]✧[/color][/b][/url] [b][color=#99CCFF][size=2]3771[/size][/color][/b][size=2]／[/size][b][color=#99CCFF][size=2]9999[/size][/color][/b][/color][/div][div][url=https://ref.gamer.com.tw/redir.php?url=https%3A%2F%2Fguild.gamer.com.tw%2Fwiki.php%3Fsn%3D3014%26n%3D01.【鑽石系統】][color=#FF0000][b][size=3]⦡[/size][/b][/color][/url][b][color=#FFFFCC][size=2]12[/size][/color][/b][size=2]／[/size][b][color=#FFFFCC][size=2]50[/size][/color][/b][/div][div][size=2]([url=https://home.gamer.com.tw/creationEdit1.php?sn=3081762][color=#0066CC][size=2]調整[/size][/color][/url][/size])[/div][div][size=2][color=#C0C0C0]晉升－[/color][color=#99ccff][b]2400[/b][/color]／[color=#ffff99][b]12[/b][/color][/size][/div][/td]
+[/tr]
+[/table][/div][div]
+[/div][div][table width=98% align=center cellspacing=1 cellpadding=1]
+[tr]
+[td width=90 bgcolor=#FFFFFF align=center][color=#000000][size=3]性別[/size][/color][/td]
+[td width=180 bgcolor=#000000 align=center][color=#FFFFFF][size=2]女性[/size][/color][/td]
+[td width=90 bgcolor=#FFFFFF align=center][color=#000000][size=3]年齡[/size][/color][/td]
+[td width=180 bgcolor=#000000 align=center][color=#FFFFFF][size=2]11(+3*)[/size][/color][/td]
+[/tr]
+[tr]
+[td bgcolor=#FFFFFF align=center][color=#000000][size=3]種族[/size][/color][/td]
+[td bgcolor=#000000 align=center][color=#FFFFFF][size=2]魔造魔－非天(傳奇魔物)[/size][/color][/td]
+[td bgcolor=#FFFFFF align=center][color=#000000][size=3]居住[/size][/color][/td]
+[td bgcolor=#000000 align=center][color=#ffffff][size=2]王國的據點－1號房[/size][/color][/td]
+[/tr]
+[tr]
+[td bgcolor=#FFFFFF align=center][color=#000000][size=3]生日[/size][/color][/td]
+[td bgcolor=#000000 align=center][color=#FFFFFF][size=2]9/16[/size][/color][/td]
+[td bgcolor=#FFFFFF align=center][color=#000000][size=3]領地[/size][/color][/td]
+[td bgcolor=#000000 align=center][color=#FFFFFF][size=2][url=https://home.gamer.com.tw/creationDetail.php?sn=4858073]白塵嶺[/url][/size][/color][/td]
+[/tr]
+[tr]
+[td bgcolor=#FFFFFF align=center][color=#000000][size=3]身高/體重[/size][/color][/td]
+[td bgcolor=#000000 align=center][color=#FFFFFF][size=2]145cm/80kg[/size][/color][/td]
+[td bgcolor=#FFFFFF align=center][color=#000000][size=3]陣營[/size][/color][/td]
+[td bgcolor=#000000 align=center][color=#FFFFFF][size=2]中立善良[/size][/color][/td]
+[/tr]
+[tr]
+[td bgcolor=#FFFFFF align=center][color=#000000][size=3]三圍[/size][/color][/td]
+[td bgcolor=#000000 align=center][color=#FFFFFF][size=2]B73 / W53 / H75[/size][/color][/td]
+[td bgcolor=#FFFFFF align=center][color=#000000][size=3]屬性[/size][/color][/td]
+[td bgcolor=#000000 align=center][color=#ffffff][size=2]蘿莉、呆毛、元氣[/size][/color][/td]
+[/tr]
+[/table][/div]`;
 
 let replacedBahaCode = SOURCE_BAHA_CODE;
 
@@ -9,10 +53,12 @@ let replacedBahaCode = SOURCE_BAHA_CODE;
 const textProps = [];
 const parsedTextProps = [
   ...replacedBahaCode.matchAll(/\[size=[123456]\]([^\]]*)\[\/size\]/g),
+  ...replacedBahaCode.matchAll(/\[b\]([^\]]*)\[\/b\]/g),
 ]
+  .sort((a, b) => a.index - b.index)
   .map((result, i) => ({
     text: result[1],
-    startIndex: result.index + 8,
+    startIndex: result.index + result[0].indexOf("]") + 1,
     length: result[1].length,
     order: i,
   }))
@@ -26,6 +72,7 @@ for (const parsedTextProp of parsedTextProps) {
     defaultValue: parsedTextProp.text,
     label: "",
     description: "",
+    category: "text",
   });
 
   replacedBahaCode =
@@ -50,13 +97,14 @@ const parsedImageProps = [
   .reverse();
 
 for (const parsedImageProp of parsedImageProps) {
-  const id = `img_${nanoid(8)}`;
+  const id = `url_${nanoid(8)}`;
   imageProps.unshift({
     id,
     key: `$${id}$`,
     defaultValue: parsedImageProp.text,
     label: "",
     description: "",
+    category: "url",
   });
 
   replacedBahaCode =
@@ -91,6 +139,7 @@ for (const parsedColorProp of parsedColorProps) {
       defaultValue: parsedColorProp.text,
       label: "",
       description: "",
+      category: "color",
     });
   }
 
@@ -108,6 +157,16 @@ fs.writeFileSync(
     {
       props: [...textProps, ...imageProps, ...colorProps],
       bahaCode: replacedBahaCode,
+      properties: {
+        name: "未命名模版",
+        author: "",
+        briefing: "",
+        description: "",
+        demoUrl: "",
+        previewImageUrl: "",
+        imageUrls: [],
+        tags: "",
+      },
     },
     null,
     2

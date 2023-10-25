@@ -24,6 +24,8 @@ const MarketplacePage = () => {
     );
   });
 
+  console.log(data);
+
   return (
     <PublicLayout>
       <div className="space-y-6">

@@ -1,7 +1,17 @@
 import BahaCode from "@/components/BahaCode";
+import BahaCodePreviewWrapper from "@/components/BahaCodePreviewWrapper";
 import { BahaTemplate, BahaTemplateProp } from "@/types/Baha.type";
-import { FormControl, FormLabel, Input, Table, Textarea } from "@mui/joy";
-import { useCallback, useMemo } from "react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Tab,
+  TabList,
+  Table,
+  Tabs,
+  Textarea,
+} from "@mui/joy";
+import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
@@ -57,10 +67,99 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
     );
   }, [getValues, onSubmit, parsedProps]);
 
+  const [bahaCodePreviewClassName, setBahaCodePreviewClassName] =
+    useState<string>("baha-preview");
+
+  const handleChangePreview = useCallback(
+    (_: unknown, newTab: string | number | null) =>
+      setBahaCodePreviewClassName(newTab as string),
+    []
+  );
+
+  const [bahaCodeLightOrDarkClassName, setBahaCodeLightOrDarkClassName] =
+    useState<string>("baha-preview-light");
+
+  const handleChangeLightOrDark = useCallback(
+    (_: unknown, newTab: string | number | null) =>
+      setBahaCodeLightOrDarkClassName(newTab as string),
+    []
+  );
+
   return (
-    <div className="h-full mx-auto container flex flex-row gap-x-12">
-      <section className="flex-0 shrink mx-auto py-4 px-16 overflow-y-scroll rounded-lg shadow-md shadow-gray-400">
-        <div className="baha-preview">
+    <div className="relative h-full mx-auto container flex flex-row gap-x-12">
+      <div className="absolute top-0 left-0 space-x-2">
+        <div className="inline-block">
+          <Tabs
+            size="sm"
+            value={bahaCodePreviewClassName}
+            onChange={handleChangePreview}
+          >
+            <TabList disableUnderline>
+              <Tab
+                variant="outlined"
+                color="neutral"
+                disableIndicator
+                indicatorInset
+                value="baha-preview"
+              >
+                新版小屋
+              </Tab>
+              <Tab
+                variant="outlined"
+                color="neutral"
+                disableIndicator
+                indicatorInset
+                value="baha-preview-old-home"
+              >
+                舊版小屋
+              </Tab>
+              <Tab
+                variant="outlined"
+                color="neutral"
+                disableIndicator
+                indicatorInset
+                value="baha-preview-wiki"
+              >
+                Wiki
+              </Tab>
+            </TabList>
+          </Tabs>
+        </div>
+
+        <div className="inline-block">
+          <Tabs
+            size="sm"
+            value={bahaCodeLightOrDarkClassName}
+            onChange={handleChangeLightOrDark}
+          >
+            <TabList disableUnderline>
+              <Tab
+                variant="outlined"
+                color="neutral"
+                disableIndicator
+                indicatorInset
+                value="baha-preview-light"
+              >
+                <i className="uil uil-sun"></i>
+              </Tab>
+              <Tab
+                variant="outlined"
+                color="neutral"
+                disableIndicator
+                indicatorInset
+                value="baha-preview-dark"
+              >
+                <i className="uil uil-moon"></i>
+              </Tab>
+            </TabList>
+          </Tabs>
+        </div>
+      </div>
+
+      <section
+        className={`flex-0 shrink mx-auto py-4 px-4 overflow-y-scroll rounded-lg shadow-md shadow-gray-400 mt-10 ${bahaCodeLightOrDarkClassName}`}
+      >
+        <div className={`${bahaCodePreviewClassName}`}>
           <BahaCode
             code={template.bahaCode}
             template={template}
