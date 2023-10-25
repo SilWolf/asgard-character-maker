@@ -12,11 +12,17 @@ import MarketplacePage from "./pages/marketplace/index.page";
 import DeveloperPage from "./pages/developer/index.page";
 import MarketplaceCreatePage from "./pages/marketplace-create/index.page";
 import TemplateDetailPublishPage from "./pages/template-detail/publish.page";
+import PrivacyPolicyPage from "./pages/privacy-policy";
 
 const publicRouter = createBrowserRouter([
   {
     path: "*",
     element: <LoginPage />,
+  },
+
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicyPage />,
   },
 ]);
 
@@ -49,6 +55,11 @@ const router = createBrowserRouter([
   {
     path: "/marketplace/admin-create",
     element: <MarketplaceCreatePage />,
+  },
+
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicyPage />,
   },
 ]);
 

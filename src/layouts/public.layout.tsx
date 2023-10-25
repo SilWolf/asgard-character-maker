@@ -1,11 +1,12 @@
+import useGoogleAuth from "@/hooks/useGoogleAuth.hook";
 import { PropsWithChildren } from "react";
 import { Link } from "react-router-dom";
 
-type Props = PropsWithChildren<{
-  hideNav?: boolean;
-}>;
+type Props = PropsWithChildren;
 
-const PublicLayout = ({ hideNav, children }: Props) => {
+const PublicLayout = ({ children }: Props) => {
+  const { isLogined } = useGoogleAuth();
+
   return (
     <div>
       <header className="p-3 bg-gray-500 border-b border-gray-600 mb-8 sticky top-0 z-10">
@@ -16,7 +17,7 @@ const PublicLayout = ({ hideNav, children }: Props) => {
             </h3>
           </div>
           <div className="flex-1">
-            {!hideNav && (
+            {isLogined && (
               <nav className="space-x-6 text-sm text-white">
                 <Link to="/">首頁</Link>
                 <Link to="/marketplace">範例角色卡＆模板</Link>
@@ -60,8 +61,9 @@ const PublicLayout = ({ hideNav, children }: Props) => {
             <p className="text-sm text-gray-400">
               &copy; 2023 SilWolf's Workshop
             </p>
-            <nav className="text-sm text-gray-400 space-x-4">
+            <nav className="text-sm text-gray-400 space-x-6">
               <Link to="/developer">偵錯頁面</Link>
+              <Link to="/privacy-policy">隱私權政策</Link>
             </nav>
           </div>
         </div>
