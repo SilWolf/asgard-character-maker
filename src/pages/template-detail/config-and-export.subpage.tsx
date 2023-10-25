@@ -58,11 +58,11 @@ const TemplateDetailConfigAndExportSubPage = ({
 
   const handleClickDelete = useCallback(() => {
     openDialog({
-      title: "刪除模版",
-      content: "此動作無法回溯，請先下載紀錄檔進行備放。確定刪除模版嗎？",
+      title: "刪除模板",
+      content: "此動作無法回溯，請先下載紀錄檔進行備放。確定刪除模板嗎？",
       onYes: async () => {
         return deleteFile(templateId).then(() => {
-          toast.success("已刪除模版");
+          toast.success("已刪除模板");
           navigate("/");
         });
       },
@@ -75,7 +75,7 @@ const TemplateDetailConfigAndExportSubPage = ({
         <form className="space-y-6" onBlur={handleBlurForm}>
           <h2 className="text-2xl">基本設置</h2>
           <FormControl required>
-            <FormLabel>模版名稱</FormLabel>
+            <FormLabel>模板名稱</FormLabel>
             <Input
               {...register("name", { required: true })}
               className="max-w-[400px]"
@@ -87,9 +87,9 @@ const TemplateDetailConfigAndExportSubPage = ({
             <FormHelperText>
               <p>
                 <span className="line-through">因為巴哈太垃圾</span>
-                巴哈有數種不同的創作頁面，各有不同的排版差異。很少情況下一套模版能用在不同頁面上。
+                巴哈有數種不同的創作頁面，各有不同的排版差異。很少情況下一套模板能用在不同頁面上。
                 <br />
-                請勾選你認為這模版適合的頁面。
+                請勾選你認為這模板適合的頁面。
               </p>
             </FormHelperText>
             <div className="grid grid-cols-3 gap-x-4 mt-4">
@@ -110,7 +110,7 @@ const TemplateDetailConfigAndExportSubPage = ({
           <h2 className="text-2xl">進階設置</h2>
 
           <Alert color="warning">
-            除非你打算投稿此模版，否則「進階設置」是不需要填寫的，留空即可。
+            除非你打算投稿此模板，否則「進階設置」是不需要填寫的，留空即可。
           </Alert>
 
           <FormControl>
@@ -126,7 +126,7 @@ const TemplateDetailConfigAndExportSubPage = ({
             <FormLabel>介紹</FormLabel>
             <Input {...register("briefing")} />
             <FormHelperText>
-              簡介這個模版可用於什麼場景、有怎樣的風格。
+              簡介這個模板可用於什麼場景、有怎樣的風格。
             </FormHelperText>
           </FormControl>
 
@@ -135,7 +135,7 @@ const TemplateDetailConfigAndExportSubPage = ({
             <Textarea
               {...register("description")}
               minRows={5}
-              placeholder={`# 關於這個模版
+              placeholder={`# 關於這個模板
 
 ## 特色
 
@@ -147,7 +147,7 @@ const TemplateDetailConfigAndExportSubPage = ({
 `}
             />
             <FormHelperText>
-              詳細介紹這個模版、使用時的建議及注意事項、如何修改等等。支援
+              詳細介紹這個模板、使用時的建議及注意事項、如何修改等等。支援
               Markdown。
             </FormHelperText>
           </FormControl>
@@ -158,7 +158,7 @@ const TemplateDetailConfigAndExportSubPage = ({
               {...register("demoUrl")}
               placeholder="https://home.gamer.com.tw/artwork.php?sn=1234567"
             />
-            <FormHelperText>使用了這個模版的示範創作。</FormHelperText>
+            <FormHelperText>使用了這個模板的示範創作。</FormHelperText>
           </FormControl>
 
           <FormControl>
@@ -183,7 +183,7 @@ const TemplateDetailConfigAndExportSubPage = ({
             <FormLabel>標籤</FormLabel>
             <Input {...register("tags")} placeholder="新版小屋,簡約,整齊" />
             <FormHelperText>
-              能形容模版的關鍵字，以方便用戶搜索。用逗號(,)分隔每個標籤。
+              能形容模板的關鍵字，以方便用戶搜索。用逗號(,)分隔每個標籤。
             </FormHelperText>
           </FormControl>
         </form>
@@ -195,14 +195,14 @@ const TemplateDetailConfigAndExportSubPage = ({
             color="neutral"
             onClick={handleClickDownloadConfigJsonFile}
           >
-            下載模版設定檔 (.json)
+            下載模板設定檔 (.json)
           </Button>
         </section>
 
         <section className="space-y-6">
           <h2 className="text-2xl">其他操作</h2>
           <Button color="danger" variant="outlined" onClick={handleClickDelete}>
-            刪除此模版
+            刪除此模板
           </Button>
         </section>
       </div>

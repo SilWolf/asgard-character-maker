@@ -30,7 +30,7 @@ const LoginPage = () => {
             return toast.promise(
               Promise.all([
                 postCreateFolder("角色卡"),
-                postCreateFolder("模版"),
+                postCreateFolder("模板"),
               ]).then(async (results) => {
                 const [newSheetsFolderId, newTemplatesFolderId] = results.map(
                   (res) => res.data.id
@@ -81,15 +81,15 @@ const LoginPage = () => {
     <PublicLayout hideNav>
       <div className="container mx-auto">
         <div className="space-y-6 text-center">
-          <h1 className="text-2xl bold">RPG公會創作模版工具</h1>
+          <h1 className="text-2xl bold">RPG公會創作模板工具</h1>
           <p>
-            這是一套方便RPG玩家製作角色卡的工具，提供了不同角色卡模版，讓玩家輸入資料後，快速生成巴哈創作的代碼。
+            這是一套方便RPG玩家製作角色卡的工具，提供了不同角色卡模板，讓玩家輸入資料後，快速生成巴哈創作的代碼。
           </p>
           <p>
             使用此工具需要登入Google帳號，並存取您的Google Drive，用於以下用途：
           </p>
           <ul className="inline-block text-justify list-disc">
-            <li>建立、存取自定義模版的資料夾及檔案</li>
+            <li>建立、存取自定義模板的資料夾及檔案</li>
             <li>建立、存取匯出的巴哈創作原始碼的資料夾及檔案</li>
           </ul>
           <div></div>

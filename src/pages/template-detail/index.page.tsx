@@ -131,7 +131,7 @@ const TemplateCreatePage = () => {
         <div className="container mx-auto">
           <Breadcrumbs aria-label="breadcrumbs">
             <Link to="/">主頁</Link>
-            <span>模版</span>
+            <span>模板</span>
             <span>{template.properties.name}</span>
           </Breadcrumbs>
         </div>

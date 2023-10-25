@@ -1,12 +1,23 @@
 import { BahaTemplateProperties } from "@/types/Baha.type";
+import { Button } from "@mui/joy";
 import { useMemo } from "react";
+import { useAsyncFn } from "react-use";
 
 type Props = {
+  templateId: string;
   properties: BahaTemplateProperties;
+  onClickDownload: (e: React.MouseEvent<HTMLButtonElement>) => Promise<unknown>;
 };
 
-const MarketplaceItemCard = ({ properties }: Props) => {
+const MarketplaceItemCard = ({
+  templateId,
+  properties,
+  onClickDownload,
+}: Props) => {
   const tags = useMemo(() => properties.tags.split(","), [properties.tags]);
+
+  const [{ loading: isDownloading }, handleClickDownload] =
+    useAsyncFn(onClickDownload);
 
   return (
     <div className="space-y-4">
@@ -25,6 +36,16 @@ const MarketplaceItemCard = ({ properties }: Props) => {
             {tag}
           </div>
         ))}
+      </div>
+      <div>
+        <Button
+          variant="outlined"
+          loading={isDownloading}
+          onClick={handleClickDownload}
+          data-id={templateId}
+        >
+          下載此模板
+        </Button>
       </div>
     </div>
   );

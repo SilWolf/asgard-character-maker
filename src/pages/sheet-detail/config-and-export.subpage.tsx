@@ -121,7 +121,7 @@ const SheetDetailConfigAndExportSubPage = ({
         <form className="space-y-4" onBlur={handleBlurForm}>
           <h2 className="text-2xl">基本設置</h2>
           <FormControl>
-            <FormLabel>模版名稱</FormLabel>
+            <FormLabel>模板名稱</FormLabel>
             <Input {...register("name")} />
           </FormControl>
           <FormControl>

@@ -158,7 +158,7 @@ fs.writeFileSync(
       props: [...textProps, ...imageProps, ...colorProps],
       bahaCode: replacedBahaCode,
       properties: {
-        name: "未命名模版",
+        name: "未命名模板",
         author: "",
         briefing: "",
         description: "",

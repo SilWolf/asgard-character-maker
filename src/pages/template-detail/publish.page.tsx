@@ -53,7 +53,7 @@ const TemplateDetailPublishPage = () => {
 
     toast
       .promise(publishAsyncFn(), {
-        loading: "正在發佈模版",
+        loading: "正在發佈模板",
         success: "發佈成功",
         error: "發佈失敗",
       })
@@ -80,7 +80,7 @@ const TemplateDetailPublishPage = () => {
         <div className="container mx-auto">
           <Breadcrumbs aria-label="breadcrumbs">
             <Link to="/">主頁</Link>
-            <span>模版</span>
+            <span>模板</span>
             <Link to={`/template/${templateId}`}>
               {template.properties.name}
             </Link>
@@ -90,7 +90,7 @@ const TemplateDetailPublishPage = () => {
 
         <div className="space-y-6">
           <FormControl required>
-            <FormLabel>模版名稱</FormLabel>
+            <FormLabel>模板名稱</FormLabel>
             <Input
               value={template.properties.name}
               className="max-w-[400px]"
@@ -115,7 +115,7 @@ const TemplateDetailPublishPage = () => {
             <FormLabel>介紹</FormLabel>
             <Input value={template.properties.briefing} readOnly />
             <FormHelperText>
-              簡介這個模版可用於什麼場景、有怎樣的風格。
+              簡介這個模板可用於什麼場景、有怎樣的風格。
             </FormHelperText>
           </FormControl>
 
@@ -126,7 +126,7 @@ const TemplateDetailPublishPage = () => {
               placeholder="https://home.gamer.com.tw/artwork.php?sn=1234567"
               readOnly
             />
-            <FormHelperText>使用了這個模版的示範創作。</FormHelperText>
+            <FormHelperText>使用了這個模板的示範創作。</FormHelperText>
           </FormControl>
 
           <FormControl>
@@ -147,12 +147,16 @@ const TemplateDetailPublishPage = () => {
               readOnly
             />
             <FormHelperText>
-              能形容模版的關鍵字，以方便用戶搜索。用逗號(,)分隔每個標籤。
+              能形容模板的關鍵字，以方便用戶搜索。用逗號(,)分隔每個標籤。
             </FormHelperText>
           </FormControl>
 
           <div className="max-w-[320px] mx-auto shadow shadow-gray-400 p-4 rounded">
-            <MarketplaceItemCard properties={template.properties} />
+            <MarketplaceItemCard
+              templateId={templateId}
+              properties={template.properties}
+              onClickDownload={() => Promise.resolve()}
+            />
           </div>
 
           <Button onClick={handleClickPublish} loading={isPublishing}>

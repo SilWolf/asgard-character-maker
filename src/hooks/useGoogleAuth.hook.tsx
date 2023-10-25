@@ -45,7 +45,7 @@ export const GoogleAuthProvider = ({
   const [token, updateToken] = useCookie("acm-google-auth-token");
   const setToken = useCallback(
     (newToken: string) => {
-      updateToken(newToken, { expires: 1 / 24 });
+      updateToken(newToken, { expires: 4 / 24 });
     },
     [updateToken]
   );
@@ -53,7 +53,7 @@ export const GoogleAuthProvider = ({
   const [rawSetting, updateSetting] = useCookie("acm-google-drive-setting");
   const setSetting = useCallback(
     (newSetting: GoogleDriveAppSetting) => {
-      updateSetting(JSON.stringify(newSetting), { expires: 1 / 24 });
+      updateSetting(JSON.stringify(newSetting), { expires: 4 / 24 });
     },
     [updateSetting]
   );

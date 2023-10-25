@@ -100,6 +100,19 @@ export const getFileByIdAsJSON = <T extends Record<string, unknown>>(
     .then((res) => res.data);
 };
 
+export const getPublicFileByIdAsJSON = <T extends Record<string, unknown>>(
+  fileId: string
+) => {
+  return googleDriveAxiosInstance
+    .get<T>(`/files/${fileId}`, {
+      params: {
+        alt: "media",
+        public: "1",
+      },
+    })
+    .then((res) => res.data);
+};
+
 export const postCreateFolder = (name: string, parentFolderId?: string) => {
   return googleDriveAxiosInstance.post<{
     id: string;

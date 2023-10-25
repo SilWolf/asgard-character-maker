@@ -199,7 +199,7 @@ const SheetDetailPage = () => {
             </span>
           ),
           success: "已成功創建",
-          error: "創建失敗，下載模版失敗",
+          error: "創建失敗，下載模板失敗",
         }
       );
     },

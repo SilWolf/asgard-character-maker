@@ -24,7 +24,7 @@ const MarketplaceCreatePage = () => {
       <div className="container mx-auto max-w-screen-md space-y-6">
         <form className="space-y-6">
           <FormControl required>
-            <FormLabel>模版名稱</FormLabel>
+            <FormLabel>模板名稱</FormLabel>
             <Input
               {...register("name", { required: true })}
               className="max-w-[400px]"
@@ -44,7 +44,7 @@ const MarketplaceCreatePage = () => {
             <FormLabel>介紹</FormLabel>
             <Input {...register("briefing")} />
             <FormHelperText>
-              簡介這個模版可用於什麼場景、有怎樣的風格。
+              簡介這個模板可用於什麼場景、有怎樣的風格。
             </FormHelperText>
           </FormControl>
 
@@ -54,7 +54,7 @@ const MarketplaceCreatePage = () => {
               {...register("demoUrl")}
               placeholder="https://home.gamer.com.tw/artwork.php?sn=1234567"
             />
-            <FormHelperText>使用了這個模版的示範創作。</FormHelperText>
+            <FormHelperText>使用了這個模板的示範創作。</FormHelperText>
           </FormControl>
 
           <FormControl>
@@ -70,7 +70,7 @@ const MarketplaceCreatePage = () => {
             <FormLabel>標籤</FormLabel>
             <Input {...register("tags")} placeholder="新版小屋,簡約,整齊" />
             <FormHelperText>
-              能形容模版的關鍵字，以方便用戶搜索。用逗號(,)分隔每個標籤。
+              能形容模板的關鍵字，以方便用戶搜索。用逗號(,)分隔每個標籤。
             </FormHelperText>
           </FormControl>
 

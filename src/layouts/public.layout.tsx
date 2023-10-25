@@ -12,15 +12,20 @@ const PublicLayout = ({ hideNav, children }: Props) => {
         <div className="container mx-auto flex gap-x-8 justify-between items-center">
           <div className="shrink-0">
             <h3 className="text-lg text-white">
-              <a href="/">RPG公會創作模版工具</a>
+              <a href="/">RPG公會創作模板工具</a>
             </h3>
           </div>
           <div className="flex-1">
             {!hideNav && (
               <nav className="space-x-6 text-sm text-white">
                 <Link to="/">首頁</Link>
-                <Link to="/marketplace">範例角色卡＆模版</Link>
-                <a href="#">如何使用？</a>
+                <Link to="/marketplace">範例角色卡＆模板</Link>
+                <a
+                  href="https://hackmd.io/@PWg311VDTh2gesW0WcvqFw/rJAa6I8Mp"
+                  target="_blank"
+                >
+                  如何使用？
+                </a>
               </nav>
             )}
           </div>

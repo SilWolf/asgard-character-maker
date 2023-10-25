@@ -77,7 +77,7 @@ const HomePage = () => {
     const defaultSheet: Sheet = {
       templatesMap: {
         starter: {
-          name: "預設模版",
+          name: "預設模板",
           bahaCode: "[div]輸入你想要的值：$placeholder$[/div]",
           props: [
             {
@@ -142,7 +142,7 @@ const HomePage = () => {
         {
           loading: (
             <span>
-              正在上傳自定義模版 <span className="bold">{file.name}</span>
+              正在上傳自定義模板 <span className="bold">{file.name}</span>
             </span>
           ),
           success: "上傳完成！",
@@ -158,10 +158,10 @@ const HomePage = () => {
     postUploadJsonObjectAsFile
   );
   const handleClickCreateTemplate = useCallback(() => {
-    const newTitle = `未命名模版_${getNowString()}`;
+    const newTitle = `未命名模板_${getNowString()}`;
     const defaultTemplate: BahaTemplate = {
       props: [],
-      bahaCode: "[div]這是一個新的模版。[/div]",
+      bahaCode: "[div]這是一個新的模板。[/div]",
       properties: {
         name: newTitle,
         author: "",
@@ -184,7 +184,7 @@ const HomePage = () => {
           googleDriveTemplatesFolderId
         ),
         {
-          loading: "正在創建一個空白的模版",
+          loading: "正在創建一個空白的模板",
           success: "創建完成！",
           error: "創建失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
         }
@@ -289,7 +289,7 @@ const HomePage = () => {
 
           <section className="space-y-2">
             <div className="flex justify-between">
-              <h1 className="text-2xl bold">你的自定義模版</h1>
+              <h1 className="text-2xl bold">你的自定義模板</h1>
               <div className="text-right space-x-2">
                 <Button
                   size="lg"
@@ -298,7 +298,7 @@ const HomePage = () => {
                   onClick={handleClickUploadTemplate}
                   loading={isUploadingTemplate}
                 >
-                  上傳模版 (.json)
+                  上傳模板 (.json)
                 </Button>
                 <Button
                   size="lg"
@@ -307,7 +307,7 @@ const HomePage = () => {
                   onClick={handleClickCreateTemplate}
                   loading={isCreatingTemplate}
                 >
-                  創建新的模版
+                  創建新的模板
                 </Button>
               </div>
             </div>
@@ -348,7 +348,7 @@ const HomePage = () => {
             </Table>
             {!isLoadingTemplates && templates?.length === 0 && (
               <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
-                沒有自定義的模版
+                沒有自定義的模板
               </div>
             )}
             {isLoadingTemplates && (

@@ -61,7 +61,7 @@ const SheetDetailNewSingleSubPage = ({
         <h2 className="text-xl">新增區塊</h2>
         <div className="shadow shadow-gray-400 p-8 rounded space-y-6">
           <FormControl required>
-            <FormLabel>選擇一個模版</FormLabel>
+            <FormLabel>選擇一個模板</FormLabel>
             <Select placeholder="選擇…" name="templateId">
               {templates?.map((template) => (
                 <Option key={template.id} value={template.id}>
