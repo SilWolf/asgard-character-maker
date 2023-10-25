@@ -71,14 +71,14 @@ const LoginPage = () => {
 
   if (isLogining) {
     return (
-      <PublicLayout hideNav>
+      <PublicLayout>
         <div className="container mx-auto text-center">讀取中…</div>
       </PublicLayout>
     );
   }
 
   return (
-    <PublicLayout hideNav>
+    <PublicLayout>
       <div className="container mx-auto">
         <div className="space-y-6 text-center">
           <h1 className="text-2xl bold">RPG公會創作模板工具</h1>
