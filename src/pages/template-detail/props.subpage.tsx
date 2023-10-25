@@ -1,5 +1,4 @@
 import BahaCode from "@/components/BahaCode";
-import BahaCodePreviewWrapper from "@/components/BahaCodePreviewWrapper";
 import { BahaTemplate, BahaTemplateProp } from "@/types/Baha.type";
 import {
   FormControl,
