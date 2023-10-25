@@ -23,9 +23,15 @@ import useDialog from "@/hooks/useDialog.hook";
 type LayoutRowDivProps = {
   sheet: Sheet;
   row: SheetLayoutRow;
+  onClickEditName: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onClickDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
-const LayoutRowDiv = ({ sheet, row, onClickDelete }: LayoutRowDivProps) => {
+const LayoutRowDiv = ({
+  sheet,
+  row,
+  onClickEditName,
+  onClickDelete,
+}: LayoutRowDivProps) => {
   const { name, templateName } = useMemo(() => {
     const section = sheet.sectionsMap[row.cols[0]?.sectionIds[0]];
     if (!section) {
@@ -51,10 +57,20 @@ const LayoutRowDiv = ({ sheet, row, onClickDelete }: LayoutRowDivProps) => {
 
   return (
     <div className="flex justify-between items-center">
-      <div>
-        {name} - {templateName}
+      <div className="">
+        {name}
+        <span className="text-xs text-gray-600"> ({templateName})</span>
       </div>
       <div className="space-x-1">
+        <Button
+          size="sm"
+          color="primary"
+          variant="plain"
+          data-id={row.id}
+          onClick={onClickEditName}
+        >
+          重新命名
+        </Button>
         <Button
           size="sm"
           color="danger"
@@ -73,12 +89,14 @@ type Props = {
   sheet: Sheet;
   onSubmitSection: (newSection: SheetSection) => Promise<unknown>;
   onSubmitLayout: (newLayout: Sheet["layout"], fullRefresh?: boolean) => void;
+  onEditSection: (sectionId: string, newSection: SheetSection) => void;
 };
 
 const SheetDetailLayoutAndSectionsSubPage = ({
   sheet,
   onSubmitSection,
   onSubmitLayout,
+  onEditSection,
 }: Props) => {
   const { data: templates } = useCustomTemplates();
   const { openDialog } = useDialog();
@@ -126,6 +144,35 @@ const SheetDetailLayoutAndSectionsSubPage = ({
       });
     },
     [namePlaceholder, onSubmitSectionAsyncFn]
+  );
+
+  const handleEditRow = useCallback(
+    (e: React.MouseEvent) => {
+      const targetRowId = e.currentTarget.getAttribute("data-id") as string;
+      const row = rows.find(({ id }) => id === targetRowId);
+      if (!row) {
+        return;
+      }
+
+      const sectionId = row.cols[0]?.sectionIds[0];
+      if (!sectionId) {
+        return;
+      }
+
+      const section = sheet.sectionsMap[sectionId];
+      if (!section) {
+        return;
+      }
+
+      const newName = prompt("新的區域名稱", section.name);
+      if (newName) {
+        onEditSection(section.id, {
+          ...section,
+          name: newName,
+        });
+      }
+    },
+    [onEditSection, rows, sheet.sectionsMap]
   );
 
   const handleDeleteRow = useCallback(
@@ -200,16 +247,24 @@ const SheetDetailLayoutAndSectionsSubPage = ({
                     <Draggable key={row.id} draggableId={row.id} index={index}>
                       {(provided) => (
                         <div
-                          className="bg-gray-100 border border-gray-300 rounded px-4 py-3 mb-2"
+                          className="bg-gray-100 border border-gray-300 rounded px-2 py-3 mb-2 flex items-center gap-x-2"
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          {...provided.dragHandleProps}
                         >
-                          <LayoutRowDiv
-                            sheet={sheet}
-                            row={row}
-                            onClickDelete={handleDeleteRow}
-                          />
+                          <div
+                            className="shrink-0"
+                            {...provided.dragHandleProps}
+                          >
+                            <i className="uil uil-draggabledots"></i>
+                          </div>
+                          <div className="flex-1">
+                            <LayoutRowDiv
+                              sheet={sheet}
+                              row={row}
+                              onClickEditName={handleEditRow}
+                              onClickDelete={handleDeleteRow}
+                            />
+                          </div>
                         </div>
                       )}
                     </Draggable>

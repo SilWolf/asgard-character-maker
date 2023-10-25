@@ -206,6 +206,26 @@ const SheetDetailPage = () => {
     [toggleDirty]
   );
 
+  const handleEditSection = useCallback(
+    (sectionId: string, newSection: SheetSection) => {
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          sectionsMap: {
+            ...prev.sectionsMap,
+            [sectionId]: newSection,
+          },
+        };
+      });
+      toggleDirty(true);
+    },
+    [toggleDirty]
+  );
+
   const handleSubmitConfig = useCallback(
     (newValue: Sheet["properties"]) => {
       setSheet((prev) => {
@@ -340,6 +360,7 @@ const SheetDetailPage = () => {
             sheet={sheet}
             onSubmitSection={handleSubmitNewSection}
             onSubmitLayout={handleSubmitNewLayout}
+            onEditSection={handleEditSection}
           />
         </section>
 
