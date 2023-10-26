@@ -79,9 +79,17 @@ const TemplateDetailPublishPage = () => {
       <div className="container mx-auto max-w-screen-md space-y-6">
         <div className="container mx-auto">
           <Breadcrumbs aria-label="breadcrumbs">
-            <Link to="/">主頁</Link>
+            <Link
+              to="/"
+              className="text-neutral-800 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-300 no-underline"
+            >
+              主頁
+            </Link>
             <span>模板</span>
-            <Link to={`/template/${templateId}`}>
+            <Link
+              to={`/template/${templateId}`}
+              className="text-neutral-800 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-300 no-underline"
+            >
               {template.properties.name}
             </Link>
             <span>發佈</span>

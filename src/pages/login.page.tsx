@@ -61,7 +61,7 @@ const LoginPage = () => {
           return setting;
         })
         .then((setting) => {
-          setToken(tokenResponse.access_token);
+          setToken(tokenResponse.access_token, tokenResponse.expires_in);
           setSetting(setting);
           navigate("/");
         });

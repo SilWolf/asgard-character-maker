@@ -36,7 +36,6 @@ const MarketplacePage = () => {
 
       return toast.promise(
         getPublicFileByIdAsJSON<BahaTemplate>(templateId).then((template) => {
-          console.log(template, setting?.templatesFolderId);
           return postUploadJsonObjectAsFile(
             template,
             `${template.properties.name}.json`,
@@ -80,6 +79,7 @@ const MarketplacePage = () => {
                       item.properties as unknown as BahaTemplateProperties
                     }
                     onClickDownload={handleClickDownload}
+                    detailTo={`/marketplace/${item.id}`}
                   />
                 </div>
               </div>

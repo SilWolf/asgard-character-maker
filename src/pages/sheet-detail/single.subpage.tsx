@@ -58,7 +58,7 @@ const SheetDetailSingle = ({
 
   return (
     <div className="h-full mx-auto container flex flex-row gap-x-12">
-      <section className="flex-0 shrink mx-auto py-4 px-16 overflow-y-scroll rounded-lg shadow-md shadow-gray-400">
+      <section className="flex-0 shrink mx-auto py-4 px-16 overflow-y-scroll rounded-lg shadow-md shadow-neutral-400">
         <div className="baha-preview">
           <BahaCode
             code={template.bahaCode}
@@ -76,7 +76,7 @@ const SheetDetailSingle = ({
                 {colorProps.map((prop) => (
                   <div
                     key={prop.id}
-                    className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
+                    className="odd:bg-neutral-100 dark:odd:bg-neutral-900 even:bg-neutral-50 dark:even:bg-neutral-800 bg-opacity-25 py-4 px-4"
                   >
                     <FormControl>
                       <FormLabel>{prop.label}</FormLabel>
@@ -97,7 +97,7 @@ const SheetDetailSingle = ({
                 {textProps.map((prop) => (
                   <div
                     key={prop.id}
-                    className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
+                    className="odd:bg-neutral-100 dark:odd:bg-neutral-900 even:bg-neutral-50 dark:even:bg-neutral-800 bg-opacity-25 py-4 px-4"
                   >
                     <FormControl>
                       <FormLabel>{prop.label}</FormLabel>
@@ -118,7 +118,7 @@ const SheetDetailSingle = ({
                 {urlProps.map((prop) => (
                   <div
                     key={prop.id}
-                    className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
+                    className="odd:bg-neutral-100 dark:odd:bg-neutral-900 even:bg-neutral-50 dark:even:bg-neutral-800 bg-opacity-25 py-4 px-4"
                   >
                     <FormControl>
                       <FormLabel>{prop.label}</FormLabel>
@@ -139,7 +139,7 @@ const SheetDetailSingle = ({
                 {systemProps.map((prop) => (
                   <div
                     key={prop.id}
-                    className="odd:bg-gray-100 even:bg-gray-50 py-4 px-4"
+                    className="odd:bg-neutral-100 dark:odd:bg-neutral-900 even:bg-neutral-50 dark:even:bg-neutral-800 bg-opacity-25 py-4 px-4"
                   >
                     <FormControl>
                       <FormLabel>{prop.label}</FormLabel>

@@ -40,7 +40,6 @@ const bahaPreset = reactPreset.extend((tags: Record<string, unknown>) => ({
     };
   },
   color: (node: BBOBNode) => {
-    console.log(node.attrs);
     return {
       tag: "span",
       attrs: {

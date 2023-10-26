@@ -16,7 +16,7 @@ const TemplateDetailBahaCodeSubPage = ({ template, onSubmit }: Props) => {
   );
 
   return (
-    <div className="container max-w-screen-md mx-auto">
+    <div className="container max-w-screen-md mx-auto py-4">
       <FormControl>
         <FormLabel>原始碼</FormLabel>
         <Textarea

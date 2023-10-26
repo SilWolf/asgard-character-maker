@@ -59,7 +59,10 @@ const LayoutRowDiv = ({
     <div className="flex justify-between items-center">
       <div className="">
         {name}
-        <span className="text-xs text-gray-600"> ({templateName})</span>
+        <span className="text-xs text-neutral-600 dark:text-neutral-400">
+          {" "}
+          ({templateName})
+        </span>
       </div>
       <div className="space-x-1">
         <Button
@@ -208,7 +211,7 @@ const SheetDetailLayoutAndSectionsSubPage = ({
           <form onSubmit={handleSubmitNewSection}>
             <div className="mx-auto container max-w-screen-md space-y-6">
               <h2 className="text-xl">新增區塊</h2>
-              <div className="shadow shadow-gray-400 p-8 rounded space-y-6">
+              <div className="shadow shadow-neutral-400 p-8 rounded space-y-6">
                 <FormControl required>
                   <FormLabel>選擇一個模板</FormLabel>
                   <Select placeholder="選擇…" name="templateId">
@@ -247,7 +250,7 @@ const SheetDetailLayoutAndSectionsSubPage = ({
                     <Draggable key={row.id} draggableId={row.id} index={index}>
                       {(provided) => (
                         <div
-                          className="bg-gray-100 border border-gray-300 rounded px-2 py-3 mb-2 flex items-center gap-x-2"
+                          className="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded px-2 py-3 mb-2 flex items-center gap-x-2"
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                         >

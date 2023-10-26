@@ -88,6 +88,25 @@ export const getFileByNameAsJSON = async <T extends Record<string, unknown>>(
     .then((res) => res.data);
 };
 
+export const getFileById = (
+  fileId: string,
+  options?: { isPublic?: boolean }
+) => {
+  const params: Record<string, string> = {
+    fields: "id,name,createdTime,modifiedTime,size,properties",
+  };
+
+  if (options?.isPublic) {
+    params.public = "1";
+  }
+
+  return googleDriveAxiosInstance
+    .get<GoogleDriveFile>(`/files/${fileId}`, {
+      params,
+    })
+    .then((res) => res.data);
+};
+
 export const getFileByIdAsJSON = <T extends Record<string, unknown>>(
   fileId: string
 ) => {

@@ -4,6 +4,7 @@ import { BahaTemplate } from "@/types/Baha.type";
 import {
   Alert,
   Button,
+  Checkbox,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -29,13 +30,15 @@ const TemplateDetailConfigAndExportSubPage = ({
   const { openDialog } = useDialog();
   const navigate = useNavigate();
 
-  const { register, getValues } = useForm({
+  const { register, getValues, formState } = useForm({
+    mode: "onBlur",
     defaultValues: {
       ...template.properties,
     },
   });
 
   const handleBlurForm = useCallback(() => {
+    console.log(getValues());
     onSubmit(getValues());
   }, [getValues, onSubmit]);
 
@@ -82,51 +85,80 @@ const TemplateDetailConfigAndExportSubPage = ({
             />
           </FormControl>
 
-          {/* <FormControl>
+          <div>
             <FormLabel>適用的頁面</FormLabel>
             <FormHelperText>
               <p>
                 <span className="line-through">因為巴哈太垃圾</span>
-                巴哈有數種不同的創作頁面，各有不同的排版差異。很少情況下一套模板能用在不同頁面上。
+                巴哈有數種不同的創作頁面，各有不同的排版差異。
                 <br />
+                很少情況下一套模板能用在不同頁面上。
                 請勾選你認為這模板適合的頁面。
+                <br />
+                <br />
+                關於每種介面之間的差異，可參考 「如何使用？#介面差異」{" "}
+                <i className="uil uil-external-link-alt"></i>
               </p>
             </FormHelperText>
             <div className="grid grid-cols-3 gap-x-4 mt-4">
               <div>
-                <Checkbox label="適合新版小屋" />
+                <Checkbox
+                  label="適合新版小屋"
+                  {...register("suitableForNewHome")}
+                  value={"1"}
+                />
               </div>
               <div>
-                <Checkbox label="適合舊版小屋" />
+                <Checkbox
+                  label="適合舊版小屋"
+                  {...register("suitableForOldHome")}
+                  value={"1"}
+                />
               </div>
               <div>
-                <Checkbox label="適合WIKI" />
+                <Checkbox
+                  label="適合WIKI"
+                  {...register("suitableForWiki")}
+                  value={"1"}
+                />
               </div>
             </div>
-          </FormControl> */}
+          </div>
         </form>
 
         <form className="space-y-6" onBlur={handleBlurForm}>
           <h2 className="text-2xl">進階設置</h2>
 
           <Alert color="warning">
-            除非你打算投稿此模板，否則「進階設置」是不需要填寫的，留空即可。
+            <p>
+              除非你打算投稿此模板，否則「進階設置」是不需要填寫的，留空即可。
+              <br />
+              關於投稿，請參閱{" "}
+              <span>
+                「如何使用？#投稿模板」{" "}
+                <i className="uil uil-external-link-alt"></i>
+              </span>
+            </p>
           </Alert>
 
           <FormControl>
             <FormLabel>作者</FormLabel>
-            <Input {...register("author")} className="max-w-[200px]" />
+            <Input {...register("author")} className="max-w-[300px]" />
             <FormHelperText>
-              建議使用 <span className="bold">暱稱 (巴哈帳號)</span>{" "}
-              的格式，例如 <span className="bold">銀狼 (silwolf167)</span>。
+              建議使用 <span className="text-black">暱稱 (巴哈帳號)</span>{" "}
+              的格式，例如 <span className="text-black">銀狼 (silwolf167)</span>
+              。
             </FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>介紹</FormLabel>
-            <Input {...register("briefing")} />
+            <Input
+              {...register("briefing")}
+              slotProps={{ input: { maxLength: 60 } }}
+            />
             <FormHelperText>
-              簡介這個模板可用於什麼場景、有怎樣的風格。
+              簡介這個模板可用於什麼場景、有怎樣的風格。最多60字。
             </FormHelperText>
           </FormControl>
 
@@ -142,6 +174,8 @@ const TemplateDetailConfigAndExportSubPage = ({
 # 使用的注意事項
 
 ## 修改的建議
+
+## 相關的其他模塊
 ......
 
 `}
@@ -152,28 +186,55 @@ const TemplateDetailConfigAndExportSubPage = ({
             </FormHelperText>
           </FormControl>
 
-          <FormControl>
+          <FormControl error={!!formState.errors["demoUrl"]?.message}>
             <FormLabel>示範的小屋創作連結</FormLabel>
             <Input
-              {...register("demoUrl")}
+              {...register("demoUrl", {
+                maxLength: {
+                  value: 60,
+                  message: "網址太長了，請自行縮短網址。",
+                },
+              })}
               placeholder="https://home.gamer.com.tw/artwork.php?sn=1234567"
             />
-            <FormHelperText>使用了這個模板的示範創作。</FormHelperText>
+            <FormHelperText>
+              使用了這個模板的示範創作，上限60字符。如果連結太長，可使用{" "}
+              <a href="https://cleanuri.com/" target="_blank">
+                Cleanuri.com <i className="uil uil-external-link-alt"></i>
+              </a>{" "}
+              縮短
+            </FormHelperText>
           </FormControl>
 
-          <FormControl>
+          <FormControl error={!!formState.errors["previewImageUrl"]?.message}>
             <FormLabel>預覽圖片</FormLabel>
             <Input
-              {...register("previewImageUrl")}
+              {...register("previewImageUrl", {
+                maxLength: {
+                  value: 60,
+                  message: "網址太長了，請自行縮短網址。",
+                },
+              })}
               placeholder="https://i.imgur.com/image.png"
             />
-            <FormHelperText>建議採用 16:9 比例的圖片</FormHelperText>
+            <FormHelperText>
+              建議採用 16:9 比例的圖片，上限60字符。如果連結太長，可使用{" "}
+              <a href="https://cleanuri.com/" target="_blank">
+                Cleanuri.com <i className="uil uil-external-link-alt"></i>
+              </a>{" "}
+              縮短
+            </FormHelperText>
           </FormControl>
 
-          <FormControl>
+          <FormControl error={!!formState.errors["imageUrls"]?.message}>
             <FormLabel>更多介紹圖片</FormLabel>
             <Input
-              {...register("imageUrls")}
+              {...register("imageUrls", {
+                maxLength: {
+                  value: 60,
+                  message: "最多60字。",
+                },
+              })}
               placeholder="https://i.imgur.com/image.png"
             />
             <FormHelperText>用逗號(,)分隔每張圖片網址</FormHelperText>

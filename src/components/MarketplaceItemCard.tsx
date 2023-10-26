@@ -1,17 +1,20 @@
 import { BahaTemplateProperties } from "@/types/Baha.type";
 import { Button } from "@mui/joy";
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { useAsyncFn } from "react-use";
 
 type Props = {
   templateId: string;
   properties: BahaTemplateProperties;
+  detailTo?: string;
   onClickDownload: (e: React.MouseEvent<HTMLButtonElement>) => Promise<unknown>;
 };
 
 const MarketplaceItemCard = ({
   templateId,
   properties,
+  detailTo,
   onClickDownload,
 }: Props) => {
   const tags = useMemo(() => properties.tags.split(","), [properties.tags]);
@@ -37,7 +40,7 @@ const MarketplaceItemCard = ({
           </div>
         ))}
       </div>
-      <div>
+      <div className="space-x-1">
         <Button
           variant="outlined"
           loading={isDownloading}
@@ -46,6 +49,13 @@ const MarketplaceItemCard = ({
         >
           下載此模板
         </Button>
+        {detailTo && (
+          <Link to={detailTo}>
+            <Button variant="outlined" color="neutral" data-id={templateId}>
+              詳細
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );

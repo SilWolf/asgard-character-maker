@@ -33,10 +33,11 @@ const MarketplaceCreatePage = () => {
 
           <FormControl>
             <FormLabel>作者</FormLabel>
-            <Input {...register("author")} className="max-w-[200px]" />
+            <Input {...register("author")} className="max-w-[300px]" />
             <FormHelperText>
-              建議使用 <span className="bold">暱稱 (巴哈帳號)</span>{" "}
-              的格式，例如 <span className="bold">銀狼 (silwolf167)</span>。
+              建議使用 <span className="text-black">暱稱 (巴哈帳號)</span>{" "}
+              的格式，例如 <span className="text-black">銀狼 (silwolf167)</span>
+              。
             </FormHelperText>
           </FormControl>
 

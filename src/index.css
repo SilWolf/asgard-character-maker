@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply dark:bg-[#272728] dark:text-[#F7F7F7];
+  }
+
+  a {
+    @apply text-orange-500 underline hover:text-orange-400;
+  }
+}
+
 @layer components {
   .baha-preview {
     font-family: "Helvetica Neue", Helvetica, "Roboto", Arial, "Lucida Grande", "PingFang TC", "蘋果儷中黑", "Apple LiGothic Medium", sans-serif;
@@ -131,6 +141,11 @@
     li {
       display: list-item;
     }
+  }
+
+  .baha-preview-light {
+    background: #ffffff;
+    color: #464646;
   }
 
   .baha-preview-dark {

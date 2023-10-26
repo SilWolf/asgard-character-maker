@@ -288,7 +288,12 @@ const SheetDetailPage = () => {
       <header id="header" className="space-y-4">
         <div className="container mx-auto">
           <Breadcrumbs aria-label="breadcrumbs">
-            <Link to="/">主頁</Link>
+            <Link
+              to="/"
+              className="text-neutral-800 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-300 no-underline"
+            >
+              主頁
+            </Link>
             <span>角色卡</span>
             <span>{sheet.properties.name}</span>
           </Breadcrumbs>

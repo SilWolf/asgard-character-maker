@@ -19,7 +19,7 @@ export type GoogleDriveAppSetting = {
 
 type GoogleAuthContextValue = {
   token: string | undefined | null;
-  setToken: (newValue: string) => unknown;
+  setToken: (newValue: string, expiresIn: number) => unknown;
   setting: GoogleDriveAppSetting;
   setSetting: (newValue: GoogleDriveAppSetting) => unknown;
 };
@@ -44,8 +44,8 @@ export const GoogleAuthProvider = ({
 }: GoogleAuthProviderProps) => {
   const [token, updateToken] = useCookie("acm-google-auth-token");
   const setToken = useCallback(
-    (newToken: string) => {
-      updateToken(newToken, { expires: 4 / 24 });
+    (newToken: string, expiresIn: number) => {
+      updateToken(newToken, { expires: expiresIn / 86400 });
     },
     [updateToken]
   );
@@ -53,7 +53,7 @@ export const GoogleAuthProvider = ({
   const [rawSetting, updateSetting] = useCookie("acm-google-drive-setting");
   const setSetting = useCallback(
     (newSetting: GoogleDriveAppSetting) => {
-      updateSetting(JSON.stringify(newSetting), { expires: 4 / 24 });
+      updateSetting(JSON.stringify(newSetting), { expires: 1 / 24 });
     },
     [updateSetting]
   );
@@ -116,7 +116,7 @@ export const GoogleAuthLoginButton = ({
 
   const handleSuccessGoogleLogin = useCallback(
     (tokenResponse: TokenResponse) => {
-      setToken(tokenResponse.access_token);
+      setToken(tokenResponse.access_token, tokenResponse.expires_in);
       onSuccess?.(tokenResponse);
     },
     [onSuccess, setToken]
