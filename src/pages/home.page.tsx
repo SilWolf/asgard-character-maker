@@ -2,13 +2,12 @@ import {
   copyFile,
   getFilesByFolderId,
   patchFileProperties,
-  postUploadFile,
   postUploadJsonObjectAsFile,
 } from "@/helpers/google-drive.helper";
 import useCustomTemplates from "@/hooks/useCustomTemplates.hook";
 import PublicLayout from "@/layouts/public.layout";
 import { getNowString, renderHumanDate } from "@/utils/date.util";
-import { pickFile } from "@/utils/file.util";
+import { pickFile, readJsonFromFile } from "@/utils/file.util";
 import { Button, Table } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
@@ -19,6 +18,7 @@ import { BahaTemplate } from "@/types/Baha.type";
 import { Sheet } from "@/types/Sheet.type";
 import useGoogleAuth from "@/hooks/useGoogleAuth.hook";
 import usePreference from "@/hooks/usePreference.hook";
+import { validateJson } from "@/utils/json.util";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -46,33 +46,6 @@ const HomePage = () => {
     enabled: !!googleDriveSheetsFolderId,
   });
 
-  const [{ loading: isUploadingSheet }, uploadSheetAsyncFn] = useAsyncFn(
-    postUploadFile,
-    []
-  );
-
-  const handleClickUploadSheet = useCallback(async () => {
-    const file = await pickFile();
-    toast
-      .promise(uploadSheetAsyncFn(file, file.name, googleDriveSheetsFolderId), {
-        loading: (
-          <span>
-            正在上傳角色卡 <span className="bold">{file.name}</span>
-          </span>
-        ),
-        success: "上傳完成！",
-        error: "上傳失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
-      })
-      .then(() => {
-        refetchSheets();
-      });
-  }, [googleDriveSheetsFolderId, refetchSheets, uploadSheetAsyncFn]);
-
-  const [{ loading: isUploadingTemplate }, uploadTemplateAsyncFn] = useAsyncFn(
-    postUploadFile,
-    []
-  );
-
   const [{ loading: isCreatingSheet }, createSheetAsyncFn] = useAsyncFn(
     (jsonObj: Record<string, unknown>, name: string, parentFolderId?: string) =>
       postUploadJsonObjectAsFile(jsonObj, `${name}.json`, parentFolderId).then(
@@ -92,6 +65,7 @@ const HomePage = () => {
   const handleClickCreateSheet = useCallback(() => {
     const name = `未命名角色卡_${getNowString()}`;
     const defaultSheet: Sheet = {
+      schemaVersion: "1",
       templatesMap: {
         starter: {
           name: "預設模板",
@@ -126,13 +100,15 @@ const HomePage = () => {
         name,
         author: "",
         briefing: "",
-        description: "",
         demoUrl: "",
         previewImageUrl: "",
-        imageUrls: [],
         tags: "",
         viewMode: preference.viewMode,
         previewMode: preference.previewMode,
+      },
+      detailProperties: {
+        description: "",
+        imageUrls: [],
       },
     };
     toast
@@ -159,64 +135,68 @@ const HomePage = () => {
     preference.viewMode,
   ]);
 
-  const handleClickUploadTemplate = useCallback(async () => {
+  const handleClickUploadSheet = useCallback(async () => {
     const file = await pickFile();
+    const uploadedSheet = await readJsonFromFile<Sheet>(file);
+    const jsonValidateResult = await validateJson(
+      uploadedSheet,
+      "/json-schema/sheet-v1.schema.json"
+    );
+
+    if (!jsonValidateResult.valid) {
+      toast.error(
+        "上傳的檔案格式有誤，請檢查檔案內容。詳細錯誤請打開 F12 主控台查看。"
+      );
+      console.error(jsonValidateResult.errors);
+      return;
+    }
+
     toast
       .promise(
-        uploadTemplateAsyncFn(file, file.name, googleDriveTemplatesFolderId),
+        createSheetAsyncFn(
+          uploadedSheet,
+          `${uploadedSheet.properties.name}.json`,
+          googleDriveSheetsFolderId
+        ),
         {
-          loading: (
-            <span>
-              正在上傳自定義模板 <span className="bold">{file.name}</span>
-            </span>
-          ),
-          success: "上傳完成！",
-          error: "上傳失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+          loading: "上傳角色卡中……",
+          success: "創建完成！",
+          error: "創建失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
         }
       )
-      .then(() => {
-        refetchTemplates();
+      .then((res) => {
+        navigate(`/sheet/${res.data.id}`);
       });
-  }, [googleDriveTemplatesFolderId, refetchTemplates, uploadTemplateAsyncFn]);
+  }, [createSheetAsyncFn, googleDriveSheetsFolderId, navigate]);
 
   const [{ loading: isCreatingTemplate }, createTemplateAsyncFn] = useAsyncFn(
-    (jsonObj: Record<string, unknown>, name: string, parentFolderId?: string) =>
+    (jsonObj: BahaTemplate, name: string, parentFolderId?: string) =>
       postUploadJsonObjectAsFile(jsonObj, `${name}.json`, parentFolderId).then(
-        (res) =>
-          patchFileProperties(res.data.id, {
-            name,
-            author: "",
-            briefing: "",
-            suitableForNewHome: "0",
-            suitableForOldHome: "0",
-            suitableForWiki: "0",
-            suitableForLightMode: "0",
-            suitableForDarkMode: "0",
-            demoUrl: "",
-            previewImageUrl: "",
-            tags: "",
-          })
+        (res) => patchFileProperties(res.data.id, jsonObj.properties)
       )
   );
   const handleClickCreateTemplate = useCallback(() => {
     const newTitle = `未命名模板_${getNowString()}`;
     const defaultTemplate: BahaTemplate = {
+      schemaVersion: "1",
       props: [],
       bahaCode: "[div]這是一個新的模板。[/div]",
       properties: {
         name: newTitle,
         author: "",
         briefing: "",
-        description: "",
-        suitableForNewHome: false,
-        suitableForOldHome: false,
-        suitableForWiki: false,
-        suitableForLightMode: false,
-        suitableForDarkMode: false,
+        suitableForNewHome: "0",
+        suitableForOldHome: "0",
+        suitableForWiki: "0",
+        suitableForLightMode: "0",
+        suitableForDarkMode: "0",
         demoUrl: "",
         previewImageUrl: "",
-        imageUrls: [],
         tags: "",
+      },
+      detailProperties: {
+        description: "",
+        imageUrls: [],
       },
     };
     toast
@@ -230,6 +210,40 @@ const HomePage = () => {
           loading: "正在創建一個空白的模板",
           success: "創建完成！",
           error: "創建失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        }
+      )
+      .then((res) => {
+        navigate(`/template/${res.data.id}`);
+      });
+  }, [createTemplateAsyncFn, googleDriveTemplatesFolderId, navigate]);
+
+  const handleClickUploadTemplate = useCallback(async () => {
+    const file = await pickFile();
+    const uploadedTemplate = await readJsonFromFile<BahaTemplate>(file);
+    const jsonValidateResult = await validateJson(
+      uploadedTemplate,
+      "/json-schema/template-v1.schema.json"
+    );
+
+    if (!jsonValidateResult.valid) {
+      toast.error(
+        "上傳的檔案格式有誤，請檢查檔案內容。詳細錯誤請打開 F12 主控台查看。"
+      );
+      console.error(jsonValidateResult.errors);
+      return;
+    }
+
+    toast
+      .promise(
+        createTemplateAsyncFn(
+          uploadedTemplate,
+          `${uploadedTemplate.properties.name}.json`,
+          googleDriveTemplatesFolderId
+        ),
+        {
+          loading: "上傳模板中……",
+          success: "上傳完成！",
+          error: "上傳失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
         }
       )
       .then((res) => {
@@ -268,7 +282,7 @@ const HomePage = () => {
                   variant="soft"
                   color="primary"
                   onClick={handleClickUploadSheet}
-                  loading={isUploadingSheet}
+                  loading={isCreatingSheet}
                 >
                   上傳角色卡 (.json)
                 </Button>
@@ -341,7 +355,7 @@ const HomePage = () => {
                   variant="soft"
                   color="primary"
                   onClick={handleClickUploadTemplate}
-                  loading={isUploadingTemplate}
+                  loading={isCreatingTemplate}
                 >
                   上傳模板 (.json)
                 </Button>

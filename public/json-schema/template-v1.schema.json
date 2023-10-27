@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/BahaTemplate",
+  "definitions": {
+    "BahaTemplate": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "1"
+        },
+        "props": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BahaTemplateProp"
+          }
+        },
+        "bahaCode": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/BahaTemplateProperties"
+        },
+        "detailProperties": {
+          "$ref": "#/definitions/BahaTemplateDetailProperties"
+        }
+      },
+      "required": ["schemaVersion", "props", "bahaCode", "properties"],
+      "additionalProperties": false
+    },
+    "BahaTemplateProp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "defaultValue": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["text", "color", "url", "system"]
+        }
+      },
+      "required": [
+        "id",
+        "key",
+        "defaultValue",
+        "label",
+        "description",
+        "category"
+      ],
+      "additionalProperties": false
+    },
+    "BahaTemplateProperties": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "briefing": {
+          "type": "string"
+        },
+        "suitableForNewHome": {
+          "type": "string",
+          "enum": ["0", "1"]
+        },
+        "suitableForOldHome": {
+          "type": "string",
+          "enum": ["0", "1"]
+        },
+        "suitableForWiki": {
+          "type": "string",
+          "enum": ["0", "1"]
+        },
+        "suitableForLightMode": {
+          "type": "string",
+          "enum": ["0", "1"]
+        },
+        "suitableForDarkMode": {
+          "type": "string",
+          "enum": ["0", "1"]
+        },
+        "demoUrl": {
+          "type": "string",
+          "pattern": "(^https?://)|^$"
+        },
+        "previewImageUrl": {
+          "type": "string",
+          "pattern": "(^https?://)|^$"
+        },
+        "tags": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "suitableForNewHome",
+        "suitableForOldHome",
+        "suitableForWiki",
+        "suitableForLightMode",
+        "suitableForDarkMode"
+      ],
+      "additionalProperties": false
+    },
+    "BahaTemplateDetailProperties": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "imageUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

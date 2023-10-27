@@ -15,3 +15,15 @@ export const pickFile = async () =>
   });
 
 export const getFileMime = (filename: string) => mime.getType(filename);
+
+export const readJsonFromFile = <T>(file: File) =>
+  new Promise<T>((res) => {
+    const onReaderLoad = (event: ProgressEvent<FileReader>) => {
+      const obj = JSON.parse(event.target?.result as string);
+      res(obj);
+    };
+
+    const reader = new FileReader();
+    reader.onload = onReaderLoad;
+    reader.readAsText(file);
+  });

@@ -105,7 +105,7 @@ const SheetDetailConfigAndExportSubPage = ({
   const handleClickDelete = useCallback(() => {
     openDialog({
       title: "刪除角色卡",
-      content: "此動作無法回溯，請先下載紀錄檔進行備放。確定刪除角色卡嗎？",
+      content: "此動作無法回溯，請先下載紀錄檔進行備份。確定刪除角色卡嗎？",
       onYes: async () => {
         return deleteFile(sheetId).then(() => {
           toast.success("已刪除角色卡");

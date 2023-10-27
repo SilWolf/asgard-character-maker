@@ -1,0 +1,214 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/Sheet",
+  "definitions": {
+    "Sheet": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "1"
+        },
+        "templatesMap": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/SheetTemplate"
+          }
+        },
+        "sectionsMap": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/SheetSection"
+          }
+        },
+        "layout": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SheetLayoutRow"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/SheetProperties"
+        },
+        "detailProperties": {
+          "$ref": "#/definitions/SheetDetailProperties"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "templatesMap",
+        "sectionsMap",
+        "layout",
+        "properties",
+        "detailProperties"
+      ],
+      "additionalProperties": false
+    },
+    "SheetTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "bahaCode": {
+          "type": "string"
+        },
+        "props": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BahaTemplateProp"
+          }
+        }
+      },
+      "required": ["bahaCode", "name", "props"]
+    },
+    "BahaTemplateProp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "defaultValue": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["text", "color", "url", "system"]
+        }
+      },
+      "required": [
+        "id",
+        "key",
+        "defaultValue",
+        "label",
+        "description",
+        "category"
+      ],
+      "additionalProperties": false
+    },
+    "SheetSection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "templateId": {
+          "type": "string"
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": ["id", "name", "templateId", "value"],
+      "additionalProperties": false
+    },
+    "SheetLayoutRow": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "cols": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SheetLayoutCol"
+          }
+        }
+      },
+      "required": ["id", "cols"],
+      "additionalProperties": false
+    },
+    "SheetLayoutCol": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "width": {
+          "type": "string"
+        },
+        "sectionIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["id", "width", "sectionIds"],
+      "additionalProperties": false
+    },
+    "SheetProperties": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "briefing": {
+          "type": "string"
+        },
+        "demoUrl": {
+          "type": "string",
+          "pattern": "(^https?://)|^$"
+        },
+        "previewImageUrl": {
+          "type": "string",
+          "pattern": "(^https?://)|^$"
+        },
+        "tags": {
+          "type": "string"
+        },
+        "viewMode": {
+          "type": "string",
+          "enum": ["light", "dark"]
+        },
+        "previewMode": {
+          "type": "string",
+          "enum": [
+            "baha-preview-new-home",
+            "baha-preview-old-home",
+            "baha-preview-wiki"
+          ]
+        }
+      },
+      "required": ["name", "viewMode", "previewMode"],
+      "additionalProperties": false
+    },
+    "SheetDetailProperties": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "imageUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

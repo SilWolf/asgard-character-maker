@@ -23,10 +23,13 @@ import PublicLayout from "@/layouts/public.layout";
 import { ErrorBoundary } from "react-error-boundary";
 import SheetDetailLayoutAndSectionsSubPage from "./layout-and-sections.subpage";
 import { utilGetUniqueId } from "@/utils/string.util";
+import SheetDetailErrorSubpage from "./error.subpage";
+import { validateJson } from "@/utils/json.util";
 
 const SheetDetailPage = () => {
   const { sheetId } = useParams<{ sheetId: string }>();
   const [sheet, setSheet] = useState<Sheet | undefined>(undefined);
+  const [pageError, setPageError] = useState<unknown>();
 
   const [dirty, toggleDirty] = useToggle(false);
   const usePromptOptions = useMemo(
@@ -44,7 +47,18 @@ const SheetDetailPage = () => {
       return;
     }
 
-    getFileByIdAsJSON<Sheet>(sheetId).then(setSheet);
+    getFileByIdAsJSON<Sheet>(sheetId).then(async (fetchedTemplate) => {
+      const jsonValidateResult = await validateJson(
+        fetchedTemplate,
+        "/json-schema/sheet-v1.schema.json"
+      );
+
+      if (jsonValidateResult.errors) {
+        setPageError(jsonValidateResult.errors);
+      }
+
+      setSheet(fetchedTemplate);
+    });
   });
 
   const [{ loading: isSaving }, saveAsyncFn] = useAsyncFn(
@@ -320,6 +334,18 @@ const SheetDetailPage = () => {
 
   if (!sheet || !sheetId) {
     return <PublicLayout />;
+  }
+
+  if (pageError) {
+    return (
+      <PublicLayout>
+        <SheetDetailErrorSubpage
+          sheet={sheet}
+          sheetId={sheetId}
+          error={pageError}
+        />
+      </PublicLayout>
+    );
   }
 
   return (

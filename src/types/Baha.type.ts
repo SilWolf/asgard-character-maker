@@ -1,7 +1,9 @@
 export type BahaTemplate = {
+  schemaVersion: "1";
   props: BahaTemplateProp[];
   bahaCode: string;
   properties: BahaTemplateProperties;
+  detailProperties?: BahaTemplateDetailProperties;
 };
 
 export type BahaTemplateProp = {
@@ -15,21 +17,19 @@ export type BahaTemplateProp = {
 
 export type BahaTemplateProperties = {
   name: string;
-  author: string;
-  briefing: string;
-  description: string;
-  suitableForNewHome: boolean;
-  suitableForOldHome: boolean;
-  suitableForWiki: boolean;
-  suitableForLightMode: boolean;
-  suitableForDarkMode: boolean;
-  demoUrl: string;
-  previewImageUrl: string;
-  imageUrls: string[];
-  tags: string;
+  author?: string;
+  briefing?: string;
+  suitableForNewHome: "0" | "1";
+  suitableForOldHome: "0" | "1";
+  suitableForWiki: "0" | "1";
+  suitableForLightMode: "0" | "1";
+  suitableForDarkMode: "0" | "1";
+  demoUrl?: string;
+  previewImageUrl?: string;
+  tags?: string;
 };
 
-export type BahaTemplatePropertiesTemplate = {
-  id: string;
-  name: string;
+export type BahaTemplateDetailProperties = {
+  description?: string;
+  imageUrls?: string[];
 };

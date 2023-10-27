@@ -12,10 +12,13 @@ import TemplateDetailPropsSubPage from "./props.subpage";
 import TemplateDetailBahaCodeSubPage from "./bahaCode.subpage";
 import toast from "react-hot-toast";
 import TemplateDetailConfigAndExportSubPage from "./config-and-export.subpage";
+import { validateJson } from "@/utils/json.util";
+import TemplateDetailErrorSubpage from "./error.subpage";
 
 const TemplateCreatePage = () => {
   const { templateId } = useParams<{ templateId: string }>();
   const [template, setTemplate] = useState<BahaTemplate | undefined>(undefined);
+  const [pageError, setPageError] = useState<unknown>();
 
   const [dirty, toggleDirty] = useToggle(false);
   const usePromptOptions = useMemo(
@@ -126,11 +129,36 @@ const TemplateCreatePage = () => {
       return;
     }
 
-    getFileByIdAsJSON<BahaTemplate>(templateId).then(setTemplate);
+    getFileByIdAsJSON<BahaTemplate>(templateId).then(
+      async (fetchedTemplate) => {
+        const jsonValidateResult = await validateJson(
+          fetchedTemplate,
+          "/json-schema/template-v1.schema.json"
+        );
+
+        if (jsonValidateResult.errors) {
+          setPageError(jsonValidateResult.errors);
+        }
+
+        setTemplate(fetchedTemplate);
+      }
+    );
   });
 
   if (!template || !templateId) {
     return <PublicLayout></PublicLayout>;
+  }
+
+  if (pageError) {
+    return (
+      <PublicLayout>
+        <TemplateDetailErrorSubpage
+          template={template}
+          templateId={templateId}
+          error={pageError}
+        />
+      </PublicLayout>
+    );
   }
 
   return (

@@ -61,7 +61,7 @@ const TemplateDetailConfigAndExportSubPage = ({
   const handleClickDelete = useCallback(() => {
     openDialog({
       title: "刪除模板",
-      content: "此動作無法回溯，請先下載紀錄檔進行備放。確定刪除模板嗎？",
+      content: "此動作無法回溯，請先下載紀錄檔進行備份。確定刪除模板嗎？",
       onYes: async () => {
         return deleteFile(templateId).then(() => {
           toast.success("已刪除模板");
@@ -104,21 +104,25 @@ const TemplateDetailConfigAndExportSubPage = ({
                 <Checkbox
                   label="適合新版小屋"
                   {...register("suitableForNewHome")}
-                  defaultChecked={template.properties.suitableForNewHome}
+                  defaultChecked={
+                    template.properties.suitableForNewHome === "1"
+                  }
                 />
               </div>
               <div>
                 <Checkbox
                   label="適合舊版小屋"
                   {...register("suitableForOldHome")}
-                  defaultChecked={template.properties.suitableForOldHome}
+                  defaultChecked={
+                    template.properties.suitableForOldHome === "1"
+                  }
                 />
               </div>
               <div>
                 <Checkbox
                   label="適合WIKI"
                   {...register("suitableForWiki")}
-                  defaultChecked={template.properties.suitableForWiki}
+                  defaultChecked={template.properties.suitableForWiki === "1"}
                 />
               </div>
             </div>
@@ -135,7 +139,9 @@ const TemplateDetailConfigAndExportSubPage = ({
                     </span>
                   }
                   {...register("suitableForLightMode")}
-                  defaultChecked={template.properties.suitableForLightMode}
+                  defaultChecked={
+                    template.properties.suitableForLightMode === "1"
+                  }
                 />
               </div>
               <div>
@@ -146,7 +152,9 @@ const TemplateDetailConfigAndExportSubPage = ({
                     </span>
                   }
                   {...register("suitableForDarkMode")}
-                  defaultChecked={template.properties.suitableForDarkMode}
+                  defaultChecked={
+                    template.properties.suitableForDarkMode === "1"
+                  }
                 />
               </div>
             </div>

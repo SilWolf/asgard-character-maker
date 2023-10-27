@@ -31,32 +31,16 @@ const TemplateDetailPublishPage = () => {
       return;
     }
 
-    const newProperties = {
-      name: template.properties.name,
-      author: template.properties.author,
-      briefing: template.properties.briefing,
-      demoUrl: template.properties.demoUrl,
-      previewImageUrl: template.properties.previewImageUrl,
-      tags: template.properties.tags,
-      suitableForNewHome: template.properties.suitableForNewHome ? "1" : null,
-      suitableForOldHome: template.properties.suitableForOldHome ? "1" : null,
-      suitableForWiki: template.properties.suitableForWiki ? "1" : null,
-      suitableForLightMode: template.properties.suitableForLightMode
-        ? "1"
-        : null,
-      suitableForDarkMode: template.properties.suitableForDarkMode ? "1" : null,
-    };
-
     const newName = [
-      newProperties.name,
-      newProperties.author,
-      newProperties.briefing,
-      newProperties.tags,
-      newProperties.suitableForOldHome ? "[O]" : undefined,
-      newProperties.suitableForNewHome ? "[N]" : undefined,
-      newProperties.suitableForWiki ? "[W]" : undefined,
-      newProperties.suitableForLightMode ? "[L]" : undefined,
-      newProperties.suitableForDarkMode ? "[D]" : undefined,
+      template.properties.name,
+      template.properties.author,
+      template.properties.briefing,
+      template.properties.tags,
+      template.properties.suitableForOldHome ? "[O]" : undefined,
+      template.properties.suitableForNewHome ? "[N]" : undefined,
+      template.properties.suitableForWiki ? "[W]" : undefined,
+      template.properties.suitableForLightMode ? "[L]" : undefined,
+      template.properties.suitableForDarkMode ? "[D]" : undefined,
     ]
       .filter((item) => !!item)
       .join(",");
@@ -65,7 +49,7 @@ const TemplateDetailPublishPage = () => {
       template,
       `${newName}.json`,
       import.meta.env.VITE_GOOGLE_DRIVE_MARKETPLACE_FOLDER_ID
-    ).then((res) => patchFileProperties(res.data.id, newProperties));
+    ).then((res) => patchFileProperties(res.data.id, template.properties));
   }, [template]);
 
   const handleClickPublish = useCallback(() => {
@@ -134,7 +118,9 @@ const TemplateDetailPublishPage = () => {
               <div>
                 <Checkbox
                   label="適合新版小屋"
-                  defaultChecked={template.properties.suitableForNewHome}
+                  defaultChecked={
+                    template.properties.suitableForNewHome === "1"
+                  }
                   readOnly
                   disabled
                 />
@@ -142,7 +128,9 @@ const TemplateDetailPublishPage = () => {
               <div>
                 <Checkbox
                   label="適合舊版小屋"
-                  defaultChecked={template.properties.suitableForOldHome}
+                  defaultChecked={
+                    template.properties.suitableForOldHome === "1"
+                  }
                   readOnly
                   disabled
                 />
@@ -150,7 +138,7 @@ const TemplateDetailPublishPage = () => {
               <div>
                 <Checkbox
                   label="適合WIKI"
-                  defaultChecked={template.properties.suitableForWiki}
+                  defaultChecked={template.properties.suitableForWiki === "1"}
                   readOnly
                   disabled
                 />
@@ -168,7 +156,9 @@ const TemplateDetailPublishPage = () => {
                       適合明亮模式 <i className="uil uil-sun"></i>
                     </span>
                   }
-                  defaultChecked={template.properties.suitableForLightMode}
+                  defaultChecked={
+                    template.properties.suitableForLightMode === "1"
+                  }
                   readOnly
                   disabled
                 />
@@ -180,7 +170,9 @@ const TemplateDetailPublishPage = () => {
                       適合黑闇模式 <i className="uil uil-moon"></i>
                     </span>
                   }
-                  defaultChecked={template.properties.suitableForDarkMode}
+                  defaultChecked={
+                    template.properties.suitableForDarkMode === "1"
+                  }
                   readOnly
                   disabled
                 />

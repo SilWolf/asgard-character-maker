@@ -1,5 +1,6 @@
 export const renderHumanDate = (isoDate: string) => {
-  return new Date(isoDate).toLocaleDateString();
+  const date = new Date(isoDate);
+  return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 };
 
 export const getNowString = () => {

@@ -101,27 +101,7 @@ const MarketplacePage = () => {
             `${template.properties.name}.json`,
             setting?.templatesFolderId
           ).then((res) =>
-            patchFileProperties(res.data.id, {
-              name: template.properties.name,
-              author: template.properties.author,
-              briefing: template.properties.briefing,
-              demoUrl: template.properties.demoUrl,
-              previewImageUrl: template.properties.previewImageUrl,
-              tags: template.properties.tags,
-              suitableForNewHome: template.properties.suitableForNewHome
-                ? "1"
-                : null,
-              suitableForOldHome: template.properties.suitableForOldHome
-                ? "1"
-                : null,
-              suitableForWiki: template.properties.suitableForWiki ? "1" : null,
-              suitableForLightMode: template.properties.suitableForLightMode
-                ? "1"
-                : null,
-              suitableForDarkMode: template.properties.suitableForDarkMode
-                ? "1"
-                : null,
-            })
+            patchFileProperties(res.data.id, template.properties)
           );
         }),
         {
