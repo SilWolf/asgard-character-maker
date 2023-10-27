@@ -99,7 +99,7 @@ export const getFileByNameAsJSON = async <T extends Record<string, unknown>>(
         alt: "media",
       },
     })
-    .then((res) => res.data);
+    .then((res) => ({ data: res.data, fileId: file.id }));
 };
 
 export const getFileById = (

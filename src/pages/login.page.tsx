@@ -3,7 +3,9 @@ import useGoogleAuth, {
   GoogleDriveAppSetting,
 } from "@/hooks/useGoogleAuth.hook";
 import {
+  deleteFile,
   getFileByNameAsJSON,
+  patchFileWithJsonObject,
   postCreateFolder,
   postUploadJsonObjectAsFile,
   updateGoogleDriveRequestProps,
@@ -25,7 +27,9 @@ const LoginPage = () => {
       });
 
       return getFileByNameAsJSON<GoogleDriveAppSetting>("setting.json")
-        .then((setting) => {
+        .then((res) => {
+          const setting = res?.data;
+
           if (!setting) {
             return toast.promise(
               Promise.all([
@@ -37,16 +41,14 @@ const LoginPage = () => {
                 );
 
                 const newSetting = {
+                  appVersion: "v2023-10-27",
                   sheetsFolderId: newSheetsFolderId,
                   templatesFolderId: newTemplatesFolderId,
                 };
 
                 await postUploadJsonObjectAsFile(newSetting, "setting.json");
 
-                return {
-                  sheetsFolderId: newSheetsFolderId,
-                  templatesFolderId: newTemplatesFolderId,
-                };
+                return newSetting;
               }),
               {
                 loading:
@@ -56,6 +58,39 @@ const LoginPage = () => {
                   "初始化失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
               }
             );
+
+            // v2023-10-27 = first JSON schema version
+          } else if (setting.appVersion !== "v2023-10-27") {
+            // Need to clear files / update settings
+            return Promise.allSettled([
+              deleteFile(setting.sheetsFolderId),
+              deleteFile(setting.templatesFolderId),
+            ])
+              .then(() =>
+                Promise.all([
+                  postCreateFolder("角色卡"),
+                  postCreateFolder("模板"),
+                ])
+              )
+              .then(async (results) => {
+                const [newSheetsFolderId, newTemplatesFolderId] = results.map(
+                  (res) => res.data.id
+                );
+
+                const newSetting = {
+                  appVersion: "v2023-10-27",
+                  sheetsFolderId: newSheetsFolderId,
+                  templatesFolderId: newTemplatesFolderId,
+                };
+
+                await patchFileWithJsonObject(
+                  res.fileId,
+                  newSetting,
+                  "setting.json"
+                );
+
+                return newSetting;
+              });
           }
 
           return setting;

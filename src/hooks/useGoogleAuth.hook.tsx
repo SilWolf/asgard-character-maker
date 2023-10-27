@@ -15,6 +15,7 @@ import { useCookie } from "react-use";
 export type GoogleDriveAppSetting = {
   sheetsFolderId: string;
   templatesFolderId: string;
+  appVersion: string;
 };
 
 type GoogleAuthContextValue = {

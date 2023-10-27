@@ -63,6 +63,7 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
         defaultValue: values[prop.id].defaultValue,
         label: values[prop.id].label,
         description: values[prop.id].description,
+        category: values[prop.id].category,
       }))
     );
   }, [getValues, onSubmit, parsedProps]);
