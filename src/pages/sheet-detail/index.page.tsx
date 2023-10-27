@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import SheetDetailSingle from "./single.subpage";
 import {
   getFileByIdAsJSON,
+  patchFileProperties,
   patchFileWithJsonObject,
 } from "@/helpers/google-drive.helper";
 import { useAsyncFn, useEffectOnce, useToggle } from "react-use";
@@ -62,7 +63,13 @@ const SheetDetailPage = () => {
   });
 
   const [{ loading: isSaving }, saveAsyncFn] = useAsyncFn(
-    patchFileWithJsonObject
+    (newSheet: Sheet, newName: string) =>
+      patchFileWithJsonObject(
+        sheetId as string,
+        newSheet,
+        `${newName}.json`
+      ).then(() => patchFileProperties(sheetId as string, newSheet.properties)),
+    [sheet, sheetId]
   );
   const handleClickSave = useCallback(() => {
     if (!sheet) {
@@ -70,18 +77,15 @@ const SheetDetailPage = () => {
     }
 
     toast
-      .promise(
-        saveAsyncFn(sheetId as string, sheet, `${sheet.properties.name}.json`),
-        {
-          loading: "儲存中...",
-          success: "儲存完成",
-          error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
-        }
-      )
+      .promise(saveAsyncFn(sheet, sheet.properties.name), {
+        loading: "儲存中...",
+        success: "儲存完成",
+        error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+      })
       .then(() => {
         toggleDirty(false);
       });
-  }, [saveAsyncFn, sheet, sheetId, toggleDirty]);
+  }, [saveAsyncFn, sheet, toggleDirty]);
 
   const [activeTab, setActiveTab] = useState<string>("0");
   const handleChangeTab = useCallback(

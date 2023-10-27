@@ -1,7 +1,7 @@
 import { BahaTemplateProperties } from "@/types/Baha.type";
 import { Button } from "@mui/joy";
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useAsyncFn } from "react-use";
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 const MarketplaceItemCard = ({
   templateId,
   properties,
-  detailTo,
+  // detailTo,
   onClickDownload,
 }: Props) => {
   const tags = useMemo(
@@ -44,17 +44,17 @@ const MarketplaceItemCard = ({
       </p>
       <div className="text-xs text-white dark:text-neutral-400">
         {(properties.suitableForNewHome as unknown as string) === "true" && (
-          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 text-blue-900 dark:text-blue-100 rounded-full px-3 py-1">
+          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 text-white dark:text-blue-100 rounded-full px-3 py-1">
             新版小屋
           </div>
         )}
         {(properties.suitableForOldHome as unknown as string) === "true" && (
-          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 text-blue-900 dark:text-blue-100 rounded-full px-3 py-1">
+          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 text-white dark:text-blue-100 rounded-full px-3 py-1">
             舊版小屋
           </div>
         )}
         {(properties.suitableForWiki as unknown as string) === "true" && (
-          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 text-blue-900 dark:text-blue-100 rounded-full px-3 py-1">
+          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 text-white dark:text-blue-100 rounded-full px-3 py-1">
             Wiki
           </div>
         )}
@@ -71,7 +71,7 @@ const MarketplaceItemCard = ({
         {tags.map((tag) => (
           <div
             key={tag}
-            className="inline-block mr-1 mb-1 bg-neutral-500 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-full px-3 py-1"
+            className="inline-block mr-1 mb-1 bg-neutral-500 dark:bg-neutral-900 text-white dark:text-neutral-100 rounded-full px-3 py-1"
           >
             {tag}
           </div>
@@ -86,13 +86,13 @@ const MarketplaceItemCard = ({
         >
           下載此模板
         </Button>
-        {detailTo && (
+        {/* {detailTo && (
           <Link to={detailTo}>
             <Button variant="outlined" color="neutral" data-id={templateId}>
               詳細
             </Button>
           </Link>
-        )}
+        )} */}
       </div>
     </div>
   );

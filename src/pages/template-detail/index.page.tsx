@@ -1,5 +1,6 @@
 import {
   getFileByIdAsJSON,
+  patchFileProperties,
   patchFileWithJsonObject,
 } from "@/helpers/google-drive.helper";
 import PublicLayout from "@/layouts/public.layout";
@@ -93,7 +94,15 @@ const TemplateCreatePage = () => {
   );
 
   const [{ loading: isSaving }, saveAsyncFn] = useAsyncFn(
-    patchFileWithJsonObject
+    (newTemplate: BahaTemplate, newName: string) =>
+      patchFileWithJsonObject(
+        templateId as string,
+        newTemplate,
+        `${newName}.json`
+      ).then(() =>
+        patchFileProperties(templateId as string, template?.properties ?? {})
+      ),
+    [template, templateId]
   );
   const handleClickSave = useCallback(() => {
     if (!template) {
@@ -115,7 +124,7 @@ const TemplateCreatePage = () => {
       .join(",");
 
     toast
-      .promise(saveAsyncFn(templateId as string, template, `${newName}.json`), {
+      .promise(saveAsyncFn(template, newName), {
         loading: "儲存中...",
         success: "儲存完成",
         error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
@@ -123,7 +132,7 @@ const TemplateCreatePage = () => {
       .then(() => {
         toggleDirty(false);
       });
-  }, [saveAsyncFn, template, templateId, toggleDirty]);
+  }, [saveAsyncFn, template, toggleDirty]);
 
   useEffectOnce(() => {
     if (!templateId) {
