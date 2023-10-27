@@ -34,7 +34,7 @@ const PublicLayout = ({ children }: Props) => {
                   to="/marketplace"
                   className="inline-block py-1 text-neutral-100 hover:text-white no-underline"
                 >
-                  範例角色卡＆模板
+                  模板市場
                 </Link>
                 <Link
                   to="/preference"
@@ -91,14 +91,22 @@ const PublicLayout = ({ children }: Props) => {
             </p>
             <nav className="text-sm text-neutral-400 space-x-6">
               <a
+                href="https://forms.gle/MeqxVbejAcenSwzE9"
+                target="_blank"
+                className="text-neutral-400 hover:text-neutral-500 dark:hover:text-neutral-300 no-underline"
+              >
+                回報錯誤／提出建議
+                <i className="uil uil-external-link-alt"></i>
+              </a>
+              <a
                 href="mailto:silwolf1121@gmail.com"
-                className="text-neutral-400 hover:text-neutral-500 no-underline"
+                className="text-neutral-400 hover:text-neutral-500 dark:hover:text-neutral-300 no-underline"
               >
                 聯絡作者
               </a>
               <Link
                 to="/privacy-policy"
-                className="text-neutral-400 hover:text-neutral-500 no-underline"
+                className="text-neutral-400 hover:text-neutral-500 dark:hover:text-neutral-300 no-underline"
               >
                 隱私權政策
               </Link>

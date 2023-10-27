@@ -1,4 +1,5 @@
 import BahaCode from "@/components/BahaCode";
+import usePreference from "@/hooks/usePreference.hook";
 import { BahaTemplate, BahaTemplateProp } from "@/types/Baha.type";
 import {
   FormControl,
@@ -66,8 +67,9 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
     );
   }, [getValues, onSubmit, parsedProps]);
 
+  const [preference] = usePreference();
   const [bahaCodePreviewClassName, setBahaCodePreviewClassName] =
-    useState<string>("baha-preview");
+    useState<string>(preference.previewMode);
 
   const handleChangePreview = useCallback(
     (_: unknown, newTab: string | number | null) =>
@@ -76,7 +78,7 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
   );
 
   const [bahaCodeLightOrDarkClassName, setBahaCodeLightOrDarkClassName] =
-    useState<string>("baha-preview-light");
+    useState<string>(preference.viewMode);
 
   const handleChangeLightOrDark = useCallback(
     (_: unknown, newTab: string | number | null) =>
@@ -99,7 +101,7 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
                 color="neutral"
                 disableIndicator
                 indicatorInset
-                value="baha-preview"
+                value="baha-preview-new-home"
               >
                 新版小屋
               </Tab>
@@ -137,7 +139,7 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
                 color="neutral"
                 disableIndicator
                 indicatorInset
-                value="baha-preview-light"
+                value="light"
               >
                 <i className="uil uil-sun"></i>
               </Tab>
@@ -146,7 +148,7 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
                 color="neutral"
                 disableIndicator
                 indicatorInset
-                value="baha-preview-dark"
+                value="dark"
               >
                 <i className="uil uil-moon"></i>
               </Tab>
@@ -156,9 +158,9 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
       </div>
 
       <section
-        className={`flex-0 shrink mx-auto py-4 px-4 overflow-y-scroll rounded-lg shadow-md shadow-gray-400 mt-10 ${bahaCodeLightOrDarkClassName}`}
+        className={`flex-0 shrink mx-auto py-4 px-4 overflow-y-scroll rounded-lg shadow-md shadow-neutral-400 dark:shadow-neutral-600 mt-10 baha-preview-${bahaCodeLightOrDarkClassName}`}
       >
-        <div className={`${bahaCodePreviewClassName}`}>
+        <div className={bahaCodePreviewClassName}>
           <BahaCode
             code={template.bahaCode}
             template={template}
@@ -194,7 +196,7 @@ const TemplateDetailPropsSubPage = ({ template, onSubmit }: Props) => {
                             <FormLabel>分類</FormLabel>
                             <select
                               {...register(`${id}.category`)}
-                              className="px-3 py-[6px] rounded-md border border-gray-300 text-[16px]"
+                              className="px-3 py-[6px] rounded-md border border-gray-300 dark:border-gray-700 dark:bg-neutral-900 text-[16px]"
                             >
                               <option value="text">文字</option>
                               <option value="color">顏色</option>

@@ -1,6 +1,7 @@
 import {
   copyFile,
   getFilesByFolderId,
+  patchFileProperties,
   postUploadFile,
   postUploadJsonObjectAsFile,
 } from "@/helpers/google-drive.helper";
@@ -17,11 +18,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { BahaTemplate } from "@/types/Baha.type";
 import { Sheet } from "@/types/Sheet.type";
 import useGoogleAuth from "@/hooks/useGoogleAuth.hook";
+import usePreference from "@/hooks/usePreference.hook";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   const { setting } = useGoogleAuth();
+  const [preference] = usePreference();
+
   const googleDriveSheetsFolderId = setting.sheetsFolderId;
 
   const {
@@ -70,7 +74,20 @@ const HomePage = () => {
   );
 
   const [{ loading: isCreatingSheet }, createSheetAsyncFn] = useAsyncFn(
-    postUploadJsonObjectAsFile
+    (jsonObj: Record<string, unknown>, name: string, parentFolderId?: string) =>
+      postUploadJsonObjectAsFile(jsonObj, `${name}.json`, parentFolderId).then(
+        (res) =>
+          patchFileProperties(res.data.id, {
+            name,
+            author: "",
+            briefing: "",
+            demoUrl: "",
+            previewImageUrl: "",
+            tags: "",
+            viewMode: preference.viewMode,
+            previewMode: preference.previewMode,
+          })
+      )
   );
   const handleClickCreateSheet = useCallback(() => {
     const name = `未命名角色卡_${getNowString()}`;
@@ -114,6 +131,8 @@ const HomePage = () => {
         previewImageUrl: "",
         imageUrls: [],
         tags: "",
+        viewMode: preference.viewMode,
+        previewMode: preference.previewMode,
       },
     };
     toast
@@ -132,7 +151,13 @@ const HomePage = () => {
       .then((res) => {
         navigate(`/sheet/${res.data.id}`);
       });
-  }, [createSheetAsyncFn, googleDriveSheetsFolderId, navigate]);
+  }, [
+    createSheetAsyncFn,
+    googleDriveSheetsFolderId,
+    navigate,
+    preference.previewMode,
+    preference.viewMode,
+  ]);
 
   const handleClickUploadTemplate = useCallback(async () => {
     const file = await pickFile();
@@ -155,7 +180,23 @@ const HomePage = () => {
   }, [googleDriveTemplatesFolderId, refetchTemplates, uploadTemplateAsyncFn]);
 
   const [{ loading: isCreatingTemplate }, createTemplateAsyncFn] = useAsyncFn(
-    postUploadJsonObjectAsFile
+    (jsonObj: Record<string, unknown>, name: string, parentFolderId?: string) =>
+      postUploadJsonObjectAsFile(jsonObj, `${name}.json`, parentFolderId).then(
+        (res) =>
+          patchFileProperties(res.data.id, {
+            name,
+            author: "",
+            briefing: "",
+            suitableForNewHome: "0",
+            suitableForOldHome: "0",
+            suitableForWiki: "0",
+            suitableForLightMode: "0",
+            suitableForDarkMode: "0",
+            demoUrl: "",
+            previewImageUrl: "",
+            tags: "",
+          })
+      )
   );
   const handleClickCreateTemplate = useCallback(() => {
     const newTitle = `未命名模板_${getNowString()}`;
@@ -167,9 +208,11 @@ const HomePage = () => {
         author: "",
         briefing: "",
         description: "",
-        suitableForNewHome: "0",
-        suitableForOldHome: "0",
-        suitableForWiki: "0",
+        suitableForNewHome: false,
+        suitableForOldHome: false,
+        suitableForWiki: false,
+        suitableForLightMode: false,
+        suitableForDarkMode: false,
         demoUrl: "",
         previewImageUrl: "",
         imageUrls: [],
@@ -180,7 +223,7 @@ const HomePage = () => {
       .promise(
         createTemplateAsyncFn(
           defaultTemplate,
-          `${newTitle}.json`,
+          newTitle,
           googleDriveTemplatesFolderId
         ),
         {
@@ -245,6 +288,7 @@ const HomePage = () => {
               <thead>
                 <tr>
                   <th>名稱</th>
+                  <th>作者</th>
                   <th>最後更新日期</th>
                   <th>
                     <p className="text-right">操作</p>
@@ -252,9 +296,10 @@ const HomePage = () => {
                 </tr>
               </thead>
               <tbody>
-                {sheets?.map((item) => (
+                {sheets?.files.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.name}</td>
+                    <td>{item.properties.name}</td>
+                    <td>{item.properties.author}</td>
                     <td>{renderHumanDate(item.modifiedTime)}</td>
                     <td className="text-right">
                       <div className="space-x-1">
@@ -275,13 +320,13 @@ const HomePage = () => {
                 ))}
               </tbody>
             </Table>
-            {!isLoadingSheets && sheets?.length === 0 && (
-              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+            {!isLoadingSheets && sheets?.files.length === 0 && (
+              <div className="text-center py-16 bg-neutral-100 dark:bg-neutral-900 text-sm text-neutral-700 dark:text-neutral-300">
                 沒有角色卡
               </div>
             )}
             {isLoadingSheets && (
-              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+              <div className="text-center py-16 bg-neutral-100 dark:bg-neutral-900 text-sm text-neutral-700 dark:text-neutral-300">
                 讀取中...
               </div>
             )}
@@ -316,6 +361,7 @@ const HomePage = () => {
               <thead>
                 <tr>
                   <th>名稱</th>
+                  <th>作者</th>
                   <th>最後更新日期</th>
                   <th>
                     <p className="text-right">操作</p>
@@ -323,9 +369,10 @@ const HomePage = () => {
                 </tr>
               </thead>
               <tbody>
-                {templates?.map((item) => (
+                {templates?.files.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.name}</td>
+                    <td>{item.properties.name}</td>
+                    <td>{item.properties.author}</td>
                     <td>{renderHumanDate(item.modifiedTime)}</td>
                     <td className="text-right">
                       <div className="space-x-1">
@@ -346,13 +393,13 @@ const HomePage = () => {
                 ))}
               </tbody>
             </Table>
-            {!isLoadingTemplates && templates?.length === 0 && (
-              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+            {!isLoadingTemplates && templates?.files.length === 0 && (
+              <div className="text-center py-16 bg-neutral-100 dark:bg-neutral-900 text-sm text-neutral-700 dark:text-neutral-300">
                 沒有自定義的模板
               </div>
             )}
             {isLoadingTemplates && (
-              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+              <div className="text-center py-16 bg-neutral-100 dark:bg-neutral-900 text-sm text-neutral-700 dark:text-neutral-300">
                 讀取中...
               </div>
             )}

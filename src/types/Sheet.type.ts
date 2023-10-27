@@ -38,4 +38,9 @@ export type SheetProperties = {
   previewImageUrl: string;
   imageUrls: string[];
   tags: string;
+  viewMode: "light" | "dark";
+  previewMode:
+    | "baha-preview-new-home"
+    | "baha-preview-old-home"
+    | "baha-preview-wiki";
 };

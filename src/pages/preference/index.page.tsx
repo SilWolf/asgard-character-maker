@@ -1,6 +1,12 @@
 import usePreference from "@/hooks/usePreference.hook";
 import PublicLayout from "@/layouts/public.layout";
-import { FormControl, FormLabel, Radio, RadioGroup } from "@mui/joy";
+import {
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/joy";
 import { useCallback } from "react";
 
 const PreferencePage = () => {
@@ -17,6 +23,20 @@ const PreferencePage = () => {
     [setPreference]
   );
 
+  const handleChangeViewPreviewMode = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.currentTarget.value as
+        | "baha-preview-old-home"
+        | "baha-preview-new-home"
+        | "baha-preview-wiki";
+      setPreference((prev) => ({
+        ...prev,
+        previewMode: newValue,
+      }));
+    },
+    [setPreference]
+  );
+
   if (!preference) {
     return <PublicLayout />;
   }
@@ -24,12 +44,12 @@ const PreferencePage = () => {
   return (
     <PublicLayout>
       <div className="container mx-auto max-w-screen-md space-y-6">
-        <form>
+        <form className="space-y-12">
           <FormControl>
             <FormLabel>介面顏色</FormLabel>
             <RadioGroup
+              className="max-w-[100px]"
               value={preference.viewMode}
-              name="radio-buttons-group"
               onChange={handleChangeViewMode}
             >
               <Radio
@@ -49,6 +69,28 @@ const PreferencePage = () => {
                 }
               />
             </RadioGroup>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>預設預覽介面</FormLabel>
+            <RadioGroup
+              className="max-w-[140px]"
+              value={preference.previewMode}
+              onChange={handleChangeViewPreviewMode}
+            >
+              <Radio
+                value="baha-preview-old-home"
+                label={<span>舊版小屋</span>}
+              />
+              <Radio
+                value="baha-preview-new-home"
+                label={<span>新版小屋</span>}
+              />
+              <Radio value="baha-preview-wiki" label={<span>Wiki頁面</span>} />
+            </RadioGroup>
+            <FormHelperText>
+              在預覽角色和模板時，會默認顯示選擇的介面
+            </FormHelperText>
           </FormControl>
         </form>
       </div>

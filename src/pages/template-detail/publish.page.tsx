@@ -9,6 +9,7 @@ import { BahaTemplate } from "@/types/Baha.type";
 import {
   Breadcrumbs,
   Button,
+  Checkbox,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -30,20 +31,41 @@ const TemplateDetailPublishPage = () => {
       return;
     }
 
+    const newProperties = {
+      name: template.properties.name,
+      author: template.properties.author,
+      briefing: template.properties.briefing,
+      demoUrl: template.properties.demoUrl,
+      previewImageUrl: template.properties.previewImageUrl,
+      tags: template.properties.tags,
+      suitableForNewHome: template.properties.suitableForNewHome ? "1" : null,
+      suitableForOldHome: template.properties.suitableForOldHome ? "1" : null,
+      suitableForWiki: template.properties.suitableForWiki ? "1" : null,
+      suitableForLightMode: template.properties.suitableForLightMode
+        ? "1"
+        : null,
+      suitableForDarkMode: template.properties.suitableForDarkMode ? "1" : null,
+    };
+
+    const newName = [
+      newProperties.name,
+      newProperties.author,
+      newProperties.briefing,
+      newProperties.tags,
+      newProperties.suitableForOldHome ? "[O]" : undefined,
+      newProperties.suitableForNewHome ? "[N]" : undefined,
+      newProperties.suitableForWiki ? "[W]" : undefined,
+      newProperties.suitableForLightMode ? "[L]" : undefined,
+      newProperties.suitableForDarkMode ? "[D]" : undefined,
+    ]
+      .filter((item) => !!item)
+      .join(",");
+
     return postUploadJsonObjectAsFile(
       template,
-      `${template.properties.name}.json`,
+      `${newName}.json`,
       import.meta.env.VITE_GOOGLE_DRIVE_MARKETPLACE_FOLDER_ID
-    ).then((res) =>
-      patchFileProperties(res.data.id, {
-        name: template.properties.name,
-        author: template.properties.author,
-        briefing: template.properties.briefing,
-        demoUrl: template.properties.demoUrl,
-        previewImageUrl: template.properties.previewImageUrl,
-        tags: template.properties.tags,
-      })
-    );
+    ).then((res) => patchFileProperties(res.data.id, newProperties));
   }, [template]);
 
   const handleClickPublish = useCallback(() => {
@@ -106,6 +128,66 @@ const TemplateDetailPublishPage = () => {
             />
           </FormControl>
 
+          <div>
+            <FormLabel>適用的頁面</FormLabel>
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              <div>
+                <Checkbox
+                  label="適合新版小屋"
+                  defaultChecked={template.properties.suitableForNewHome}
+                  readOnly
+                  disabled
+                />
+              </div>
+              <div>
+                <Checkbox
+                  label="適合舊版小屋"
+                  defaultChecked={template.properties.suitableForOldHome}
+                  readOnly
+                  disabled
+                />
+              </div>
+              <div>
+                <Checkbox
+                  label="適合WIKI"
+                  defaultChecked={template.properties.suitableForWiki}
+                  readOnly
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <FormLabel>適用的顏色</FormLabel>
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              <div>
+                <Checkbox
+                  label={
+                    <span>
+                      適合明亮模式 <i className="uil uil-sun"></i>
+                    </span>
+                  }
+                  defaultChecked={template.properties.suitableForLightMode}
+                  readOnly
+                  disabled
+                />
+              </div>
+              <div>
+                <Checkbox
+                  label={
+                    <span>
+                      適合黑闇模式 <i className="uil uil-moon"></i>
+                    </span>
+                  }
+                  defaultChecked={template.properties.suitableForDarkMode}
+                  readOnly
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+
           <FormControl>
             <FormLabel>作者</FormLabel>
             <Input
@@ -114,8 +196,15 @@ const TemplateDetailPublishPage = () => {
               readOnly
             />
             <FormHelperText>
-              建議使用 <span className="bold">暱稱 (巴哈帳號)</span>{" "}
-              的格式，例如 <span className="bold">銀狼 (silwolf167)</span>。
+              建議使用{" "}
+              <span className="text-black dark:text-white">
+                暱稱 (巴哈帳號)
+              </span>{" "}
+              的格式，例如{" "}
+              <span className="text-black dark:text-white">
+                銀狼 (silwolf167)
+              </span>
+              。
             </FormHelperText>
           </FormControl>
 
@@ -159,7 +248,7 @@ const TemplateDetailPublishPage = () => {
             </FormHelperText>
           </FormControl>
 
-          <div className="max-w-[320px] mx-auto shadow shadow-gray-400 p-4 rounded">
+          <div className="max-w-[320px] mx-auto shadow shadow-neutral-400 dark:shadow-neutral-600 p-4 rounded">
             <MarketplaceItemCard
               templateId={templateId}
               properties={template.properties}

@@ -34,7 +34,13 @@ export const getFiles = () => {
 
 export const getFilesByFolderId = (
   folderId: string,
-  options?: { isPublic?: boolean; targetFileName?: string }
+  options?: {
+    isPublic?: boolean;
+    rawFilter?: string;
+    targetFileName?: string;
+    pageSize?: number;
+    nextPageToken?: string;
+  }
 ) => {
   const params: Record<string, string> = {
     fields: "files(id,name,createdTime,modifiedTime,size,properties)",
@@ -51,15 +57,23 @@ export const getFilesByFolderId = (
     params.q += ` and name = '${options.targetFileName}'`;
   }
 
+  if (options?.rawFilter) {
+    params.q += ` and ${options.rawFilter}`;
+  }
+
   if (options?.isPublic) {
     params.public = "1";
   }
 
+  if (options?.nextPageToken) {
+    params.nextPageToken = options.nextPageToken;
+  }
+
   return googleDriveAxiosInstance
-    .get<{ files: GoogleDriveFile[] }>("/files", {
+    .get<{ files: GoogleDriveFile[]; nextPageToken: string | null }>("/files", {
       params,
     })
-    .then((res) => res.data.files);
+    .then((res) => res.data);
 };
 
 export const getPublicFilesByFolderId = (folderId: string) =>
@@ -71,7 +85,7 @@ export const getFileByNameAsJSON = async <T extends Record<string, unknown>>(
 ) => {
   const files = await getFilesByFolderId(folderId, {
     targetFileName: fileName,
-  });
+  }).then((res) => res.files);
 
   if (!files || files.length === 0) {
     return undefined;
@@ -246,7 +260,7 @@ export const copyFile = (fileId: string) => {
 
 export const patchFileProperties = (
   fileId: string,
-  properties: Record<string, string>
+  properties: Record<string, string | null>
 ) => {
   return googleDriveAxiosInstance.patch(
     `https://www.googleapis.com/drive/v3/files/${fileId}`,

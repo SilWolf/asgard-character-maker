@@ -10,10 +10,15 @@ import { useColorScheme } from "@mui/joy/styles";
 
 export type PreferenceProps = {
   viewMode: "light" | "dark";
+  previewMode:
+    | "baha-preview-old-home"
+    | "baha-preview-new-home"
+    | "baha-preview-wiki";
 };
 
 const defaultPreference: PreferenceProps = {
   viewMode: "light",
+  previewMode: "baha-preview-new-home",
 };
 
 type MyPreferenceContextProps = [

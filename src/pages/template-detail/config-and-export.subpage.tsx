@@ -38,7 +38,6 @@ const TemplateDetailConfigAndExportSubPage = ({
   });
 
   const handleBlurForm = useCallback(() => {
-    console.log(getValues());
     onSubmit(getValues());
   }, [getValues, onSubmit]);
 
@@ -100,26 +99,54 @@ const TemplateDetailConfigAndExportSubPage = ({
                 <i className="uil uil-external-link-alt"></i>
               </p>
             </FormHelperText>
-            <div className="grid grid-cols-3 gap-x-4 mt-4">
+            <div className="grid grid-cols-3 gap-4 mt-4">
               <div>
                 <Checkbox
                   label="適合新版小屋"
                   {...register("suitableForNewHome")}
-                  value={"1"}
+                  defaultChecked={template.properties.suitableForNewHome}
                 />
               </div>
               <div>
                 <Checkbox
                   label="適合舊版小屋"
                   {...register("suitableForOldHome")}
-                  value={"1"}
+                  defaultChecked={template.properties.suitableForOldHome}
                 />
               </div>
               <div>
                 <Checkbox
                   label="適合WIKI"
                   {...register("suitableForWiki")}
-                  value={"1"}
+                  defaultChecked={template.properties.suitableForWiki}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <FormLabel>適用的顏色</FormLabel>
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              <div>
+                <Checkbox
+                  label={
+                    <span>
+                      適合明亮模式 <i className="uil uil-sun"></i>
+                    </span>
+                  }
+                  {...register("suitableForLightMode")}
+                  defaultChecked={template.properties.suitableForLightMode}
+                />
+              </div>
+              <div>
+                <Checkbox
+                  label={
+                    <span>
+                      適合黑闇模式 <i className="uil uil-moon"></i>
+                    </span>
+                  }
+                  {...register("suitableForDarkMode")}
+                  defaultChecked={template.properties.suitableForDarkMode}
                 />
               </div>
             </div>
@@ -145,8 +172,14 @@ const TemplateDetailConfigAndExportSubPage = ({
             <FormLabel>作者</FormLabel>
             <Input {...register("author")} className="max-w-[300px]" />
             <FormHelperText>
-              建議使用 <span className="text-black">暱稱 (巴哈帳號)</span>{" "}
-              的格式，例如 <span className="text-black">銀狼 (silwolf167)</span>
+              建議使用{" "}
+              <span className="text-black dark:text-white">
+                暱稱 (巴哈帳號)
+              </span>{" "}
+              的格式，例如{" "}
+              <span className="text-black dark:text-white">
+                銀狼 (silwolf167)
+              </span>
               。
             </FormHelperText>
           </FormControl>

@@ -11,7 +11,12 @@ import {
 import { useAsyncFn, useEffectOnce, useToggle } from "react-use";
 import { Link, useParams, unstable_usePrompt } from "react-router-dom";
 import { SheetNewSingle } from "./new-single.subpage";
-import { Sheet, SheetSection, SheetTemplate } from "@/types/Sheet.type";
+import {
+  Sheet,
+  SheetProperties,
+  SheetSection,
+  SheetTemplate,
+} from "@/types/Sheet.type";
 import { BahaTemplate } from "@/types/Baha.type";
 import SheetDetailConfigAndExportSubPage from "./config-and-export.subpage";
 import PublicLayout from "@/layouts/public.layout";
@@ -49,6 +54,7 @@ const SheetDetailPage = () => {
     if (!sheet) {
       return;
     }
+
     toast
       .promise(
         saveAsyncFn(sheetId as string, sheet, `${sheet.properties.name}.json`),
@@ -120,13 +126,12 @@ const SheetDetailPage = () => {
     []
   );
 
-  const handleSubmitSingle = useCallback(
+  const handleSubmitSectionValue = useCallback(
     (sectionId: string, newValue: Record<string, string>) => {
       setSheet((prev) => {
         if (!prev || !prev.sectionsMap[sectionId]) {
           return prev;
         }
-
         return {
           ...prev,
           sectionsMap: {
@@ -136,6 +141,22 @@ const SheetDetailPage = () => {
               value: [newValue],
             },
           },
+        };
+      });
+      toggleDirty(true);
+    },
+    [toggleDirty]
+  );
+
+  const handleSubmitProperties = useCallback(
+    (newProperties: SheetProperties) => {
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          ...prev,
+          properties: newProperties,
         };
       });
       toggleDirty(true);
@@ -261,21 +282,39 @@ const SheetDetailPage = () => {
     return sectionIds.map((sectionId) => sheet.sectionsMap[sectionId]);
   }, [sheet]);
 
-  const [bahaCodePreviewClassName, setBahaCodePreviewClassName] =
-    useState<string>("baha-preview");
-
   const handleChangePreview = useCallback(
-    (_: unknown, newTab: string | number | null) =>
-      setBahaCodePreviewClassName(newTab as string),
+    (_: unknown, newValue: string | number | null) =>
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          properties: {
+            ...prev.properties,
+            previewMode: newValue as SheetProperties["previewMode"],
+          },
+        };
+      }),
     []
   );
 
-  const [bahaCodeLightOrDarkClassName, setBahaCodeLightOrDarkClassName] =
-    useState<string>("baha-preview-light");
+  const handleChangeViewMode = useCallback(
+    (_: unknown, newValue: string | number | null) =>
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
 
-  const handleChangeLightOrDark = useCallback(
-    (_: unknown, newTab: string | number | null) =>
-      setBahaCodeLightOrDarkClassName(newTab as string),
+        return {
+          ...prev,
+          properties: {
+            ...prev.properties,
+            viewMode: newValue as SheetProperties["viewMode"],
+          },
+        };
+      }),
     []
   );
 
@@ -329,9 +368,6 @@ const SheetDetailPage = () => {
                       {section.name}
                     </Tab>
                   ))}
-                  <Tab value="+" variant="plain" color="neutral">
-                    +
-                  </Tab>
                 </TabList>
               </Tabs>
             </div>
@@ -365,7 +401,7 @@ const SheetDetailPage = () => {
             <div className="inline-block">
               <Tabs
                 size="sm"
-                value={bahaCodePreviewClassName}
+                value={sheet.properties.previewMode}
                 onChange={handleChangePreview}
               >
                 <TabList disableUnderline>
@@ -374,7 +410,7 @@ const SheetDetailPage = () => {
                     color="neutral"
                     disableIndicator
                     indicatorInset
-                    value="baha-preview"
+                    value="baha-preview-new-home"
                   >
                     新版小屋
                   </Tab>
@@ -403,8 +439,8 @@ const SheetDetailPage = () => {
             <div className="inline-block">
               <Tabs
                 size="sm"
-                value={bahaCodeLightOrDarkClassName}
-                onChange={handleChangeLightOrDark}
+                value={sheet.properties.viewMode}
+                onChange={handleChangeViewMode}
               >
                 <TabList disableUnderline>
                   <Tab
@@ -412,7 +448,7 @@ const SheetDetailPage = () => {
                     color="neutral"
                     disableIndicator
                     indicatorInset
-                    value="baha-preview-light"
+                    value="light"
                   >
                     <i className="uil uil-sun"></i>
                   </Tab>
@@ -421,7 +457,7 @@ const SheetDetailPage = () => {
                     color="neutral"
                     disableIndicator
                     indicatorInset
-                    value="baha-preview-dark"
+                    value="dark"
                   >
                     <i className="uil uil-moon"></i>
                   </Tab>
@@ -431,9 +467,9 @@ const SheetDetailPage = () => {
           </div>
 
           <div
-            className={`mx-auto container py-4 ${bahaCodeLightOrDarkClassName}`}
+            className={`mx-auto container py-4 baha-preview-${sheet.properties.viewMode}`}
           >
-            <div className={bahaCodePreviewClassName}>
+            <div className={sheet.properties.previewMode}>
               {sheetSections.map((section) => (
                 <BahaCode
                   key={section.id}
@@ -476,8 +512,10 @@ const SheetDetailPage = () => {
                   sectionId={section.id}
                   template={sheet.templatesMap[section.templateId]}
                   value={section.value[0]}
+                  properties={sheet.properties}
                   submitFlag={activeTab !== section.id}
-                  onSubmit={handleSubmitSingle}
+                  onSubmitValue={handleSubmitSectionValue}
+                  onSubmitProperties={handleSubmitProperties}
                 />
               </ErrorBoundary>
             </div>

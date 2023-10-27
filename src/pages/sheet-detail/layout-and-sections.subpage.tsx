@@ -215,9 +215,9 @@ const SheetDetailLayoutAndSectionsSubPage = ({
                 <FormControl required>
                   <FormLabel>選擇一個模板</FormLabel>
                   <Select placeholder="選擇…" name="templateId">
-                    {templates?.map((template) => (
+                    {templates?.files.map((template) => (
                       <Option key={template.id} value={template.id}>
-                        {template.name}
+                        {template.properties.name}
                       </Option>
                     ))}
                   </Select>

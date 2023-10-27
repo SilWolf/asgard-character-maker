@@ -95,19 +95,27 @@ const TemplateCreatePage = () => {
     if (!template) {
       return;
     }
+
+    const newName = [
+      template.properties.name,
+      template.properties.author,
+      template.properties.briefing,
+      template.properties.tags,
+      template.properties.suitableForOldHome ? "[O]" : undefined,
+      template.properties.suitableForNewHome ? "[N]" : undefined,
+      template.properties.suitableForWiki ? "[W]" : undefined,
+      template.properties.suitableForLightMode ? "[L]" : undefined,
+      template.properties.suitableForDarkMode ? "[D]" : undefined,
+    ]
+      .filter((item) => !!item)
+      .join(",");
+
     toast
-      .promise(
-        saveAsyncFn(
-          templateId as string,
-          template,
-          `${template.properties.name}.json`
-        ),
-        {
-          loading: "儲存中...",
-          success: "儲存完成",
-          error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
-        }
-      )
+      .promise(saveAsyncFn(templateId as string, template, `${newName}.json`), {
+        loading: "儲存中...",
+        success: "儲存完成",
+        error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+      })
       .then(() => {
         toggleDirty(false);
       });
