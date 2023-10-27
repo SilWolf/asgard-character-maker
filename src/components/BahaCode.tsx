@@ -11,17 +11,19 @@ type BBOBNode = {
 
 const bahaPreset = reactPreset.extend((tags: Record<string, unknown>) => ({
   ...tags,
-  img: (node: BBOBNode) => ({
-    tag: "img",
-    attrs: {
-      src: Object.keys(node.attrs).find((key) => key === node.attrs[key]),
-      style: {
-        width: node.attrs.width ? `${node.attrs.width}px` : "100%",
-        height: node.attrs.height ? `${node.attrs.height}px` : "none",
+  img: (node: BBOBNode) => {
+    return {
+      tag: "img",
+      attrs: {
+        src: Object.keys(node.attrs).find((key) => key === node.attrs[key]),
+        style: {
+          width: node.attrs.width ? `${node.attrs.width}px` : "auto",
+          height: node.attrs.height ? `${node.attrs.height}px` : "none",
+        },
       },
-    },
-    content: null,
-  }),
+      content: null,
+    };
+  },
   size: (node: BBOBNode) => {
     return {
       tag: "font",
@@ -31,41 +33,49 @@ const bahaPreset = reactPreset.extend((tags: Record<string, unknown>) => ({
       content: node.content,
     };
   },
+  b: (node: BBOBNode) => {
+    return {
+      tag: "strong",
+      content: node.content,
+    };
+  },
+  color: (node: BBOBNode) => {
+    return {
+      tag: "span",
+      attrs: {
+        style: {
+          color: Object.keys(node.attrs).find((key) => key === node.attrs[key]),
+        },
+      },
+      content: node.content,
+    };
+  },
 }));
 
 type Props = {
   code: string;
-  template: BahaTemplate;
+  template: Pick<BahaTemplate, "bahaCode" | "props">;
   values: Record<string, string>;
+  alwaysFallbackKeys?: boolean;
 };
 
-const BahaCode = ({ code, template, values }: Props) => {
+const BahaCode = ({ code, template, values, alwaysFallbackKeys }: Props) => {
   const refinedCode = useMemo(() => {
-    const props = [
-      ...template.textProps,
-      ...template.systemTextProps,
-      ...template.imageProps,
-      ...template.colorProps,
-    ];
-
     let replacedCode = code;
 
-    for (const prop of props) {
-      replacedCode = replacedCode.replace(
-        new RegExp(`\\$${prop.id}\\$`, "g"),
-        values[prop.id] || prop.defaultValue
-      );
+    if (template.props) {
+      for (const prop of template.props) {
+        replacedCode = replacedCode.replace(
+          new RegExp(`\\$${prop.id}\\$`, "g"),
+          values[prop.id] ||
+            prop.defaultValue ||
+            (alwaysFallbackKeys ? prop.key : "")
+        );
+      }
     }
 
     return replacedCode;
-  }, [
-    code,
-    template.colorProps,
-    template.imageProps,
-    template.systemTextProps,
-    template.textProps,
-    values,
-  ]);
+  }, [alwaysFallbackKeys, code, template.props, values]);
 
   return reactRender(refinedCode, bahaPreset());
 };

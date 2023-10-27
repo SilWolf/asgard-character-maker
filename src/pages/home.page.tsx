@@ -1,35 +1,38 @@
 import {
+  copyFile,
   getFilesByFolderId,
-  postCreateFolder,
+  patchFileProperties,
   postUploadFile,
+  postUploadJsonObjectAsFile,
 } from "@/helpers/google-drive.helper";
 import useCustomTemplates from "@/hooks/useCustomTemplates.hook";
 import PublicLayout from "@/layouts/public.layout";
-import { renderHumanDate } from "@/utils/date.util";
+import { getNowString, renderHumanDate } from "@/utils/date.util";
 import { pickFile } from "@/utils/file.util";
 import { Button, Table } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
-import { useAsyncFn, useEffectOnce, useLocalStorage } from "react-use";
-import { Link } from "react-router-dom";
+import { useAsyncFn } from "react-use";
+import { Link, useNavigate } from "react-router-dom";
+import { BahaTemplate } from "@/types/Baha.type";
+import { Sheet } from "@/types/Sheet.type";
+import useGoogleAuth from "@/hooks/useGoogleAuth.hook";
+import usePreference from "@/hooks/usePreference.hook";
 
 const HomePage = () => {
-  const [googleDriveMasterFolderId, setGoogleDriveMasterFolderId] =
-    useLocalStorage<string>("acm-google-drive-master-folder-id", undefined, {
-      raw: true,
-    });
-  const [googleDriveSheetsFolderId, setGoogleDriveSheetsFolderId] =
-    useLocalStorage<string>("acm-google-drive-sheets-folder-id", undefined, {
-      raw: true,
-    });
+  const navigate = useNavigate();
+
+  const { setting } = useGoogleAuth();
+  const [preference] = usePreference();
+
+  const googleDriveSheetsFolderId = setting.sheetsFolderId;
 
   const {
     data: templates,
     isLoading: isLoadingTemplates,
     refetch: refetchTemplates,
     googleDriveTemplatesFolderId,
-    setGoogleDriveTemplatesFolderId,
   } = useCustomTemplates();
 
   const {
@@ -70,6 +73,92 @@ const HomePage = () => {
     []
   );
 
+  const [{ loading: isCreatingSheet }, createSheetAsyncFn] = useAsyncFn(
+    (jsonObj: Record<string, unknown>, name: string, parentFolderId?: string) =>
+      postUploadJsonObjectAsFile(jsonObj, `${name}.json`, parentFolderId).then(
+        (res) =>
+          patchFileProperties(res.data.id, {
+            name,
+            author: "",
+            briefing: "",
+            demoUrl: "",
+            previewImageUrl: "",
+            tags: "",
+            viewMode: preference.viewMode,
+            previewMode: preference.previewMode,
+          })
+      )
+  );
+  const handleClickCreateSheet = useCallback(() => {
+    const name = `未命名角色卡_${getNowString()}`;
+    const defaultSheet: Sheet = {
+      templatesMap: {
+        starter: {
+          name: "預設模板",
+          bahaCode: "[div]輸入你想要的值：$placeholder$[/div]",
+          props: [
+            {
+              id: "placeholder",
+              key: "$placeholder$",
+              defaultValue: "預設值",
+              label: "文字",
+              description: "修改這個值就能填入左側的預覽中",
+              category: "text",
+            },
+          ],
+        },
+      },
+      sectionsMap: {
+        section1: {
+          id: "section1",
+          name: "第一個區塊",
+          templateId: "starter",
+          value: [{}],
+        },
+      },
+      layout: [
+        {
+          id: "row1",
+          cols: [{ id: "col1", width: "100%", sectionIds: ["section1"] }],
+        },
+      ],
+      properties: {
+        name,
+        author: "",
+        briefing: "",
+        description: "",
+        demoUrl: "",
+        previewImageUrl: "",
+        imageUrls: [],
+        tags: "",
+        viewMode: preference.viewMode,
+        previewMode: preference.previewMode,
+      },
+    };
+    toast
+      .promise(
+        createSheetAsyncFn(
+          defaultSheet,
+          `${name}.json`,
+          googleDriveSheetsFolderId
+        ),
+        {
+          loading: "正在創建一個空白的角色卡",
+          success: "創建完成！",
+          error: "創建失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        }
+      )
+      .then((res) => {
+        navigate(`/sheet/${res.data.id}`);
+      });
+  }, [
+    createSheetAsyncFn,
+    googleDriveSheetsFolderId,
+    navigate,
+    preference.previewMode,
+    preference.viewMode,
+  ]);
+
   const handleClickUploadTemplate = useCallback(async () => {
     const file = await pickFile();
     toast
@@ -78,7 +167,7 @@ const HomePage = () => {
         {
           loading: (
             <span>
-              正在上傳自定義模版 <span className="bold">{file.name}</span>
+              正在上傳自定義模板 <span className="bold">{file.name}</span>
             </span>
           ),
           success: "上傳完成！",
@@ -90,37 +179,81 @@ const HomePage = () => {
       });
   }, [googleDriveTemplatesFolderId, refetchTemplates, uploadTemplateAsyncFn]);
 
-  useEffectOnce(() => {
-    if (!googleDriveMasterFolderId) {
-      toast.promise(
-        postCreateFolder("巴哈RPG公會角色卡工具資料庫")
-          .then((res) => {
-            const parentFolderId = res.data.id;
-            setGoogleDriveMasterFolderId(parentFolderId);
-
-            return Promise.all([
-              postCreateFolder("角色卡", parentFolderId),
-              postCreateFolder("自定義模版", parentFolderId),
-            ]);
+  const [{ loading: isCreatingTemplate }, createTemplateAsyncFn] = useAsyncFn(
+    (jsonObj: Record<string, unknown>, name: string, parentFolderId?: string) =>
+      postUploadJsonObjectAsFile(jsonObj, `${name}.json`, parentFolderId).then(
+        (res) =>
+          patchFileProperties(res.data.id, {
+            name,
+            author: "",
+            briefing: "",
+            suitableForNewHome: "0",
+            suitableForOldHome: "0",
+            suitableForWiki: "0",
+            suitableForLightMode: "0",
+            suitableForDarkMode: "0",
+            demoUrl: "",
+            previewImageUrl: "",
+            tags: "",
           })
-          .then((results) => {
-            const [newSheetsFolderId, newTemplatesFolderId] = results.map(
-              (res) => res.data.id
-            );
-
-            setGoogleDriveSheetsFolderId(newSheetsFolderId);
-            setGoogleDriveTemplatesFolderId(newTemplatesFolderId);
-          }),
+      )
+  );
+  const handleClickCreateTemplate = useCallback(() => {
+    const newTitle = `未命名模板_${getNowString()}`;
+    const defaultTemplate: BahaTemplate = {
+      props: [],
+      bahaCode: "[div]這是一個新的模板。[/div]",
+      properties: {
+        name: newTitle,
+        author: "",
+        briefing: "",
+        description: "",
+        suitableForNewHome: false,
+        suitableForOldHome: false,
+        suitableForWiki: false,
+        suitableForLightMode: false,
+        suitableForDarkMode: false,
+        demoUrl: "",
+        previewImageUrl: "",
+        imageUrls: [],
+        tags: "",
+      },
+    };
+    toast
+      .promise(
+        createTemplateAsyncFn(
+          defaultTemplate,
+          newTitle,
+          googleDriveTemplatesFolderId
+        ),
         {
-          loading:
-            "偵測到第一次使用此工具，正在在 Google Drive 上初始化所需要的資料夾……",
-          success: "初始化成功，作為第一步，點擊「創建新的角色卡」吧。",
-          error:
-            "初始化失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+          loading: "正在創建一個空白的模板",
+          success: "創建完成！",
+          error: "創建失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
         }
-      );
-    }
-  });
+      )
+      .then((res) => {
+        navigate(`/template/${res.data.id}`);
+      });
+  }, [createTemplateAsyncFn, googleDriveTemplatesFolderId, navigate]);
+
+  const [{ loading: isCopyingFile }, copyFileAsyncFn] = useAsyncFn(copyFile);
+  const handleClickCopy = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const fileId = e.currentTarget.getAttribute("data-file-id") as string;
+      toast
+        .promise(copyFileAsyncFn(fileId), {
+          loading: "正在複製新的檔案",
+          success: "複製成功",
+          error: "複製失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        })
+        .then(() => {
+          refetchSheets();
+          refetchTemplates();
+        });
+    },
+    [copyFileAsyncFn, refetchSheets, refetchTemplates]
+  );
 
   return (
     <PublicLayout>
@@ -137,9 +270,15 @@ const HomePage = () => {
                   onClick={handleClickUploadSheet}
                   loading={isUploadingSheet}
                 >
-                  上傳角色卡(.json)
+                  上傳角色卡 (.json)
                 </Button>
-                <Button size="lg" variant="solid" color="success">
+                <Button
+                  size="lg"
+                  variant="solid"
+                  color="success"
+                  onClick={handleClickCreateSheet}
+                  loading={isCreatingSheet}
+                >
                   創建新的角色卡
                 </Button>
               </div>
@@ -149,6 +288,7 @@ const HomePage = () => {
               <thead>
                 <tr>
                   <th>名稱</th>
+                  <th>作者</th>
                   <th>最後更新日期</th>
                   <th>
                     <p className="text-right">操作</p>
@@ -156,28 +296,37 @@ const HomePage = () => {
                 </tr>
               </thead>
               <tbody>
-                {sheets?.map((item) => (
+                {sheets?.files.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.name}</td>
+                    <td>{item.properties.name}</td>
+                    <td>{item.properties.author}</td>
                     <td>{renderHumanDate(item.modifiedTime)}</td>
                     <td className="text-right">
                       <div className="space-x-1">
                         <Link to={`/sheet/${item.id}`}>
                           <Button data-file-id={item.id}>打開</Button>
                         </Link>
+                        <Button
+                          variant="plain"
+                          data-file-id={item.id}
+                          onClick={handleClickCopy}
+                          loading={isCopyingFile}
+                        >
+                          複製
+                        </Button>
                       </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
-            {!isLoadingSheets && sheets?.length === 0 && (
-              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+            {!isLoadingSheets && sheets?.files.length === 0 && (
+              <div className="text-center py-16 bg-neutral-100 dark:bg-neutral-900 text-sm text-neutral-700 dark:text-neutral-300">
                 沒有角色卡
               </div>
             )}
             {isLoadingSheets && (
-              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+              <div className="text-center py-16 bg-neutral-100 dark:bg-neutral-900 text-sm text-neutral-700 dark:text-neutral-300">
                 讀取中...
               </div>
             )}
@@ -185,7 +334,7 @@ const HomePage = () => {
 
           <section className="space-y-2">
             <div className="flex justify-between">
-              <h1 className="text-2xl bold">你的自定義模版</h1>
+              <h1 className="text-2xl bold">你的自定義模板</h1>
               <div className="text-right space-x-2">
                 <Button
                   size="lg"
@@ -194,10 +343,16 @@ const HomePage = () => {
                   onClick={handleClickUploadTemplate}
                   loading={isUploadingTemplate}
                 >
-                  上傳新的模版(.json)
+                  上傳模板 (.json)
                 </Button>
-                <Button size="lg" variant="solid" color="success">
-                  創建新的模版
+                <Button
+                  size="lg"
+                  variant="solid"
+                  color="success"
+                  onClick={handleClickCreateTemplate}
+                  loading={isCreatingTemplate}
+                >
+                  創建新的模板
                 </Button>
               </div>
             </div>
@@ -206,6 +361,7 @@ const HomePage = () => {
               <thead>
                 <tr>
                   <th>名稱</th>
+                  <th>作者</th>
                   <th>最後更新日期</th>
                   <th>
                     <p className="text-right">操作</p>
@@ -213,28 +369,37 @@ const HomePage = () => {
                 </tr>
               </thead>
               <tbody>
-                {templates?.map((item) => (
+                {templates?.files.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.name}</td>
+                    <td>{item.properties.name}</td>
+                    <td>{item.properties.author}</td>
                     <td>{renderHumanDate(item.modifiedTime)}</td>
                     <td className="text-right">
                       <div className="space-x-1">
                         <Link to={`/template/${item.id}`}>
                           <Button data-file-id={item.id}>打開</Button>
                         </Link>
+                        <Button
+                          variant="plain"
+                          data-file-id={item.id}
+                          onClick={handleClickCopy}
+                          loading={isCopyingFile}
+                        >
+                          複製
+                        </Button>
                       </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
-            {!isLoadingTemplates && templates?.length === 0 && (
-              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
-                沒有自定義的模版
+            {!isLoadingTemplates && templates?.files.length === 0 && (
+              <div className="text-center py-16 bg-neutral-100 dark:bg-neutral-900 text-sm text-neutral-700 dark:text-neutral-300">
+                沒有自定義的模板
               </div>
             )}
             {isLoadingTemplates && (
-              <div className="text-center py-16 bg-gray-100 text-sm text-gray-700">
+              <div className="text-center py-16 bg-neutral-100 dark:bg-neutral-900 text-sm text-neutral-700 dark:text-neutral-300">
                 讀取中...
               </div>
             )}

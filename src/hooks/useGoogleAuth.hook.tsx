@@ -12,14 +12,26 @@ import React, {
 } from "react";
 import { useCookie } from "react-use";
 
+export type GoogleDriveAppSetting = {
+  sheetsFolderId: string;
+  templatesFolderId: string;
+};
+
 type GoogleAuthContextValue = {
   token: string | undefined | null;
-  setToken: (newValue: string) => unknown;
+  setToken: (newValue: string, expiresIn: number) => unknown;
+  setting: GoogleDriveAppSetting;
+  setSetting: (newValue: GoogleDriveAppSetting) => unknown;
 };
 
 const GoogleAuthContext = React.createContext<GoogleAuthContextValue>({
   token: undefined,
   setToken: () => {},
+  setting: {
+    sheetsFolderId: "",
+    templatesFolderId: "",
+  },
+  setSetting: () => {},
 });
 
 type GoogleAuthProviderProps = PropsWithChildren<{
@@ -32,13 +44,35 @@ export const GoogleAuthProvider = ({
 }: GoogleAuthProviderProps) => {
   const [token, updateToken] = useCookie("acm-google-auth-token");
   const setToken = useCallback(
-    (newToken: string) => {
-      updateToken(newToken, { expires: 1 / 24 });
+    (newToken: string, expiresIn: number) => {
+      updateToken(newToken, { expires: expiresIn / 86400 });
     },
     [updateToken]
   );
 
-  const value = useMemo(() => ({ token, setToken }), [setToken, token]);
+  const [rawSetting, updateSetting] = useCookie("acm-google-drive-setting");
+  const setSetting = useCallback(
+    (newSetting: GoogleDriveAppSetting) => {
+      updateSetting(JSON.stringify(newSetting), { expires: 1 / 24 });
+    },
+    [updateSetting]
+  );
+
+  const setting = useMemo(() => {
+    if (!rawSetting) {
+      return {
+        sheetsFolderId: "",
+        templatesFolderId: "",
+      };
+    }
+
+    return JSON.parse(rawSetting) as GoogleDriveAppSetting;
+  }, [rawSetting]);
+
+  const value = useMemo(
+    () => ({ token, setToken, setting, setSetting }),
+    [setToken, token, setting, setSetting]
+  );
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
@@ -50,14 +84,20 @@ export const GoogleAuthProvider = ({
 };
 
 const useGoogleAuth = () => {
-  const { token, setToken } = useContext(GoogleAuthContext);
+  const { token, setToken, setting, setSetting } =
+    useContext(GoogleAuthContext);
 
-  const isLogined = useMemo(() => !!token, [token]);
+  const isLogined = useMemo(
+    () => !!token && !!setting.sheetsFolderId && !!setting.templatesFolderId,
+    [token, setting]
+  );
 
   return {
     isLogined,
     token,
     setToken,
+    setting,
+    setSetting,
   };
 };
 
@@ -76,7 +116,7 @@ export const GoogleAuthLoginButton = ({
 
   const handleSuccessGoogleLogin = useCallback(
     (tokenResponse: TokenResponse) => {
-      setToken(tokenResponse.access_token);
+      setToken(tokenResponse.access_token, tokenResponse.expires_in);
       onSuccess?.(tokenResponse);
     },
     [onSuccess, setToken]
@@ -99,11 +139,6 @@ export const GoogleAuthLoginButton = ({
   }, [login]);
 
   return (
-    // <GoogleLogin
-    //   onSuccess={handleSuccessGoogleLogin}
-    //   onError={handleErrorGoogleLogin}
-    //   auto_select
-    // />
     <Button onClick={handleClickLogin} variant="outlined">
       登入 Google 並援權
     </Button>

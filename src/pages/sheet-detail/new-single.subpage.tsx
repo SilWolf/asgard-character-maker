@@ -33,7 +33,7 @@ const SheetDetailNewSingleSubPage = ({
     [sectionsCount]
   );
 
-  const [{ loading: isSubmitting }, onSubmitAsyncFn] = useAsyncFn(onSubmit, []);
+  const [{ loading: isSubmitting }, onSubmitAsyncFn] = useAsyncFn(onSubmit);
 
   const handleSubmit = useCallback(
     (e: FormEvent) => {
@@ -59,13 +59,13 @@ const SheetDetailNewSingleSubPage = ({
     <form onSubmit={handleSubmit}>
       <div className="mx-auto container max-w-screen-md space-y-6">
         <h2 className="text-xl">新增區塊</h2>
-        <div className="shadow shadow-gray-400 p-8 rounded space-y-6">
+        <div className="shadow shadow-neutral-400 dark:shadow-neutral-600 p-8 rounded space-y-6">
           <FormControl required>
-            <FormLabel>選擇一個模版</FormLabel>
+            <FormLabel>選擇一個模板</FormLabel>
             <Select placeholder="選擇…" name="templateId">
-              {templates?.map((template) => (
+              {templates?.files.map((template) => (
                 <Option key={template.id} value={template.id}>
-                  {template.name}
+                  {template.properties.name}
                 </Option>
               ))}
             </Select>

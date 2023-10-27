@@ -1,7 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 import { useCallback, useMemo, useState } from "react";
 import BahaCode from "@/components/BahaCode";
-import { Breadcrumbs, Button, Tab, TabList, Tabs } from "@mui/joy";
+import { Alert, Breadcrumbs, Button, Tab, TabList, Tabs } from "@mui/joy";
 import toast from "react-hot-toast";
 import SheetDetailSingle from "./single.subpage";
 import {
@@ -10,13 +10,19 @@ import {
 } from "@/helpers/google-drive.helper";
 import { useAsyncFn, useEffectOnce, useToggle } from "react-use";
 import { Link, useParams, unstable_usePrompt } from "react-router-dom";
-import SheetDetailNewSingleSubPage, {
-  SheetNewSingle,
-} from "./new-single.subpage";
-import { Sheet } from "@/types/Sheet.type";
+import { SheetNewSingle } from "./new-single.subpage";
+import {
+  Sheet,
+  SheetProperties,
+  SheetSection,
+  SheetTemplate,
+} from "@/types/Sheet.type";
 import { BahaTemplate } from "@/types/Baha.type";
 import SheetDetailConfigAndExportSubPage from "./config-and-export.subpage";
 import PublicLayout from "@/layouts/public.layout";
+import { ErrorBoundary } from "react-error-boundary";
+import SheetDetailLayoutAndSectionsSubPage from "./layout-and-sections.subpage";
+import { utilGetUniqueId } from "@/utils/string.util";
 
 const SheetDetailPage = () => {
   const { sheetId } = useParams<{ sheetId: string }>();
@@ -48,12 +54,16 @@ const SheetDetailPage = () => {
     if (!sheet) {
       return;
     }
+
     toast
-      .promise(saveAsyncFn(sheetId as string, sheet), {
-        loading: "儲存中...",
-        success: "儲存完成",
-        error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
-      })
+      .promise(
+        saveAsyncFn(sheetId as string, sheet, `${sheet.properties.name}.json`),
+        {
+          loading: "儲存中...",
+          success: "儲存完成",
+          error: "儲存失敗，請刷新頁面重試，或通知銀狼 (silwolf167) 尋求協助。",
+        }
+      )
       .then(() => {
         toggleDirty(false);
       });
@@ -67,26 +77,70 @@ const SheetDetailPage = () => {
     []
   );
 
-  const handleSubmitSingle = useCallback(
-    (sectionId: string, newValue: Record<string, string>) => {
+  const handleSubmitNewLayout = useCallback(
+    (newLayout: Sheet["layout"], fullRefresh?: boolean) => {
       setSheet((prev) => {
         if (!prev) {
           return prev;
         }
 
-        const index = prev.sections.findIndex(({ id }) => sectionId === id);
-        if (index === -1) {
-          return prev;
+        const newPrev = {
+          ...prev,
+          layout: newLayout,
+        };
+
+        if (fullRefresh) {
+          const sectionIds = [];
+          const templateIds = [];
+
+          for (const row of newPrev.layout) {
+            for (const col of row.cols) {
+              for (const sectionId of col.sectionIds) {
+                const section = newPrev.sectionsMap[sectionId];
+                if (section) {
+                  sectionIds.push(section.id);
+                  templateIds.push(section.templateId);
+                }
+              }
+            }
+          }
+
+          newPrev.sectionsMap = sectionIds.reduce<Record<string, SheetSection>>(
+            (obj, curr) => {
+              obj[curr] = prev.sectionsMap[curr];
+              return obj;
+            },
+            {}
+          );
+          newPrev.templatesMap = templateIds.reduce<
+            Record<string, SheetTemplate>
+          >((obj, curr) => {
+            obj[curr] = prev.templatesMap[curr];
+            return obj;
+          }, {});
         }
 
-        const section = prev.sections[index];
+        return newPrev;
+      });
+    },
+    []
+  );
 
+  const handleSubmitSectionValue = useCallback(
+    (sectionId: string, newValue: Record<string, string>) => {
+      setSheet((prev) => {
+        if (!prev || !prev.sectionsMap[sectionId]) {
+          return prev;
+        }
         return {
           ...prev,
-          sections: prev.sections.splice(index, 1, {
-            ...section,
-            value: newValue,
-          }),
+          sectionsMap: {
+            ...prev.sectionsMap,
+            [sectionId]: {
+              ...prev.sectionsMap[sectionId],
+              value: [newValue],
+            },
+          },
         };
       });
       toggleDirty(true);
@@ -94,47 +148,177 @@ const SheetDetailPage = () => {
     [toggleDirty]
   );
 
-  const handleSubmitNewSingle = useCallback(
+  const handleSubmitProperties = useCallback(
+    (newProperties: SheetProperties) => {
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          ...prev,
+          properties: newProperties,
+        };
+      });
+      toggleDirty(true);
+    },
+    [toggleDirty]
+  );
+
+  const handleSubmitNewSection = useCallback(
     async (newSingle: SheetNewSingle) => {
-      return toast
-        .promise(getFileByIdAsJSON<BahaTemplate>(newSingle.templateId), {
+      return toast.promise(
+        getFileByIdAsJSON<BahaTemplate>(newSingle.templateId).then(
+          (template) => {
+            setSheet((prev) => {
+              if (!prev) {
+                return prev;
+              }
+
+              return {
+                ...prev,
+                templatesMap: {
+                  ...prev.templatesMap,
+                  [newSingle.templateId]: {
+                    bahaCode: template.bahaCode,
+                    props: template.props,
+                    name: template.properties.name,
+                  },
+                },
+                sectionsMap: {
+                  ...prev.sectionsMap,
+                  [newSingle.id]: {
+                    id: newSingle.id,
+                    name: newSingle.name,
+                    templateId: newSingle.templateId,
+                    value: [{}],
+                  },
+                },
+                layout: [
+                  ...prev.layout,
+                  {
+                    id: `row_${utilGetUniqueId()}`,
+                    cols: [
+                      {
+                        id: `col_${utilGetUniqueId()}`,
+                        width: "100%",
+                        sectionIds: [newSingle.id],
+                      },
+                    ],
+                  },
+                ],
+              };
+            });
+            setActiveTab(newSingle.id);
+
+            toggleDirty(true);
+          }
+        ),
+        {
           loading: (
             <span>
               正在創建區塊 <span className="bold">{newSingle.name}</span>
             </span>
           ),
           success: "已成功創建",
-          error: "創建失敗，下載模版失敗",
-        })
-        .then((template) => {
-          setSheet((prev) => {
-            if (!prev) {
-              return prev;
-            }
-
-            return {
-              ...prev,
-              sections: [
-                ...prev.sections,
-                {
-                  id: newSingle.id,
-                  slug: newSingle.id,
-                  name: newSingle.name,
-                  template,
-                  value: {},
-                },
-              ],
-            };
-          });
-          setActiveTab(newSingle.id);
-
-          toggleDirty(true);
-        });
+          error: "創建失敗，下載模板失敗",
+        }
+      );
     },
     [toggleDirty]
   );
 
-  if (!sheet) {
+  const handleEditSection = useCallback(
+    (sectionId: string, newSection: SheetSection) => {
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          sectionsMap: {
+            ...prev.sectionsMap,
+            [sectionId]: newSection,
+          },
+        };
+      });
+      toggleDirty(true);
+    },
+    [toggleDirty]
+  );
+
+  const handleSubmitConfig = useCallback(
+    (newValue: Sheet["properties"]) => {
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          ...prev,
+          properties: {
+            ...prev.properties,
+            ...newValue,
+          },
+        };
+      });
+
+      toggleDirty(true);
+    },
+    [toggleDirty]
+  );
+
+  const sheetSections = useMemo(() => {
+    if (!sheet) {
+      return [];
+    }
+
+    const sectionIds = [];
+    for (const row of sheet.layout) {
+      for (const col of row.cols) {
+        sectionIds.push(...col.sectionIds);
+      }
+    }
+
+    return sectionIds.map((sectionId) => sheet.sectionsMap[sectionId]);
+  }, [sheet]);
+
+  const handleChangePreview = useCallback(
+    (_: unknown, newValue: string | number | null) =>
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          properties: {
+            ...prev.properties,
+            previewMode: newValue as SheetProperties["previewMode"],
+          },
+        };
+      }),
+    []
+  );
+
+  const handleChangeViewMode = useCallback(
+    (_: unknown, newValue: string | number | null) =>
+      setSheet((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          properties: {
+            ...prev.properties,
+            viewMode: newValue as SheetProperties["viewMode"],
+          },
+        };
+      }),
+    []
+  );
+
+  if (!sheet || !sheetId) {
     return <PublicLayout />;
   }
 
@@ -143,8 +327,14 @@ const SheetDetailPage = () => {
       <header id="header" className="space-y-4">
         <div className="container mx-auto">
           <Breadcrumbs aria-label="breadcrumbs">
-            <Link to="/">主頁</Link>
-            <span>{sheet.name}</span>
+            <Link
+              to="/"
+              className="text-neutral-800 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-300 no-underline"
+            >
+              主頁
+            </Link>
+            <span>角色卡</span>
+            <span>{sheet.properties.name}</span>
           </Breadcrumbs>
         </div>
         <div className="container mx-auto flex flex-row gap-x-4">
@@ -154,6 +344,13 @@ const SheetDetailPage = () => {
                 <Tab value="0" variant="plain" color="neutral">
                   總覽
                 </Tab>
+                <Tab
+                  value="layout-and-sections"
+                  variant="plain"
+                  color="neutral"
+                >
+                  區塊＆佈局
+                </Tab>
               </TabList>
             </Tabs>
           </div>
@@ -161,7 +358,7 @@ const SheetDetailPage = () => {
             <div>
               <Tabs value={activeTab} onChange={handleChangeTab}>
                 <TabList>
-                  {sheet.sections.map((section) => (
+                  {sheetSections.map((section) => (
                     <Tab
                       key={section.id}
                       value={section.id}
@@ -171,9 +368,6 @@ const SheetDetailPage = () => {
                       {section.name}
                     </Tab>
                   ))}
-                  <Tab value="+" variant="plain" color="neutral">
-                    +
-                  </Tab>
                 </TabList>
               </Tabs>
             </div>
@@ -182,7 +376,7 @@ const SheetDetailPage = () => {
             <Tabs value={activeTab} onChange={handleChangeTab}>
               <TabList>
                 <Tab value="configAndExport" variant="plain" color="neutral">
-                  設定/匯出
+                  設定＆匯出
                 </Tab>
               </TabList>
             </Tabs>
@@ -203,53 +397,140 @@ const SheetDetailPage = () => {
           className="hidden data-[active='1']:block"
           data-active={activeTab === "0" ? "1" : "0"}
         >
-          <div className="mx-auto container py-4">
-            <div className="baha-preview">
-              {sheet.sections.map((section) => (
+          <div className="container mx-auto mb-2 space-x-2">
+            <div className="inline-block">
+              <Tabs
+                size="sm"
+                value={sheet.properties.previewMode}
+                onChange={handleChangePreview}
+              >
+                <TabList disableUnderline>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="baha-preview-new-home"
+                  >
+                    新版小屋
+                  </Tab>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="baha-preview-old-home"
+                  >
+                    舊版小屋
+                  </Tab>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="baha-preview-wiki"
+                  >
+                    Wiki
+                  </Tab>
+                </TabList>
+              </Tabs>
+            </div>
+
+            <div className="inline-block">
+              <Tabs
+                size="sm"
+                value={sheet.properties.viewMode}
+                onChange={handleChangeViewMode}
+              >
+                <TabList disableUnderline>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="light"
+                  >
+                    <i className="uil uil-sun"></i>
+                  </Tab>
+                  <Tab
+                    variant="outlined"
+                    color="neutral"
+                    disableIndicator
+                    indicatorInset
+                    value="dark"
+                  >
+                    <i className="uil uil-moon"></i>
+                  </Tab>
+                </TabList>
+              </Tabs>
+            </div>
+          </div>
+
+          <div
+            className={`mx-auto container py-4 baha-preview-${sheet.properties.viewMode}`}
+          >
+            <div className={sheet.properties.previewMode}>
+              {sheetSections.map((section) => (
                 <BahaCode
                   key={section.id}
-                  code={section.template.bahaCode}
-                  template={section.template}
-                  values={section.value}
+                  code={sheet.templatesMap[section.templateId].bahaCode}
+                  template={sheet.templatesMap[section.templateId]}
+                  values={section.value[0]}
                 />
               ))}
             </div>
           </div>
         </section>
 
-        {sheet.sections.map((section) => (
+        <section
+          className="hidden data-[active='1']:block"
+          data-active={activeTab === "layout-and-sections" ? "1" : "0"}
+        >
+          <SheetDetailLayoutAndSectionsSubPage
+            sheet={sheet}
+            onSubmitSection={handleSubmitNewSection}
+            onSubmitLayout={handleSubmitNewLayout}
+            onEditSection={handleEditSection}
+          />
+        </section>
+
+        {sheetSections.map((section) => (
           <section
             key={section.id}
             className="hidden data-[active='1']:block"
             data-active={activeTab === section.id ? "1" : "0"}
           >
             <div className="h-[calc(100vh-320px)]">
-              <SheetDetailSingle
-                sectionId={section.id}
-                template={section.template}
-                value={section.value}
-                submitFlag={activeTab !== section.id}
-                onSubmit={handleSubmitSingle}
-              />
+              <ErrorBoundary
+                fallbackRender={() => (
+                  <Alert color="danger">
+                    在輸出畫面時出現錯誤，有可能檔案格式不對而導致。請在“設定＆匯出“頁面中下載備份、嘗試修復後再上傳，或是直接刪除此檔案。
+                  </Alert>
+                )}
+              >
+                <SheetDetailSingle
+                  sectionId={section.id}
+                  template={sheet.templatesMap[section.templateId]}
+                  value={section.value[0]}
+                  properties={sheet.properties}
+                  submitFlag={activeTab !== section.id}
+                  onSubmitValue={handleSubmitSectionValue}
+                  onSubmitProperties={handleSubmitProperties}
+                />
+              </ErrorBoundary>
             </div>
           </section>
         ))}
 
         <section
           className="hidden data-[active='1']:block"
-          data-active={activeTab === "+" ? "1" : "0"}
-        >
-          <SheetDetailNewSingleSubPage
-            sectionsCount={sheet.sections.length}
-            onSubmit={handleSubmitNewSingle}
-          />
-        </section>
-
-        <section
-          className="hidden data-[active='1']:block"
           data-active={activeTab === "configAndExport" ? "1" : "0"}
         >
-          <SheetDetailConfigAndExportSubPage sheet={sheet} />
+          <SheetDetailConfigAndExportSubPage
+            sheet={sheet}
+            onSubmit={handleSubmitConfig}
+            sheetId={sheetId}
+          />
         </section>
       </div>
     </PublicLayout>

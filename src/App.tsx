@@ -1,13 +1,33 @@
 /* eslint-disable no-irregular-whitespace */
 import SheetDetailPage from "./pages/sheet-detail/index.page";
+import TemplateDetailPage from "./pages/template-detail/index.page";
 
 import useGoogleAuth from "./hooks/useGoogleAuth.hook";
-import FirstLandingPage from "./pages/first-landing.page";
-import HomePage from "./pages/home.page";
 import { updateGoogleDriveRequestProps } from "./helpers/google-drive.helper";
 import { useEffectOnce } from "react-use";
-import TemplateDetailPage from "./pages/template-detail.page";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import HomePage from "./pages/home.page";
+import LoginPage from "./pages/login.page";
+import MarketplacePage from "./pages/marketplace/index.page";
+import DeveloperPage from "./pages/developer/index.page";
+import MarketplaceCreatePage from "./pages/marketplace-create/index.page";
+import TemplateDetailPublishPage from "./pages/template-detail/publish.page";
+import PrivacyPolicyPage from "./pages/privacy-policy";
+import MarketplaceEditPropertiesPage from "./pages/marketplace/editProperties.page";
+import MarketplaceDetailPage from "./pages/marketplace-detail/index.page";
+import PreferencePage from "./pages/preference/index.page";
+
+const publicRouter = createBrowserRouter([
+  {
+    path: "*",
+    element: <LoginPage />,
+  },
+
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicyPage />,
+  },
+]);
 
 const router = createBrowserRouter([
   {
@@ -22,17 +42,45 @@ const router = createBrowserRouter([
     path: "/template/:templateId",
     element: <TemplateDetailPage />,
   },
+  {
+    path: "/template/:templateId/admin-publish",
+    element: <TemplateDetailPublishPage />,
+  },
+  {
+    path: "/marketplace",
+    element: <MarketplacePage />,
+  },
+  {
+    path: "/developer",
+    element: <DeveloperPage />,
+  },
+
+  {
+    path: "/marketplace/admin-create",
+    element: <MarketplaceCreatePage />,
+  },
+  {
+    path: "/marketplace/:templateId",
+    element: <MarketplaceDetailPage />,
+  },
+  {
+    path: "/marketplace/:templateId/admin-editProperties",
+    element: <MarketplaceEditPropertiesPage />,
+  },
+
+  {
+    path: "/preference",
+    element: <PreferencePage />,
+  },
+
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicyPage />,
+  },
 ]);
 
 const App = () => {
-  const { isLogined, token } = useGoogleAuth();
-  // return <DetailPage />;
-
-  // const hasAccess = hasGrantedAllScopesGoogle(
-  //   tokenResponse,
-  //   "google-scope-1",
-  //   "google-scope-2"
-  // );
+  const { token, isLogined } = useGoogleAuth();
 
   useEffectOnce(() => {
     updateGoogleDriveRequestProps({
@@ -41,11 +89,7 @@ const App = () => {
     });
   });
 
-  if (!isLogined) {
-    return <FirstLandingPage />;
-  }
-
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={isLogined ? router : publicRouter} />;
 };
 
 export default App;
