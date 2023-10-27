@@ -31,6 +31,7 @@ const GoogleAuthContext = React.createContext<GoogleAuthContextValue>({
   setting: {
     sheetsFolderId: "",
     templatesFolderId: "",
+    appVersion: "",
   },
   setSetting: () => {},
 });
@@ -64,6 +65,7 @@ export const GoogleAuthProvider = ({
       return {
         sheetsFolderId: "",
         templatesFolderId: "",
+        appVersion: "",
       };
     }
 
