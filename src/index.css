@@ -43,6 +43,14 @@
       } */
     }
 
+    ul {
+      margin: 10px;
+      padding-left: 20px;
+      list-style-type: disc;
+      list-style-position: outside;
+      white-space: normal;
+    }
+
     td {
       padding: 3px;
       box-sizing: content-box;
@@ -82,10 +90,11 @@
     }
 
     ul {
-      margin: 10px;
-      padding-left: 30px;
+      margin: 0;
+      padding-left: 20px;
       list-style-type: disc;
       list-style-position: outside;
+      white-space: normal;
     }
 
     li {
@@ -136,9 +145,10 @@
 
     ul {
       margin: 10px;
-      padding-left: 30px;
+      padding-left: 20px;
       list-style-type: disc;
       list-style-position: outside;
+      white-space: normal;
     }
 
     li {

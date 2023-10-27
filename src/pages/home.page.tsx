@@ -1,5 +1,6 @@
 import {
   copyFile,
+  getFileByIdAsJSON,
   getFilesByFolderId,
   patchFileProperties,
   postUploadJsonObjectAsFile,
@@ -251,7 +252,16 @@ const HomePage = () => {
       });
   }, [createTemplateAsyncFn, googleDriveTemplatesFolderId, navigate]);
 
-  const [{ loading: isCopyingFile }, copyFileAsyncFn] = useAsyncFn(copyFile);
+  const [{ loading: isCopyingFile }, copyFileAsyncFn] = useAsyncFn(
+    (fileId: string) =>
+      copyFile(fileId).then((res) =>
+        getFileByIdAsJSON<{
+          properties: BahaTemplate["properties"] | Sheet["properties"];
+        }>(res.data.id).then(({ properties }) =>
+          patchFileProperties(res.data.id, properties)
+        )
+      )
+  );
   const handleClickCopy = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       const fileId = e.currentTarget.getAttribute("data-file-id") as string;

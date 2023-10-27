@@ -253,7 +253,7 @@ export const deleteFile = (fileId: string) => {
 };
 
 export const copyFile = (fileId: string) => {
-  return googleDriveAxiosInstance.post(
+  return googleDriveAxiosInstance.post<GoogleDriveFile>(
     `https://www.googleapis.com/drive/v3/files/${fileId}/copy`
   );
 };

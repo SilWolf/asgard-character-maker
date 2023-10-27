@@ -184,7 +184,7 @@ const MarketplacePage = () => {
           </form>
         </section>
 
-        <section className="container mx-auto grid grid-cols-4 gap-4">
+        <section className="container mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {data?.pages.map((page) =>
             page.files.map((item) => (
               <div key={item.id}>
