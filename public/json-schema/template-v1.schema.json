@@ -74,24 +74,19 @@
           "type": "string"
         },
         "suitableForNewHome": {
-          "type": "string",
-          "enum": ["0", "1"]
+          "type": "boolean"
         },
         "suitableForOldHome": {
-          "type": "string",
-          "enum": ["0", "1"]
+          "type": "boolean"
         },
         "suitableForWiki": {
-          "type": "string",
-          "enum": ["0", "1"]
+          "type": "boolean"
         },
         "suitableForLightMode": {
-          "type": "string",
-          "enum": ["0", "1"]
+          "type": "boolean"
         },
         "suitableForDarkMode": {
-          "type": "string",
-          "enum": ["0", "1"]
+          "type": "boolean"
         },
         "demoUrl": {
           "type": "string",

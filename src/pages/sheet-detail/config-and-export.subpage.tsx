@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 type Props = {
   sheet: Sheet;
   sheetId: string;
-  onSubmit: (newValues: Sheet["properties"]) => void;
+  onSubmit: (newValues: Pick<Sheet, "properties" | "detailProperties">) => void;
 };
 
 const SheetDetailConfigAndExportSubPage = ({
@@ -28,10 +28,10 @@ const SheetDetailConfigAndExportSubPage = ({
   const { openDialog } = useDialog();
   const navigate = useNavigate();
 
-  const { register, getValues } = useForm<Sheet["properties"]>({
+  const { register, getValues } = useForm({
     defaultValues: {
-      name: sheet.properties.name,
-      author: sheet.properties.author,
+      properties: sheet.properties,
+      detailProperties: sheet.detailProperties,
     },
   });
 
@@ -122,11 +122,11 @@ const SheetDetailConfigAndExportSubPage = ({
           <h2 className="text-2xl">基本設置</h2>
           <FormControl>
             <FormLabel>模板名稱</FormLabel>
-            <Input {...register("name")} />
+            <Input {...register("properties.name")} />
           </FormControl>
           <FormControl>
             <FormLabel>作者</FormLabel>
-            <Input {...register("author")} />
+            <Input {...register("properties.author")} />
           </FormControl>
         </form>
 

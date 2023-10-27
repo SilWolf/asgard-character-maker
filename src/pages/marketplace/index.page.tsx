@@ -126,7 +126,7 @@ const MarketplacePage = () => {
 
         <section className="container mx-auto max-w-screen-md">
           <form onSubmit={handleClickSubmitFolder}>
-            <div className="bg-neutral-100 rounded py-4 px-8 space-y-4">
+            <div className="bg-neutral-100 dark:bg-neutral-900 rounded py-4 px-8 space-y-4">
               <FormControl>
                 <FormLabel>搜索</FormLabel>
                 <Input

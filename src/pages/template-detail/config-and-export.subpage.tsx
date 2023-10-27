@@ -18,7 +18,10 @@ import { useNavigate } from "react-router-dom";
 
 type Props = {
   template: BahaTemplate;
-  onSubmit: (newValues: BahaTemplate["properties"]) => void;
+  onSubmit: (newValue: {
+    properties: BahaTemplate["properties"];
+    detailProperties: BahaTemplate["detailProperties"];
+  }) => void;
   templateId: string;
 };
 
@@ -30,10 +33,11 @@ const TemplateDetailConfigAndExportSubPage = ({
   const { openDialog } = useDialog();
   const navigate = useNavigate();
 
-  const { register, getValues, formState } = useForm({
+  const { register, getValues } = useForm({
     mode: "onBlur",
     defaultValues: {
-      ...template.properties,
+      properties: { ...template.properties },
+      detailProperties: { ...template.detailProperties },
     },
   });
 
@@ -79,7 +83,7 @@ const TemplateDetailConfigAndExportSubPage = ({
           <FormControl required>
             <FormLabel>模板名稱</FormLabel>
             <Input
-              {...register("name", { required: true })}
+              {...register("properties.name", { required: true })}
               className="max-w-[400px]"
             />
           </FormControl>
@@ -103,26 +107,22 @@ const TemplateDetailConfigAndExportSubPage = ({
               <div>
                 <Checkbox
                   label="適合新版小屋"
-                  {...register("suitableForNewHome")}
-                  defaultChecked={
-                    template.properties.suitableForNewHome === "1"
-                  }
+                  {...register("properties.suitableForNewHome")}
+                  defaultChecked={template.properties.suitableForNewHome}
                 />
               </div>
               <div>
                 <Checkbox
                   label="適合舊版小屋"
-                  {...register("suitableForOldHome")}
-                  defaultChecked={
-                    template.properties.suitableForOldHome === "1"
-                  }
+                  {...register("properties.suitableForOldHome")}
+                  defaultChecked={template.properties.suitableForOldHome}
                 />
               </div>
               <div>
                 <Checkbox
                   label="適合WIKI"
-                  {...register("suitableForWiki")}
-                  defaultChecked={template.properties.suitableForWiki === "1"}
+                  {...register("properties.suitableForWiki")}
+                  defaultChecked={template.properties.suitableForWiki}
                 />
               </div>
             </div>
@@ -138,10 +138,8 @@ const TemplateDetailConfigAndExportSubPage = ({
                       適合明亮模式 <i className="uil uil-sun"></i>
                     </span>
                   }
-                  {...register("suitableForLightMode")}
-                  defaultChecked={
-                    template.properties.suitableForLightMode === "1"
-                  }
+                  {...register("properties.suitableForLightMode")}
+                  defaultChecked={template.properties.suitableForLightMode}
                 />
               </div>
               <div>
@@ -151,10 +149,8 @@ const TemplateDetailConfigAndExportSubPage = ({
                       適合黑闇模式 <i className="uil uil-moon"></i>
                     </span>
                   }
-                  {...register("suitableForDarkMode")}
-                  defaultChecked={
-                    template.properties.suitableForDarkMode === "1"
-                  }
+                  {...register("properties.suitableForDarkMode")}
+                  defaultChecked={template.properties.suitableForDarkMode}
                 />
               </div>
             </div>
@@ -178,7 +174,10 @@ const TemplateDetailConfigAndExportSubPage = ({
 
           <FormControl>
             <FormLabel>作者</FormLabel>
-            <Input {...register("author")} className="max-w-[300px]" />
+            <Input
+              {...register("properties.author")}
+              className="max-w-[300px]"
+            />
             <FormHelperText>
               建議使用{" "}
               <span className="text-black dark:text-white">
@@ -195,7 +194,7 @@ const TemplateDetailConfigAndExportSubPage = ({
           <FormControl>
             <FormLabel>介紹</FormLabel>
             <Input
-              {...register("briefing")}
+              {...register("properties.briefing")}
               slotProps={{ input: { maxLength: 60 } }}
             />
             <FormHelperText>
@@ -206,7 +205,7 @@ const TemplateDetailConfigAndExportSubPage = ({
           <FormControl>
             <FormLabel>詳細介紹</FormLabel>
             <Textarea
-              {...register("description")}
+              {...register("detailProperties.description")}
               minRows={5}
               placeholder={`# 關於這個模板
 
@@ -227,10 +226,10 @@ const TemplateDetailConfigAndExportSubPage = ({
             </FormHelperText>
           </FormControl>
 
-          <FormControl error={!!formState.errors["demoUrl"]?.message}>
+          <FormControl>
             <FormLabel>示範的小屋創作連結</FormLabel>
             <Input
-              {...register("demoUrl", {
+              {...register("properties.demoUrl", {
                 maxLength: {
                   value: 60,
                   message: "網址太長了，請自行縮短網址。",
@@ -247,10 +246,10 @@ const TemplateDetailConfigAndExportSubPage = ({
             </FormHelperText>
           </FormControl>
 
-          <FormControl error={!!formState.errors["previewImageUrl"]?.message}>
+          <FormControl>
             <FormLabel>預覽圖片</FormLabel>
             <Input
-              {...register("previewImageUrl", {
+              {...register("properties.previewImageUrl", {
                 maxLength: {
                   value: 60,
                   message: "網址太長了，請自行縮短網址。",
@@ -267,23 +266,21 @@ const TemplateDetailConfigAndExportSubPage = ({
             </FormHelperText>
           </FormControl>
 
-          <FormControl error={!!formState.errors["imageUrls"]?.message}>
+          <FormControl>
             <FormLabel>更多介紹圖片</FormLabel>
             <Input
-              {...register("imageUrls", {
-                maxLength: {
-                  value: 60,
-                  message: "最多60字。",
-                },
-              })}
-              placeholder="https://i.imgur.com/image.png"
+              {...register("detailProperties.imageUrls")}
+              placeholder="https://i.imgur.com/image1.png,https://i.imgur.com/image2.png"
             />
             <FormHelperText>用逗號(,)分隔每張圖片網址</FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>標籤</FormLabel>
-            <Input {...register("tags")} placeholder="新版小屋,簡約,整齊" />
+            <Input
+              {...register("properties.tags")}
+              placeholder="新版小屋,簡約,整齊"
+            />
             <FormHelperText>
               能形容模板的關鍵字，以方便用戶搜索。用逗號(,)分隔每個標籤。
             </FormHelperText>

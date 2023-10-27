@@ -118,9 +118,7 @@ const TemplateDetailPublishPage = () => {
               <div>
                 <Checkbox
                   label="適合新版小屋"
-                  defaultChecked={
-                    template.properties.suitableForNewHome === "1"
-                  }
+                  defaultChecked={template.properties.suitableForNewHome}
                   readOnly
                   disabled
                 />
@@ -128,9 +126,7 @@ const TemplateDetailPublishPage = () => {
               <div>
                 <Checkbox
                   label="適合舊版小屋"
-                  defaultChecked={
-                    template.properties.suitableForOldHome === "1"
-                  }
+                  defaultChecked={template.properties.suitableForOldHome}
                   readOnly
                   disabled
                 />
@@ -138,7 +134,7 @@ const TemplateDetailPublishPage = () => {
               <div>
                 <Checkbox
                   label="適合WIKI"
-                  defaultChecked={template.properties.suitableForWiki === "1"}
+                  defaultChecked={template.properties.suitableForWiki}
                   readOnly
                   disabled
                 />
@@ -156,9 +152,7 @@ const TemplateDetailPublishPage = () => {
                       適合明亮模式 <i className="uil uil-sun"></i>
                     </span>
                   }
-                  defaultChecked={
-                    template.properties.suitableForLightMode === "1"
-                  }
+                  defaultChecked={template.properties.suitableForLightMode}
                   readOnly
                   disabled
                 />
@@ -170,9 +164,7 @@ const TemplateDetailPublishPage = () => {
                       適合黑闇模式 <i className="uil uil-moon"></i>
                     </span>
                   }
-                  defaultChecked={
-                    template.properties.suitableForDarkMode === "1"
-                  }
+                  defaultChecked={template.properties.suitableForDarkMode}
                   readOnly
                   disabled
                 />

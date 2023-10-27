@@ -18,12 +18,17 @@ const MarketplaceItemCard = ({
   onClickDownload,
 }: Props) => {
   const tags = useMemo(
-    () => properties.tags.split(",").filter((item) => !!item),
-    [properties.tags]
+    () =>
+      properties?.tags
+        ? properties.tags.split(",").filter((item) => !!item)
+        : [],
+    [properties]
   );
 
   const [{ loading: isDownloading }, handleClickDownload] =
     useAsyncFn(onClickDownload);
+
+  console.log(properties);
 
   return (
     <div className="space-y-4">
@@ -38,27 +43,27 @@ const MarketplaceItemCard = ({
         {properties.briefing}
       </p>
       <div className="text-xs text-white dark:text-neutral-400">
-        {properties.suitableForNewHome && (
-          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 rounded-full px-3 py-1">
+        {(properties.suitableForNewHome as unknown as string) === "true" && (
+          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 text-blue-900 dark:text-blue-100 rounded-full px-3 py-1">
             新版小屋
           </div>
         )}
-        {properties.suitableForOldHome && (
-          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 rounded-full px-3 py-1">
+        {(properties.suitableForOldHome as unknown as string) === "true" && (
+          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 text-blue-900 dark:text-blue-100 rounded-full px-3 py-1">
             舊版小屋
           </div>
         )}
-        {properties.suitableForWiki && (
-          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 rounded-full px-3 py-1">
+        {(properties.suitableForWiki as unknown as string) === "true" && (
+          <div className="inline-block mr-1 mb-1 bg-blue-500 dark:bg-blue-900 text-blue-900 dark:text-blue-100 rounded-full px-3 py-1">
             Wiki
           </div>
         )}
-        {properties.suitableForLightMode && (
+        {(properties.suitableForLightMode as unknown as string) === "true" && (
           <div className="inline-block mr-1 mb-1 bg-amber-200 dark:bg-amber-200 text-amber-800 dark:text-amber-800 rounded-full px-3 py-1">
             明亮 <i className="uil uil-sun"></i>
           </div>
         )}
-        {properties.suitableForDarkMode && (
+        {(properties.suitableForDarkMode as unknown as string) === "true" && (
           <div className="inline-block mr-1 mb-1 bg-indigo-950 dark:bg-indigo-950 text-indigo-200 dark:text-indigo-200 rounded-full px-3 py-1">
             黑闇 <i className="uil uil-moon"></i>
           </div>
@@ -66,7 +71,7 @@ const MarketplaceItemCard = ({
         {tags.map((tag) => (
           <div
             key={tag}
-            className="inline-block mr-1 mb-1 bg-neutral-500 dark:bg-neutral-900 rounded-full px-3 py-1"
+            className="inline-block mr-1 mb-1 bg-neutral-500 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-full px-3 py-1"
           >
             {tag}
           </div>

@@ -19,11 +19,11 @@ export type BahaTemplateProperties = {
   name: string;
   author?: string;
   briefing?: string;
-  suitableForNewHome: "0" | "1";
-  suitableForOldHome: "0" | "1";
-  suitableForWiki: "0" | "1";
-  suitableForLightMode: "0" | "1";
-  suitableForDarkMode: "0" | "1";
+  suitableForNewHome: boolean;
+  suitableForOldHome: boolean;
+  suitableForWiki: boolean;
+  suitableForLightMode: boolean;
+  suitableForDarkMode: boolean;
   demoUrl?: string;
   previewImageUrl?: string;
   tags?: string;

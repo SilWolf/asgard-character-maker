@@ -142,14 +142,14 @@
       display: list-item;
     }
   }
+}
 
-  .baha-preview-light {
-    background: #ffffff;
-    color: #464646;
-  }
+.baha-preview-light {
+  background: #ffffff;
+  color: #464646;
+}
 
-  .baha-preview-dark {
-    background: #272728;
-    color: #F7F7F7;
-  }
+.baha-preview-dark {
+  background: #272728;
+  color: #F7F7F7;
 }

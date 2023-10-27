@@ -65,16 +65,17 @@ const TemplateCreatePage = () => {
   );
 
   const handleSubmitConfig = useCallback(
-    (newValue: BahaTemplate["properties"]) => {
+    (newValue: {
+      properties: BahaTemplate["properties"];
+      detailProperties: BahaTemplate["detailProperties"];
+    }) => {
       setTemplate((prev) => {
         if (!prev) {
           return prev;
         }
         return {
           ...prev,
-          properties: {
-            ...newValue,
-          },
+          ...newValue,
         };
       });
 

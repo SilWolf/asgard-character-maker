@@ -260,7 +260,7 @@ export const copyFile = (fileId: string) => {
 
 export const patchFileProperties = (
   fileId: string,
-  properties: Record<string, string | null>
+  properties: Record<string, string | boolean | null>
 ) => {
   return googleDriveAxiosInstance.patch(
     `https://www.googleapis.com/drive/v3/files/${fileId}`,

@@ -262,17 +262,14 @@ const SheetDetailPage = () => {
   );
 
   const handleSubmitConfig = useCallback(
-    (newValue: Sheet["properties"]) => {
+    (newValue: Pick<Sheet, "properties" | "detailProperties">) => {
       setSheet((prev) => {
         if (!prev) {
           return prev;
         }
         return {
           ...prev,
-          properties: {
-            ...prev.properties,
-            ...newValue,
-          },
+          ...newValue,
         };
       });
 

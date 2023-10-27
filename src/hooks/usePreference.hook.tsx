@@ -49,7 +49,6 @@ export const MyPreferenceProvider = ({ children }: PropsWithChildren) => {
 
     // Handle view mode
     setMode(runtimePreference.viewMode);
-    document.body.setAttribute("data-view-mode", runtimePreference.viewMode);
   }, [runtimePreference, setMode, setStoredPreference]);
 
   return (
