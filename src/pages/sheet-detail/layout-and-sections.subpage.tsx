@@ -102,6 +102,7 @@ type LayoutRowDivProps = {
   sheet: Sheet;
   row: SheetLayoutRow;
   onClickEdit: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClickClone: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onClickDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
@@ -109,6 +110,7 @@ const LayoutRowDiv = ({
   sheet,
   row,
   onClickEdit,
+  onClickClone,
   onClickDelete,
 }: LayoutRowDivProps) => {
   const { name, templateName } = useMemo(() => {
@@ -152,6 +154,15 @@ const LayoutRowDiv = ({
           onClick={onClickEdit}
         >
           修改
+        </Button>
+        <Button
+          size="sm"
+          color="primary"
+          variant="plain"
+          data-id={row.id}
+          onClick={onClickClone}
+        >
+          複製
         </Button>
         <Button
           size="sm"
@@ -237,6 +248,35 @@ const SheetDetailLayoutAndSectionsSubPage = ({
     [rows, sheet.sectionsMap]
   );
 
+  const handleCloneRow = useCallback(
+    (e: React.MouseEvent) => {
+      const targetRowId = e.currentTarget.getAttribute("data-id") as string;
+      const rowIndex = rows.findIndex(({ id }) => id === targetRowId);
+      const row = rows[rowIndex];
+
+      if (!row) {
+        return;
+      }
+
+      const sectionId = row.cols[0]?.sectionIds[0];
+      if (!sectionId) {
+        return;
+      }
+
+      const section = sheet.sectionsMap[sectionId];
+      if (!section) {
+        return;
+      }
+
+      handleSubmitSection({
+        id: `section_${utilGetUniqueId()}`,
+        name: section.name + " - 複製",
+        templateId: section.templateId,
+      });
+    },
+    [handleSubmitSection, rows, sheet.sectionsMap]
+  );
+
   const handleDeleteRow = useCallback(
     (e: React.MouseEvent) => {
       const targetRowId = e.currentTarget.getAttribute("data-id") as string;
@@ -302,6 +342,7 @@ const SheetDetailLayoutAndSectionsSubPage = ({
                                 sheet={sheet}
                                 row={row}
                                 onClickEdit={handleEditRow}
+                                onClickClone={handleCloneRow}
                                 onClickDelete={handleDeleteRow}
                               />
                             </div>

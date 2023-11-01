@@ -183,57 +183,74 @@ const SheetDetailPage = () => {
 
   const handleSubmitSection = useCallback(
     async (newSection: Pick<SheetSection, "id" | "name" | "templateId">) => {
+      const fetchedTemplate = sheet?.templatesMap[newSection.templateId]
+        ? Promise.resolve(sheet.templatesMap[newSection.templateId])
+        : await getFileByIdAsJSON<BahaTemplate>(newSection.templateId).then(
+            (template): SheetTemplate => ({
+              bahaCode: template.bahaCode,
+              props: template.props,
+              name: template.properties.name,
+            })
+          );
+
+      if (!fetchedTemplate) {
+        return;
+      }
+
       return toast.promise(
-        getFileByIdAsJSON<BahaTemplate>(newSection.templateId).then(
-          (template) => {
-            setSheet((prev) => {
-              if (!prev) {
-                return prev;
-              }
+        (sheet?.templatesMap[newSection.templateId]
+          ? Promise.resolve(sheet.templatesMap[newSection.templateId])
+          : getFileByIdAsJSON<BahaTemplate>(newSection.templateId).then(
+              (template): SheetTemplate => ({
+                bahaCode: template.bahaCode,
+                props: template.props,
+                name: template.properties.name,
+              })
+            )
+        ).then((template) => {
+          setSheet((prev) => {
+            if (!prev) {
+              return prev;
+            }
 
-              return {
-                ...prev,
-                templatesMap: {
-                  ...prev.templatesMap,
-                  [newSection.templateId]: {
-                    bahaCode: template.bahaCode,
-                    props: template.props,
-                    name: template.properties.name,
-                  },
+            return {
+              ...prev,
+              templatesMap: {
+                ...prev.templatesMap,
+                [newSection.templateId]: template,
+              },
+              sectionsMap: {
+                ...prev.sectionsMap,
+                [newSection.id]: {
+                  id: newSection.id,
+                  name: newSection.name,
+                  templateId: newSection.templateId,
+                  value: prev.sectionsMap[newSection.id]?.value ?? [{}],
                 },
-                sectionsMap: {
-                  ...prev.sectionsMap,
-                  [newSection.id]: {
-                    id: newSection.id,
-                    name: newSection.name,
-                    templateId: newSection.templateId,
-                    value: prev.sectionsMap[newSection.id]?.value ?? [{}],
-                  },
-                },
-                layout: [
-                  ...prev.layout,
-                  ...(!prev.sectionsMap[newSection.id]
-                    ? [
-                        {
-                          id: `row_${utilGetUniqueId()}`,
-                          cols: [
-                            {
-                              id: `col_${utilGetUniqueId()}`,
-                              width: "100%",
-                              sectionIds: [newSection.id],
-                            },
-                          ],
-                        },
-                      ]
-                    : []),
-                ],
-              };
-            });
-            setActiveTab(newSection.id);
+              },
+              layout: [
+                ...prev.layout,
+                ...(!prev.sectionsMap[newSection.id]
+                  ? [
+                      {
+                        id: `row_${utilGetUniqueId()}`,
+                        cols: [
+                          {
+                            id: `col_${utilGetUniqueId()}`,
+                            width: "100%",
+                            sectionIds: [newSection.id],
+                          },
+                        ],
+                      },
+                    ]
+                  : []),
+              ],
+            };
+          });
+          // setActiveTab(newSection.id);
 
-            toggleDirty(true);
-          }
-        ),
+          toggleDirty(true);
+        }),
         {
           loading: (
             <span>
@@ -245,7 +262,7 @@ const SheetDetailPage = () => {
         }
       );
     },
-    [toggleDirty]
+    [sheet?.templatesMap, toggleDirty]
   );
 
   const handleSubmitConfig = useCallback(
