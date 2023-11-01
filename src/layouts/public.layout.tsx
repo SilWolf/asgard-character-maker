@@ -37,6 +37,12 @@ const PublicLayout = ({ children }: Props) => {
                   模板市場
                 </Link>
                 <Link
+                  to="/examples"
+                  className="inline-block py-1 text-neutral-100 hover:text-white no-underline"
+                >
+                  實用範例
+                </Link>
+                <Link
                   to="/preference"
                   className="inline-block py-1 text-neutral-100 hover:text-white no-underline"
                 >

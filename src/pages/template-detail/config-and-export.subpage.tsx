@@ -157,6 +157,17 @@ const TemplateDetailConfigAndExportSubPage = ({
           </div>
         </form>
 
+        <section className="space-y-6">
+          <h2 className="text-2xl">匯出</h2>
+          <Button
+            variant="outlined"
+            color="neutral"
+            onClick={handleClickDownloadConfigJsonFile}
+          >
+            下載模板設定檔 (.json)
+          </Button>
+        </section>
+
         <form className="space-y-6" onBlur={handleBlurForm}>
           <h2 className="text-2xl">進階設置</h2>
 
@@ -286,17 +297,6 @@ const TemplateDetailConfigAndExportSubPage = ({
             </FormHelperText>
           </FormControl>
         </form>
-
-        <section className="space-y-6">
-          <h2 className="text-2xl">匯出</h2>
-          <Button
-            variant="outlined"
-            color="neutral"
-            onClick={handleClickDownloadConfigJsonFile}
-          >
-            下載模板設定檔 (.json)
-          </Button>
-        </section>
 
         <section className="space-y-6">
           <h2 className="text-2xl">其他操作</h2>

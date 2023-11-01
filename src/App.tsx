@@ -16,6 +16,8 @@ import PrivacyPolicyPage from "./pages/privacy-policy";
 import MarketplaceEditPropertiesPage from "./pages/marketplace/editProperties.page";
 import MarketplaceDetailPage from "./pages/marketplace-detail/index.page";
 import PreferencePage from "./pages/preference/index.page";
+import SheetDetailPublishPage from "./pages/sheet-detail/publish.page";
+import ExamplesPage from "./pages/examples/index.page";
 
 const publicRouter = createBrowserRouter([
   {
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
     element: <SheetDetailPage />,
   },
   {
+    path: "/sheet/:sheetId/admin-publish",
+    element: <SheetDetailPublishPage />,
+  },
+  {
     path: "/template/:templateId",
     element: <TemplateDetailPage />,
   },
@@ -49,6 +55,10 @@ const router = createBrowserRouter([
   {
     path: "/marketplace",
     element: <MarketplacePage />,
+  },
+  {
+    path: "/examples",
+    element: <ExamplesPage />,
   },
   {
     path: "/developer",
