@@ -207,7 +207,8 @@ const LayoutRowDiv = ({
 type Props = {
   sheet: Sheet;
   onSubmitSection: (
-    newSection: Pick<SheetSection, "id" | "name" | "templateId">
+    newSection: Pick<SheetSection, "id" | "name" | "templateId"> &
+      Partial<Pick<SheetSection, "value">>
   ) => Promise<unknown>;
   onSubmitTemplate: (
     newSection: SheetTemplate & { id: string }
@@ -223,26 +224,27 @@ const SheetDetailLayoutAndSectionsSubPage = ({
 }: Props) => {
   const { openDialog } = useDialog();
 
-  const [rows, setRows] = useState<Sheet["layout"]>([]);
-
   const inUseTemplates = useMemo(
     () => Object.entries(sheet.templatesMap),
     [sheet.templatesMap]
   );
 
-  const handleDragEnd = useCallback((result: DropResult) => {
-    setRows((prev) => {
+  const handleDragEnd = useCallback(
+    (result: DropResult) => {
       if (!result.destination) {
-        return prev;
+        return;
       }
 
-      return utilArrayOrder(
-        prev,
-        result.source.index,
-        result.destination.index
+      onSubmitLayout(
+        utilArrayOrder(
+          sheet.layout,
+          result.source.index,
+          result.destination.index
+        )
       );
-    });
-  }, []);
+    },
+    [onSubmitLayout, sheet.layout]
+  );
 
   const [editSectionDefaultValues, setEditSectionDefaultValues] = useState<
     Pick<SheetSection, "id" | "name" | "templateId"> | undefined
@@ -252,7 +254,10 @@ const SheetDetailLayoutAndSectionsSubPage = ({
     []
   );
   const handleSubmitSection = useCallback(
-    (newValue: Pick<SheetSection, "id" | "name" | "templateId">) => {
+    (
+      newValue: Pick<SheetSection, "id" | "name" | "templateId"> &
+        Partial<Pick<SheetSection, "value">>
+    ) => {
       return onSubmitSection(newValue).then(() => {
         setEditSectionDefaultValues(undefined);
       });
@@ -263,7 +268,7 @@ const SheetDetailLayoutAndSectionsSubPage = ({
   const handleEditRow = useCallback(
     (e: React.MouseEvent) => {
       const targetRowId = e.currentTarget.getAttribute("data-id") as string;
-      const row = rows.find(({ id }) => id === targetRowId);
+      const row = sheet.layout.find(({ id }) => id === targetRowId);
       if (!row) {
         return;
       }
@@ -280,14 +285,14 @@ const SheetDetailLayoutAndSectionsSubPage = ({
 
       setEditSectionDefaultValues(section);
     },
-    [rows, sheet.sectionsMap]
+    [sheet.layout, sheet.sectionsMap]
   );
 
   const handleCloneRow = useCallback(
     (e: React.MouseEvent) => {
       const targetRowId = e.currentTarget.getAttribute("data-id") as string;
-      const rowIndex = rows.findIndex(({ id }) => id === targetRowId);
-      const row = rows[rowIndex];
+      const rowIndex = sheet.layout.findIndex(({ id }) => id === targetRowId);
+      const row = sheet.layout[rowIndex];
 
       if (!row) {
         return;
@@ -307,9 +312,10 @@ const SheetDetailLayoutAndSectionsSubPage = ({
         id: `section_${utilGetUniqueId()}`,
         name: section.name + " - 複製",
         templateId: section.templateId,
+        value: JSON.parse(JSON.stringify(section.value)),
       });
     },
-    [handleSubmitSection, rows, sheet.sectionsMap]
+    [handleSubmitSection, sheet.layout, sheet.sectionsMap]
   );
 
   const handleDeleteRow = useCallback(
@@ -320,12 +326,12 @@ const SheetDetailLayoutAndSectionsSubPage = ({
         title: "刪除區塊",
         content: "確定要刪除區塊嗎？",
         onYes: async () => {
-          const newRows = rows.filter(({ id }) => id !== targetRowId);
+          const newRows = sheet.layout.filter(({ id }) => id !== targetRowId);
           return onSubmitLayout(newRows, true);
         },
       });
     },
-    [onSubmitLayout, openDialog, rows]
+    [onSubmitLayout, openDialog, sheet.layout]
   );
 
   const [editTemplateDefaultValues, setEditTemplateDefaultValues] = useState<
@@ -370,14 +376,6 @@ const SheetDetailLayoutAndSectionsSubPage = ({
     [sheet.templatesMap]
   );
 
-  const handleClickSaveLayout = useCallback(() => {
-    onSubmitLayout(rows);
-  }, [onSubmitLayout, rows]);
-
-  useEffect(() => {
-    setRows(sheet.layout);
-  }, [sheet.layout]);
-
   return (
     <>
       <div className="container mx-auto max-w-screen-md">
@@ -396,7 +394,7 @@ const SheetDetailLayoutAndSectionsSubPage = ({
               <Droppable droppableId="droppable">
                 {(provided) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {rows.map((row, index) => (
+                    {sheet.layout.map((row, index) => (
                       <Draggable
                         key={row.id}
                         draggableId={row.id}
@@ -432,12 +430,6 @@ const SheetDetailLayoutAndSectionsSubPage = ({
                 )}
               </Droppable>
             </DragDropContext>
-
-            <div>
-              <Button color="success" onClick={handleClickSaveLayout}>
-                儲存新的佈局
-              </Button>
-            </div>
           </div>
 
           <div className="space-y-6">

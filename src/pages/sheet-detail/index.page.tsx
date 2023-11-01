@@ -182,7 +182,10 @@ const SheetDetailPage = () => {
   );
 
   const handleSubmitSection = useCallback(
-    async (newSection: Pick<SheetSection, "id" | "name" | "templateId">) => {
+    async (
+      newSection: Pick<SheetSection, "id" | "name" | "templateId"> &
+        Partial<Pick<SheetSection, "value">>
+    ) => {
       const fetchedTemplate = sheet?.templatesMap[newSection.templateId]
         ? Promise.resolve(sheet.templatesMap[newSection.templateId])
         : await getFileByIdAsJSON<BahaTemplate>(newSection.templateId).then(
@@ -225,7 +228,8 @@ const SheetDetailPage = () => {
                   id: newSection.id,
                   name: newSection.name,
                   templateId: newSection.templateId,
-                  value: prev.sectionsMap[newSection.id]?.value ?? [{}],
+                  value: newSection.value ??
+                    prev.sectionsMap[newSection.id]?.value ?? [{}],
                 },
               },
               layout: [
