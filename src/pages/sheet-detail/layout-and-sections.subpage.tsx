@@ -5,10 +5,11 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
-  Option,
+  Modal,
+  ModalDialog,
+  DialogTitle,
 } from "@mui/joy";
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   DragDropContext,
   Draggable,
@@ -19,17 +20,95 @@ import { useAsyncFn } from "react-use";
 import useCustomTemplates from "@/hooks/useCustomTemplates.hook";
 import { utilGetUniqueId } from "@/utils/string.util";
 import useDialog from "@/hooks/useDialog.hook";
+import { useForm } from "react-hook-form";
+
+type SectionFormProps = {
+  onSubmit: (
+    newValue: Pick<SheetSection, "id" | "name" | "templateId">
+  ) => Promise<unknown>;
+  defaultValues?: Partial<Pick<SheetSection, "id" | "name" | "templateId">>;
+  count?: number;
+  submitButtonChildren?: React.ReactNode;
+};
+
+const SectionForm = ({
+  onSubmit,
+  defaultValues,
+  count,
+  submitButtonChildren = "新增區塊",
+}: SectionFormProps) => {
+  const { data: templates } = useCustomTemplates();
+  const [{ loading: isSubmitting }, handleSubmitAsynFn] = useAsyncFn(onSubmit, [
+    onSubmit,
+  ]);
+
+  const {
+    register,
+    reset,
+    handleSubmit: handleRHFSubmit,
+  } = useForm<Pick<SheetSection, "id" | "name" | "templateId">>({
+    defaultValues,
+  });
+
+  const namePlaceholder = useMemo(() => `區塊${(count ?? 0) + 1}`, [count]);
+
+  const handleSubmit = useMemo(
+    () =>
+      handleRHFSubmit((newValue) => {
+        handleSubmitAsynFn({
+          ...newValue,
+          id: newValue.id || `section_${utilGetUniqueId()}`,
+        });
+      }),
+    [handleRHFSubmit, handleSubmitAsynFn]
+  );
+
+  useEffect(() => {
+    console.log(defaultValues);
+    reset(defaultValues);
+  }, [defaultValues, reset]);
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <FormControl required>
+        <FormLabel>選擇一個模板</FormLabel>
+        <select
+          className="my-select"
+          placeholder="選擇…"
+          {...register("templateId", { required: true })}
+          required
+        >
+          {templates?.files.map((template) => (
+            <option key={template.id} value={template.id}>
+              {template.properties.name}
+            </option>
+          ))}
+        </select>
+      </FormControl>
+
+      <FormControl>
+        <FormLabel>區塊名稱</FormLabel>
+        <Input placeholder={namePlaceholder} {...register("name")} />
+      </FormControl>
+
+      <Button type="submit" color="success" loading={isSubmitting}>
+        {submitButtonChildren}
+      </Button>
+    </form>
+  );
+};
 
 type LayoutRowDivProps = {
   sheet: Sheet;
   row: SheetLayoutRow;
-  onClickEditName: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClickEdit: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onClickDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
+
 const LayoutRowDiv = ({
   sheet,
   row,
-  onClickEditName,
+  onClickEdit,
   onClickDelete,
 }: LayoutRowDivProps) => {
   const { name, templateName } = useMemo(() => {
@@ -70,9 +149,9 @@ const LayoutRowDiv = ({
           color="primary"
           variant="plain"
           data-id={row.id}
-          onClick={onClickEditName}
+          onClick={onClickEdit}
         >
-          重新命名
+          修改
         </Button>
         <Button
           size="sm"
@@ -90,18 +169,17 @@ const LayoutRowDiv = ({
 
 type Props = {
   sheet: Sheet;
-  onSubmitSection: (newSection: SheetSection) => Promise<unknown>;
+  onSubmitSection: (
+    newSection: Pick<SheetSection, "id" | "name" | "templateId">
+  ) => Promise<unknown>;
   onSubmitLayout: (newLayout: Sheet["layout"], fullRefresh?: boolean) => void;
-  onEditSection: (sectionId: string, newSection: SheetSection) => void;
 };
 
 const SheetDetailLayoutAndSectionsSubPage = ({
   sheet,
   onSubmitSection,
   onSubmitLayout,
-  onEditSection,
 }: Props) => {
-  const { data: templates } = useCustomTemplates();
   const { openDialog } = useDialog();
 
   const [rows, setRows] = useState<Sheet["layout"]>([]);
@@ -120,33 +198,20 @@ const SheetDetailLayoutAndSectionsSubPage = ({
     });
   }, []);
 
-  const namePlaceholder = useMemo(
-    () => `區塊${Object.entries(sheet.sectionsMap).length + 1}`,
-    [sheet.sectionsMap]
+  const [editSectionDefaultValues, setEditSectionDefaultValues] = useState<
+    Pick<SheetSection, "id" | "name" | "templateId"> | undefined
+  >();
+  const clearSectionDefaultValues = useCallback(
+    () => setEditSectionDefaultValues(undefined),
+    []
   );
-  const [{ loading: isSubmittingSection }, onSubmitSectionAsyncFn] =
-    useAsyncFn(onSubmitSection);
-  const handleSubmitNewSection = useCallback(
-    (e: FormEvent) => {
-      e.preventDefault();
-
-      const form = e.currentTarget as HTMLFormElement;
-
-      const formData = new FormData(e.currentTarget as HTMLFormElement);
-      const formJson = Object.fromEntries(
-        formData.entries()
-      ) as unknown as SheetSection;
-
-      onSubmitSectionAsyncFn({
-        id: `section_${utilGetUniqueId()}`,
-        name: formJson.name || namePlaceholder,
-        templateId: formJson.templateId,
-        value: [{}],
-      }).then(() => {
-        form.reset();
+  const handleSubmitSection = useCallback(
+    (newValue: Pick<SheetSection, "id" | "name" | "templateId">) => {
+      return onSubmitSection(newValue).then(() => {
+        setEditSectionDefaultValues(undefined);
       });
     },
-    [namePlaceholder, onSubmitSectionAsyncFn]
+    [onSubmitSection]
   );
 
   const handleEditRow = useCallback(
@@ -167,15 +232,9 @@ const SheetDetailLayoutAndSectionsSubPage = ({
         return;
       }
 
-      const newName = prompt("新的區域名稱", section.name);
-      if (newName) {
-        onEditSection(section.id, {
-          ...section,
-          name: newName,
-        });
-      }
+      setEditSectionDefaultValues(section);
     },
-    [onEditSection, rows, sheet.sectionsMap]
+    [rows, sheet.sectionsMap]
   );
 
   const handleDeleteRow = useCallback(
@@ -203,89 +262,84 @@ const SheetDetailLayoutAndSectionsSubPage = ({
   }, [sheet.layout]);
 
   return (
-    <div className="container mx-auto max-w-screen-md">
-      <div className="space-y-12">
-        <div className="space-y-6">
-          <h2 className="text-2xl">新的區塊</h2>
-
-          <form onSubmit={handleSubmitNewSection}>
-            <div className="mx-auto container max-w-screen-md space-y-6">
-              <h2 className="text-xl">新增區塊</h2>
-              <div className="shadow shadow-neutral-400 p-8 rounded space-y-6">
-                <FormControl required>
-                  <FormLabel>選擇一個模板</FormLabel>
-                  <Select placeholder="選擇…" name="templateId">
-                    {templates?.files.map((template) => (
-                      <Option key={template.id} value={template.id}>
-                        {template.properties.name}
-                      </Option>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <FormControl>
-                  <FormLabel>區塊名稱</FormLabel>
-                  <Input placeholder={namePlaceholder} name="name" />
-                </FormControl>
-
-                <Button
-                  type="submit"
-                  color="success"
-                  loading={isSubmittingSection}
-                >
-                  新增區塊
-                </Button>
-              </div>
+    <>
+      <div className="container mx-auto max-w-screen-md">
+        <div className="space-y-12">
+          <div className="mx-auto container max-w-screen-md space-y-6">
+            <h2 className="text-2xl">新增區塊</h2>
+            <div className="shadow shadow-neutral-400 p-8 rounded">
+              <SectionForm onSubmit={handleSubmitSection} />
             </div>
-          </form>
-        </div>
-        <div className="space-y-6">
-          <h2 className="text-2xl">佈局</h2>
+          </div>
 
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId="droppable">
-              {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {rows.map((row, index) => (
-                    <Draggable key={row.id} draggableId={row.id} index={index}>
-                      {(provided) => (
-                        <div
-                          className="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded px-2 py-3 mb-2 flex items-center gap-x-2"
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                        >
+          <div className="space-y-6">
+            <h2 className="text-2xl">佈局</h2>
+
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {rows.map((row, index) => (
+                      <Draggable
+                        key={row.id}
+                        draggableId={row.id}
+                        index={index}
+                      >
+                        {(provided) => (
                           <div
-                            className="shrink-0"
-                            {...provided.dragHandleProps}
+                            className="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded px-2 py-3 mb-2 flex items-center gap-x-2"
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
                           >
-                            <i className="uil uil-draggabledots"></i>
+                            <div
+                              className="shrink-0"
+                              {...provided.dragHandleProps}
+                            >
+                              <i className="uil uil-draggabledots"></i>
+                            </div>
+                            <div className="flex-1">
+                              <LayoutRowDiv
+                                sheet={sheet}
+                                row={row}
+                                onClickEdit={handleEditRow}
+                                onClickDelete={handleDeleteRow}
+                              />
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <LayoutRowDiv
-                              sheet={sheet}
-                              row={row}
-                              onClickEditName={handleEditRow}
-                              onClickDelete={handleDeleteRow}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
 
-          <div>
-            <Button color="success" onClick={handleClickSaveLayout}>
-              儲存新的佈局
-            </Button>
+            <div>
+              <Button color="success" onClick={handleClickSaveLayout}>
+                儲存新的佈局
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <Modal
+        open={!!editSectionDefaultValues}
+        onClose={clearSectionDefaultValues}
+      >
+        <ModalDialog>
+          <DialogTitle>修改現有區塊</DialogTitle>
+          <div className="w-[480px] max-w-full">
+            <SectionForm
+              defaultValues={editSectionDefaultValues}
+              onSubmit={handleSubmitSection}
+              submitButtonChildren="修改區塊"
+            />
+          </div>
+        </ModalDialog>
+      </Modal>
+    </>
   );
 };
 

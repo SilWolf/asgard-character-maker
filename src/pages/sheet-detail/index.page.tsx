@@ -11,7 +11,6 @@ import {
 } from "@/helpers/google-drive.helper";
 import { useAsyncFn, useEffectOnce, useToggle } from "react-use";
 import { Link, useParams, unstable_usePrompt } from "react-router-dom";
-import { SheetNewSingle } from "./new-single.subpage";
 import {
   Sheet,
   SheetProperties,
@@ -182,10 +181,10 @@ const SheetDetailPage = () => {
     [toggleDirty]
   );
 
-  const handleSubmitNewSection = useCallback(
-    async (newSingle: SheetNewSingle) => {
+  const handleSubmitSection = useCallback(
+    async (newSection: Pick<SheetSection, "id" | "name" | "templateId">) => {
       return toast.promise(
-        getFileByIdAsJSON<BahaTemplate>(newSingle.templateId).then(
+        getFileByIdAsJSON<BahaTemplate>(newSection.templateId).then(
           (template) => {
             setSheet((prev) => {
               if (!prev) {
@@ -196,7 +195,7 @@ const SheetDetailPage = () => {
                 ...prev,
                 templatesMap: {
                   ...prev.templatesMap,
-                  [newSingle.templateId]: {
+                  [newSection.templateId]: {
                     bahaCode: template.bahaCode,
                     props: template.props,
                     name: template.properties.name,
@@ -204,29 +203,33 @@ const SheetDetailPage = () => {
                 },
                 sectionsMap: {
                   ...prev.sectionsMap,
-                  [newSingle.id]: {
-                    id: newSingle.id,
-                    name: newSingle.name,
-                    templateId: newSingle.templateId,
-                    value: [{}],
+                  [newSection.id]: {
+                    id: newSection.id,
+                    name: newSection.name,
+                    templateId: newSection.templateId,
+                    value: prev.sectionsMap[newSection.id]?.value ?? [{}],
                   },
                 },
                 layout: [
                   ...prev.layout,
-                  {
-                    id: `row_${utilGetUniqueId()}`,
-                    cols: [
-                      {
-                        id: `col_${utilGetUniqueId()}`,
-                        width: "100%",
-                        sectionIds: [newSingle.id],
-                      },
-                    ],
-                  },
+                  ...(!prev.sectionsMap[newSection.id]
+                    ? [
+                        {
+                          id: `row_${utilGetUniqueId()}`,
+                          cols: [
+                            {
+                              id: `col_${utilGetUniqueId()}`,
+                              width: "100%",
+                              sectionIds: [newSection.id],
+                            },
+                          ],
+                        },
+                      ]
+                    : []),
                 ],
               };
             });
-            setActiveTab(newSingle.id);
+            setActiveTab(newSection.id);
 
             toggleDirty(true);
           }
@@ -234,33 +237,13 @@ const SheetDetailPage = () => {
         {
           loading: (
             <span>
-              正在創建區塊 <span className="bold">{newSingle.name}</span>
+              正在創建區塊 <span className="bold">{newSection.name}</span>
             </span>
           ),
           success: "已成功創建",
           error: "創建失敗，下載模板失敗",
         }
       );
-    },
-    [toggleDirty]
-  );
-
-  const handleEditSection = useCallback(
-    (sectionId: string, newSection: SheetSection) => {
-      setSheet((prev) => {
-        if (!prev) {
-          return prev;
-        }
-
-        return {
-          ...prev,
-          sectionsMap: {
-            ...prev.sectionsMap,
-            [sectionId]: newSection,
-          },
-        };
-      });
-      toggleDirty(true);
     },
     [toggleDirty]
   );
@@ -515,9 +498,8 @@ const SheetDetailPage = () => {
         >
           <SheetDetailLayoutAndSectionsSubPage
             sheet={sheet}
-            onSubmitSection={handleSubmitNewSection}
+            onSubmitSection={handleSubmitSection}
             onSubmitLayout={handleSubmitNewLayout}
-            onEditSection={handleEditSection}
           />
         </section>
 
@@ -527,7 +509,7 @@ const SheetDetailPage = () => {
             className="hidden data-[active='1']:block"
             data-active={activeTab === section.id ? "1" : "0"}
           >
-            <div className="h-[calc(100vh-320px)]">
+            <div className="h-[calc(100vh-210px)]">
               <ErrorBoundary
                 fallbackRender={() => (
                   <Alert color="danger">

@@ -228,7 +228,7 @@ const TemplateCreatePage = () => {
           className="hidden data-[active='1']:block"
           data-active={activeTab === "1" ? "1" : "0"}
         >
-          <div className="h-[calc(100vh-320px)]">
+          <div className="h-[calc(100vh-210px)]">
             <TemplateDetailPropsSubPage
               template={template}
               onSubmit={handleSubmitProps}

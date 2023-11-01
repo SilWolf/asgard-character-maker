@@ -55,6 +55,19 @@
       padding: 3px;
       box-sizing: content-box;
     }
+
+    table[border='1'] {
+      @apply border border-collapse;
+      border-color: gray;
+
+      & td {
+        @apply border;
+      }
+    }
+
+    img {
+      @apply inline-block;
+    }
   }
 
   .baha-preview-old-home {
@@ -99,6 +112,19 @@
 
     li {
       display: list-item;
+    }
+
+    table[border='1'] {
+      @apply border border-collapse;
+      border-color: gray;
+
+      & td {
+        @apply border;
+      }
+    }
+
+    img {
+      @apply inline-block;
     }
   }
 
@@ -154,6 +180,24 @@
     li {
       display: list-item;
     }
+
+    table[border='1'] {
+      @apply border border-collapse;
+      border-color: gray;
+
+      & td {
+        @apply border;
+      }
+    }
+
+    img {
+      @apply inline-block;
+    }
+  }
+
+  .my-select {
+    @apply px-2 border border-[#d3d8dc] rounded bg-[#FBFCFE] min-h-[2.25em];
+    box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px, rgba(21, 21, 21, 0.08) 0px 1px 2px 0px;
   }
 }
 

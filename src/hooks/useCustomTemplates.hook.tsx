@@ -11,6 +11,7 @@ const useCustomTemplates = () => {
     queryFn: () =>
       getFilesByFolderId(googleDriveTemplatesFolderId as unknown as string),
     enabled: !!googleDriveTemplatesFolderId,
+    staleTime: 2 * 60 * 1000,
   });
 
   return {
