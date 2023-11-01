@@ -28,8 +28,6 @@ const MarketplaceItemCard = ({
   const [{ loading: isDownloading }, handleClickDownload] =
     useAsyncFn(onClickDownload);
 
-  console.log(properties);
-
   return (
     <div className="space-y-4">
       <img className="bg-neutral-200" src={properties.previewImageUrl} />

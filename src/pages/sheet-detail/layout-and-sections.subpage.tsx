@@ -1,4 +1,9 @@
-import { Sheet, SheetLayoutRow, SheetSection } from "@/types/Sheet.type";
+import {
+  Sheet,
+  SheetLayoutRow,
+  SheetSection,
+  SheetTemplate,
+} from "@/types/Sheet.type";
 import { utilArrayOrder } from "@/utils/array.util";
 import {
   Button,
@@ -8,6 +13,7 @@ import {
   Modal,
   ModalDialog,
   DialogTitle,
+  Table,
 } from "@mui/joy";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -21,8 +27,10 @@ import useCustomTemplates from "@/hooks/useCustomTemplates.hook";
 import { utilGetUniqueId } from "@/utils/string.util";
 import useDialog from "@/hooks/useDialog.hook";
 import { useForm } from "react-hook-form";
+import EditTemplateModal from "./editTemplate.modal";
 
 type SectionFormProps = {
+  sheet: Sheet;
   onSubmit: (
     newValue: Pick<SheetSection, "id" | "name" | "templateId">
   ) => Promise<unknown>;
@@ -32,6 +40,7 @@ type SectionFormProps = {
 };
 
 const SectionForm = ({
+  sheet,
   onSubmit,
   defaultValues,
   count,
@@ -50,6 +59,15 @@ const SectionForm = ({
     defaultValues,
   });
 
+  const templatesInSheet = useMemo(
+    () =>
+      Object.entries(sheet.templatesMap).map(([key, value]) => ({
+        key,
+        value,
+      })),
+    [sheet.templatesMap]
+  );
+
   const namePlaceholder = useMemo(() => `區塊${(count ?? 0) + 1}`, [count]);
 
   const handleSubmit = useMemo(
@@ -64,7 +82,6 @@ const SectionForm = ({
   );
 
   useEffect(() => {
-    console.log(defaultValues);
     reset(defaultValues);
   }, [defaultValues, reset]);
 
@@ -78,11 +95,20 @@ const SectionForm = ({
           {...register("templateId", { required: true })}
           required
         >
-          {templates?.files.map((template) => (
-            <option key={template.id} value={template.id}>
-              {template.properties.name}
-            </option>
-          ))}
+          <optgroup label="已匯入的模板">
+            {templatesInSheet.map(({ key, value }) => (
+              <option key={key} value={key}>
+                {value.name}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="自定義的模板">
+            {templates?.files.map((template) => (
+              <option key={template.id} value={template.id}>
+                {template.properties.name}
+              </option>
+            ))}
+          </optgroup>
         </select>
       </FormControl>
 
@@ -183,17 +209,26 @@ type Props = {
   onSubmitSection: (
     newSection: Pick<SheetSection, "id" | "name" | "templateId">
   ) => Promise<unknown>;
+  onSubmitTemplate: (
+    newSection: SheetTemplate & { id: string }
+  ) => Promise<unknown>;
   onSubmitLayout: (newLayout: Sheet["layout"], fullRefresh?: boolean) => void;
 };
 
 const SheetDetailLayoutAndSectionsSubPage = ({
   sheet,
   onSubmitSection,
+  onSubmitTemplate,
   onSubmitLayout,
 }: Props) => {
   const { openDialog } = useDialog();
 
   const [rows, setRows] = useState<Sheet["layout"]>([]);
+
+  const inUseTemplates = useMemo(
+    () => Object.entries(sheet.templatesMap),
+    [sheet.templatesMap]
+  );
 
   const handleDragEnd = useCallback((result: DropResult) => {
     setRows((prev) => {
@@ -293,6 +328,48 @@ const SheetDetailLayoutAndSectionsSubPage = ({
     [onSubmitLayout, openDialog, rows]
   );
 
+  const [editTemplateDefaultValues, setEditTemplateDefaultValues] = useState<
+    (SheetTemplate & { id: string }) | undefined
+  >();
+  const clearTemplateDefaultValues = useCallback(
+    () => setEditTemplateDefaultValues(undefined),
+    []
+  );
+  const handleSubmitTemplate = useCallback(
+    (newBahaCode: string) => {
+      if (!editTemplateDefaultValues) {
+        return Promise.resolve();
+      }
+
+      return onSubmitTemplate({
+        ...editTemplateDefaultValues,
+        bahaCode: newBahaCode,
+      }).then(() => {
+        setEditTemplateDefaultValues(undefined);
+      });
+    },
+    [editTemplateDefaultValues, onSubmitTemplate]
+  );
+
+  const handleEditTemplate = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const templateId = e.currentTarget.getAttribute(
+        "data-template-id"
+      ) as string;
+      const template = sheet.templatesMap[templateId];
+
+      if (!template) {
+        return;
+      }
+
+      setEditTemplateDefaultValues({
+        ...template,
+        id: templateId,
+      });
+    },
+    [sheet.templatesMap]
+  );
+
   const handleClickSaveLayout = useCallback(() => {
     onSubmitLayout(rows);
   }, [onSubmitLayout, rows]);
@@ -308,7 +385,7 @@ const SheetDetailLayoutAndSectionsSubPage = ({
           <div className="mx-auto container max-w-screen-md space-y-6">
             <h2 className="text-2xl">新增區塊</h2>
             <div className="shadow shadow-neutral-400 p-8 rounded">
-              <SectionForm onSubmit={handleSubmitSection} />
+              <SectionForm sheet={sheet} onSubmit={handleSubmitSection} />
             </div>
           </div>
 
@@ -362,6 +439,39 @@ const SheetDetailLayoutAndSectionsSubPage = ({
               </Button>
             </div>
           </div>
+
+          <div className="space-y-6">
+            <h2 className="text-2xl">已匯入的模板</h2>
+
+            <Table>
+              <thead>
+                <tr>
+                  <th>模板名稱</th>
+                  <th>
+                    <p className="text-right">操作</p>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {inUseTemplates?.map(([templateId, template]) => (
+                  <tr key={templateId}>
+                    <td>{template.name}</td>
+                    <td className="text-right">
+                      <div className="space-x-1">
+                        <Button
+                          variant="plain"
+                          data-template-id={templateId}
+                          onClick={handleEditTemplate}
+                        >
+                          修改
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
         </div>
       </div>
 
@@ -373,6 +483,7 @@ const SheetDetailLayoutAndSectionsSubPage = ({
           <DialogTitle>修改現有區塊</DialogTitle>
           <div className="w-[480px] max-w-full">
             <SectionForm
+              sheet={sheet}
               defaultValues={editSectionDefaultValues}
               onSubmit={handleSubmitSection}
               submitButtonChildren="修改區塊"
@@ -380,6 +491,13 @@ const SheetDetailLayoutAndSectionsSubPage = ({
           </div>
         </ModalDialog>
       </Modal>
+
+      <EditTemplateModal
+        open={!!editTemplateDefaultValues}
+        onClose={clearTemplateDefaultValues}
+        onSubmit={handleSubmitTemplate}
+        defaultBahaCode={editTemplateDefaultValues?.bahaCode ?? ""}
+      />
     </>
   );
 };

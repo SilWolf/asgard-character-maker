@@ -265,6 +265,33 @@ const SheetDetailPage = () => {
     [sheet?.templatesMap, toggleDirty]
   );
 
+  const handleSubmitTemplate = useCallback(
+    (newTemplate: SheetTemplate & { id: string }) => {
+      const { id, ...template } = newTemplate;
+
+      setSheet((prev) => {
+        if (!prev) {
+          return;
+        }
+
+        return {
+          ...prev,
+          templatesMap: {
+            ...prev.templatesMap,
+            [id]: {
+              ...prev.templatesMap[id],
+              ...template,
+            },
+          },
+        };
+      });
+      toggleDirty(true);
+
+      return Promise.resolve();
+    },
+    [toggleDirty]
+  );
+
   const handleSubmitConfig = useCallback(
     (newValue: Pick<Sheet, "properties" | "detailProperties">) => {
       setSheet((prev) => {
@@ -368,13 +395,13 @@ const SheetDetailPage = () => {
           <div className="shrink-0">
             <Tabs value={activeTab} onChange={handleChangeTab}>
               <TabList>
-                <Tab value="0" variant="plain" color="neutral">
+                <Tab value="0" variant="plain" color="primary">
                   總覽
                 </Tab>
                 <Tab
                   value="layout-and-sections"
                   variant="plain"
-                  color="neutral"
+                  color="primary"
                 >
                   區塊＆佈局
                 </Tab>
@@ -402,7 +429,7 @@ const SheetDetailPage = () => {
           <div className="shrink-0">
             <Tabs value={activeTab} onChange={handleChangeTab}>
               <TabList>
-                <Tab value="configAndExport" variant="plain" color="neutral">
+                <Tab value="configAndExport" variant="plain" color="primary">
                   設定＆匯出
                 </Tab>
               </TabList>
@@ -517,6 +544,7 @@ const SheetDetailPage = () => {
             sheet={sheet}
             onSubmitSection={handleSubmitSection}
             onSubmitLayout={handleSubmitNewLayout}
+            onSubmitTemplate={handleSubmitTemplate}
           />
         </section>
 
