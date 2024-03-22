@@ -37,7 +37,29 @@ const SheetDetailConfigAndExportSubPage = ({
   });
 
   const handleBlurForm = useCallback(() => {
-    onSubmit(getValues());
+    const { detailProperties, ...otherValues } = getValues();
+
+    console.log(detailProperties.imageUrls);
+
+    console.log({
+      ...otherValues,
+      detailProperties: {
+        ...detailProperties,
+        imageUrls: detailProperties.imageUrls
+          ? (detailProperties.imageUrls as unknown as string).split(",")
+          : [],
+      },
+    });
+
+    onSubmit({
+      ...otherValues,
+      detailProperties: {
+        ...detailProperties,
+        imageUrls: detailProperties.imageUrls
+          ? (detailProperties.imageUrls as unknown as string).split(",")
+          : [],
+      },
+    });
   }, [getValues, onSubmit]);
 
   const finalBahaCode = useMemo(() => {
@@ -46,6 +68,7 @@ const SheetDetailConfigAndExportSubPage = ({
     }
 
     return sheet.layout
+      .filter((row) => !row.hidden)
       .map((row) =>
         row.cols
           .map((col) =>

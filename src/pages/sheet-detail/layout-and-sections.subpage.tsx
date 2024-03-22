@@ -127,6 +127,7 @@ const SectionForm = ({
 type LayoutRowDivProps = {
   sheet: Sheet;
   row: SheetLayoutRow;
+  onClickVisibility: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onClickEdit: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onClickClone: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onClickDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -135,6 +136,7 @@ type LayoutRowDivProps = {
 const LayoutRowDiv = ({
   sheet,
   row,
+  onClickVisibility,
   onClickEdit,
   onClickClone,
   onClickDelete,
@@ -164,14 +166,24 @@ const LayoutRowDiv = ({
 
   return (
     <div className="flex justify-between items-center">
-      <div className="">
+      <div className="shrink-0"></div>
+      <div className="flex-1">
         {name}
         <span className="text-xs text-neutral-600 dark:text-neutral-400">
           {" "}
           ({templateName})
         </span>
       </div>
-      <div className="space-x-1">
+      <div className="shrink-0 space-x-1">
+        <Button
+          size="sm"
+          color="primary"
+          variant="plain"
+          data-id={row.id}
+          onClick={onClickVisibility}
+        >
+          {row.hidden ? "顯示" : "隱藏"}
+        </Button>
         <Button
           size="sm"
           color="primary"
@@ -263,6 +275,25 @@ const SheetDetailLayoutAndSectionsSubPage = ({
       });
     },
     [onSubmitSection]
+  );
+
+  const handleVisibilityRow = useCallback(
+    (e: React.MouseEvent) => {
+      const targetRowId = e.currentTarget.getAttribute("data-id") as string;
+      const rowIndex = sheet.layout.findIndex(({ id }) => id === targetRowId);
+      if (rowIndex === -1) {
+        return;
+      }
+
+      const newLayout = [...sheet.layout];
+      newLayout[rowIndex] = {
+        ...newLayout[rowIndex],
+        hidden: !newLayout[rowIndex].hidden,
+      };
+
+      onSubmitLayout(newLayout);
+    },
+    [onSubmitLayout, sheet.layout]
   );
 
   const handleEditRow = useCallback(
@@ -402,9 +433,10 @@ const SheetDetailLayoutAndSectionsSubPage = ({
                       >
                         {(provided) => (
                           <div
-                            className="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded px-2 py-3 mb-2 flex items-center gap-x-2"
+                            className="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded px-2 py-3 mb-2 flex items-center gap-x-2 data-[hidden=true]:opacity-20"
                             ref={provided.innerRef}
                             {...provided.draggableProps}
+                            data-hidden={!!row.hidden}
                           >
                             <div
                               className="shrink-0"
@@ -416,6 +448,7 @@ const SheetDetailLayoutAndSectionsSubPage = ({
                               <LayoutRowDiv
                                 sheet={sheet}
                                 row={row}
+                                onClickVisibility={handleVisibilityRow}
                                 onClickEdit={handleEditRow}
                                 onClickClone={handleCloneRow}
                                 onClickDelete={handleDeleteRow}

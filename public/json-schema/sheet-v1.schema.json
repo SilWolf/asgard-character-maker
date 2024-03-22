@@ -132,6 +132,9 @@
           "items": {
             "$ref": "#/definitions/SheetLayoutCol"
           }
+        },
+        "hidden": {
+          "type": "boolean"
         }
       },
       "required": ["id", "cols"],

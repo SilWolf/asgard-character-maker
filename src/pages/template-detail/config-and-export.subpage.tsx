@@ -42,7 +42,16 @@ const TemplateDetailConfigAndExportSubPage = ({
   });
 
   const handleBlurForm = useCallback(() => {
-    onSubmit(getValues());
+    const { detailProperties, ...otherValues } = getValues();
+
+    onSubmit({
+      detailProperties: {
+        ...detailProperties,
+        imageUrls:
+          (detailProperties.imageUrls as unknown as string)?.split(",") ?? [],
+      },
+      ...otherValues,
+    });
   }, [getValues, onSubmit]);
 
   const handleClickDownloadConfigJsonFile = useCallback(() => {

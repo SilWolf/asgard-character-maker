@@ -12,6 +12,7 @@ export type Sheet = {
 export type SheetLayoutRow = {
   id: string;
   cols: SheetLayoutCol[];
+  hidden?: boolean;
 };
 
 export type SheetLayoutCol = {

@@ -320,8 +320,10 @@ const SheetDetailPage = () => {
 
     const sectionIds = [];
     for (const row of sheet.layout) {
-      for (const col of row.cols) {
-        sectionIds.push(...col.sectionIds);
+      if (!row.hidden) {
+        for (const col of row.cols) {
+          sectionIds.push(...col.sectionIds);
+        }
       }
     }
 
